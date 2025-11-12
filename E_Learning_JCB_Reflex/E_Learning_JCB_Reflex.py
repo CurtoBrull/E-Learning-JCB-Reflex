@@ -19,7 +19,7 @@ class State(rx.State):
         self.error = ""
         try:
             courses_list = await get_all_courses()
-            # Convert Course objects to dictionaries for Reflex state
+            # Convertir objetos Course a diccionarios para el estado de Reflex
             self.courses = [
                 {
                     "title": course.title,

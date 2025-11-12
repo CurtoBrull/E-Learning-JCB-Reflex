@@ -9,18 +9,18 @@ from E_Learning_JCB_Reflex.database import MongoDB
 async def get_all_courses() -> List[Course]:
     """Get all courses from database."""
     try:
-        # Ensure connection
+        # Asegurar la conexión
         await MongoDB.connect()
         db = MongoDB.get_db()
 
-        # Get courses collection
+        # Obtener la colección de cursos
         courses_collection = db["courses"]
 
-        # Fetch all courses
+        # Recuperar todos los cursos (máximo 10)
         cursor = courses_collection.find().limit(10)
         courses_data = await cursor.to_list(length=10)
 
-        # Convert to Course objects
+        # Convertir los documentos a objetos Course
         courses = [Course.from_dict(course_data) for course_data in courses_data]
 
         return courses

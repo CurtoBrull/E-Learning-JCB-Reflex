@@ -1,11 +1,11 @@
-"""Course model for E-Learning platform."""
+"""Modelo de curso para la plataforma E-Learning."""
 
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Optional
 
 
 class Course:
-    """Simple course model for MongoDB."""
+    """Modelo simple de curso para MongoDB."""
 
     def __init__(
         self,
@@ -25,11 +25,11 @@ class Course:
         self.price = price
         self.thumbnail = thumbnail
         self.level = level
-        self.created_at = created_at or datetime.utcnow()
+        self.created_at = created_at or datetime.now(timezone.utc)
 
     @classmethod
     def from_dict(cls, data: dict) -> "Course":
-        """Create Course instance from MongoDB document."""
+        """Crear instancia de Course desde un documento de MongoDB."""
         return cls(
             _id=data.get("_id"),
             title=data.get("title", ""),
@@ -42,7 +42,7 @@ class Course:
         )
 
     def to_dict(self) -> dict:
-        """Convert Course instance to dictionary."""
+        """Convertir instancia de Course a diccionario."""
         return {
             "title": self.title,
             "description": self.description,

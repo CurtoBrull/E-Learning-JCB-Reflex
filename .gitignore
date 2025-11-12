@@ -9,4 +9,5 @@ venv/
 env/
 .env
 .env.local
+.vscode/
 .claude/
