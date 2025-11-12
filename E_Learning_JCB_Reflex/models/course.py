@@ -30,15 +30,20 @@ class Course:
     @classmethod
     def from_dict(cls, data: dict) -> "Course":
         """Crear instancia de Course desde un documento de MongoDB."""
+        # Obtener nombre del instructor desde el objeto embebido
+        instructor_name = "Unknown"
+        if "instructor" in data and isinstance(data["instructor"], dict):
+            instructor_name = data["instructor"].get("name", "Unknown")
+
         return cls(
             _id=data.get("_id"),
             title=data.get("title", ""),
             description=data.get("description", ""),
-            instructor_name=data.get("instructor_name", "Unknown"),
+            instructor_name=instructor_name,
             price=data.get("price", 0.0),
-            thumbnail=data.get("thumbnail", "/placeholder-course.jpg"),
+            thumbnail=data.get("image", "/placeholder-course.jpg"),
             level=data.get("level", "beginner"),
-            created_at=data.get("created_at"),
+            created_at=data.get("createdAt"),
         )
 
     def to_dict(self) -> dict:
