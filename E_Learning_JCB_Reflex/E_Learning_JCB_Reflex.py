@@ -1,9 +1,8 @@
 """E-Learning JCB Platform - Main application file."""
 
-from pydoc import text
 import reflex as rx
 from rxconfig import config
-from E_Learning_JCB_Reflex.services.course_service import get_all_courses
+from E_Learning_JCB_Reflex.services.course_service import get_popular_courses
 from E_Learning_JCB_Reflex.models.course import Course
 
 
@@ -14,12 +13,12 @@ class State(rx.State):
     loading: bool = False
     error: str = ""
 
-    async def load_courses(self):
+    async def load_popular_courses(self):
         """Cargar cursos desde la base de datos."""
         self.loading = True
         self.error = ""
         try:
-            courses_list = await get_all_courses()
+            some_courses = await get_popular_courses()
             # Convertir objetos Course a diccionarios para el estado de Reflex
             self.courses = [
                 {
@@ -30,7 +29,7 @@ class State(rx.State):
                     "level": course.level,
                     "thumbnail": course.thumbnail,
                 }
-                for course in courses_list
+                for course in some_courses
             ]
             if not self.courses:
                 self.error = "No courses found in database"
@@ -191,7 +190,39 @@ def index() -> rx.Component:
                 width="100%",
                 padding_y="8",
                 align_items="center",
-                on_mount=State.load_courses,
+                on_mount=State.load_popular_courses,
+            ),
+            width="100%",
+            max_width="100%",
+            padding_x="2rem",
+        ),
+        width="100%",
+        spacing="0",
+    )
+
+def courses_page() -> rx.Component:
+    """Página de todos los cursos."""
+    return rx.vstack(
+        navbar(),
+        rx.container(
+            rx.vstack(
+                rx.heading(
+                    "Todos los Cursos",
+                    size="8",
+                    margin_bottom="4",
+                    text_align="center",
+                ),
+                # Aquí se podrían cargar y mostrar todos los cursos
+                rx.text(
+                    "Esta sección mostrará todos los cursos disponibles próximamente.",
+                    size="6",
+                    color="gray.600",
+                    text_align="center",
+                ),
+                spacing="4",
+                width="100%",
+                padding_y="8",
+                align_items="center",
             ),
             width="100%",
             max_width="100%",
@@ -221,8 +252,8 @@ def navbar() -> rx.Component:
                     align_items="center",
                 ),
                 rx.hstack(
-                    navbar_link("Inicio", "/#"),
-                    navbar_link("Cursos", "/#"),
+                    navbar_link("Inicio", "/"),
+                    navbar_link("Cursos", "/courses"),
                     navbar_link("Instructores", "/#"),
                     navbar_link("Contacto", "/#"),
                     navbar_link("Login", "/#"),
@@ -248,10 +279,11 @@ def navbar() -> rx.Component:
                     rx.menu.root(
                         rx.menu.trigger(rx.icon("menu", size=30)),
                         rx.menu.content(
-                            rx.menu.item("Home"),
-                            rx.menu.item("About"),
-                            rx.menu.item("Pricing"),
-                            rx.menu.item("Contact"),
+                            rx.menu.item(rx.link("Inicio", href="/")),
+                            rx.menu.item(rx.link("Cursos", href="/courses")),
+                            rx.menu.item(rx.link("Instructores", href="/#")),
+                            rx.menu.item(rx.link("Contacto", href="/#")),
+                            rx.menu.item(rx.link("Login", href="/#")),
                         ),
                         justify="end",
                     ),
@@ -272,3 +304,4 @@ def navbar() -> rx.Component:
 
 app = rx.App()
 app.add_page(index)
+app.add_page(courses_page, route="/courses")
