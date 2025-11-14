@@ -1,8 +1,11 @@
 """Estado de gestión de cursos."""
 
 import reflex as rx
-from E_Learning_JCB_Reflex.services.course_service import get_popular_courses
-from E_Learning_JCB_Reflex.services.course_service import get_all_courses
+from E_Learning_JCB_Reflex.services.course_service import (
+    get_popular_courses,
+    get_all_courses,
+    get_course_by_id,
+)
 
 
 class CourseState(rx.State):
@@ -11,6 +14,30 @@ class CourseState(rx.State):
     courses: list[dict] = []
     loading: bool = False
     error: str = ""
+
+    # Información básica del curso seleccionado
+    course_title: str = ""
+    course_description: str = ""
+    course_thumbnail: str = ""
+    course_price: float = 0.0
+    course_level: str = ""
+    course_category: str = ""
+
+    # Información del instructor
+    instructor_name: str = ""
+    instructor_email: str = ""
+    instructor_avatar: str = ""
+    instructor_bio: str = ""
+
+    # Estadísticas
+    students_count: int = 0
+    average_rating: int = 0
+    total_reviews: int = 0
+
+    # Listas
+    categories: list[str] = []
+    lessons: list[dict] = []
+    reviews: list[dict] = []
 
     async def load_popular_courses(self):
         """Cargar cursos desde la base de datos."""
@@ -21,6 +48,7 @@ class CourseState(rx.State):
             # Convertir objetos Course a diccionarios para el estado de Reflex
             self.courses = [
                 {
+                    "id": course.id,
                     "title": course.title,
                     "description": course.description,
                     "instructor_name": course.instructor_name,
@@ -47,6 +75,7 @@ class CourseState(rx.State):
             # Convertir objetos Course a diccionarios para el estado de Reflex
             self.courses = [
                 {
+                    "id": course.id,
                     "title": course.title,
                     "description": course.description,
                     "instructor_name": course.instructor_name,
@@ -63,3 +92,73 @@ class CourseState(rx.State):
             print(f"Error in load_courses: {e}")
         finally:
             self.loading = False
+
+    async def load_course_by_id(self, course_id: str):
+        """Cargar un curso específico por ID."""
+        self.loading = True
+        self.error = ""
+        try:
+            course = await get_course_by_id(course_id)
+            if course:
+                # Asignar a variables de estado planas
+                self.course_title = course.title
+                self.course_description = course.description
+                self.course_thumbnail = course.thumbnail
+                self.course_price = course.price
+                self.course_level = course.level
+                self.course_category = course.category
+
+                # Información del instructor
+                self.instructor_name = course.instructor.name
+                self.instructor_email = course.instructor.email
+                self.instructor_avatar = course.instructor.avatar_url
+                self.instructor_bio = course.instructor.bio
+
+                # Estadísticas
+                self.students_count = len(course.students)
+                self.average_rating = course.average_rating if course.average_rating else 0
+                self.total_reviews = course.total_reviews if course.total_reviews else 0
+
+                # Listas
+                self.categories = course.categories
+                self.lessons = [
+                    {
+                        "id": lesson.id,
+                        "title": lesson.title,
+                        "content": lesson.content,
+                        "order": lesson.order,
+                        "duration": lesson.duration,
+                    }
+                    for lesson in course.lessons
+                ]
+                self.reviews = [
+                    {
+                        "id": review.id,
+                        "student": review.student,
+                        "rating": review.rating,
+                        "comment": review.comment,
+                        "created_at": str(review.created_at),
+                    }
+                    for review in course.reviews
+                ]
+            else:
+                self.error = "Curso no encontrado"
+                # Limpiar variables
+                self.course_title = ""
+        except Exception as e:
+            self.error = f"Error loading course: {str(e)}"
+            self.course_title = ""
+            print(f"Error in load_course_by_id: {e}")
+        finally:
+            self.loading = False
+
+    async def load_course_from_url(self):
+        """Cargar curso usando el ID de la URL."""
+        # Obtener el course_id desde los parámetros de la ruta
+        course_id = self.router.page.params.get("course_id", "")
+        if course_id:
+            await self.load_course_by_id(course_id)
+        
+        print(f"Course id: {course_id}")
+        print(f"Course title: {self.course_title}")
+    

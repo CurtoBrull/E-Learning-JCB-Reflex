@@ -1,12 +1,12 @@
 """Course service for database operations."""
 
 from typing import List
-from motor.motor_asyncio import AsyncIOMotorClient
+from bson import ObjectId
 from E_Learning_JCB_Reflex.models.course import Course
 from E_Learning_JCB_Reflex.database import MongoDB
 
 async def get_popular_courses(limit: int = 6) -> List[Course]:
-    """Mostra algunos cursos de la base de datos."""
+    """Muestra los cursos populares."""
     try:
         # Asegurar la conexión
         await MongoDB.connect()
@@ -57,7 +57,7 @@ async def get_course_by_id(course_id: str) -> Course | None:
         db = MongoDB.get_db()
 
         courses_collection = db["courses"]
-        course_data = await courses_collection.find_one({"_id": course_id})
+        course_data = await courses_collection.find_one({"_id": ObjectId(course_id)})
 
         if course_data:
             return Course.from_dict(course_data)
