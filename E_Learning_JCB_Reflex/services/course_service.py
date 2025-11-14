@@ -37,9 +37,9 @@ async def get_all_courses() -> List[Course]:
         # Obtener la colección de cursos
         courses_collection = db["courses"]
 
-        # Recuperar cursos página principal (máximo 6)
-        cursor = courses_collection.find().limit(6)
-        courses_data = await cursor.to_list(length=6)
+        # Recuperar todos los cursos sin límite
+        cursor = courses_collection.find()
+        courses_data = await cursor.to_list(length=None)
 
         # Convertir los documentos a objetos Course
         courses = [Course.from_dict(course_data) for course_data in courses_data]
