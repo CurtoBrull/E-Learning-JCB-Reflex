@@ -26,7 +26,7 @@ def navbar() -> rx.Component:
                 rx.hstack(
                     navbar_link("Inicio", "/"),
                     navbar_link("Cursos", "/courses"),
-                    navbar_link("Instructores", "/#"),
+                    navbar_link("Instructores", "/instructors"),
                     navbar_link("Contacto", "/#"),
                     navbar_link("Login", "/#"),
                     rx.color_mode.button(),
@@ -53,7 +53,7 @@ def navbar() -> rx.Component:
                         rx.menu.content(
                             rx.menu.item(rx.link("Inicio", href="/")),
                             rx.menu.item(rx.link("Cursos", href="/courses")),
-                            rx.menu.item(rx.link("Instructores", href="/#")),
+                            rx.menu.item(rx.link("Instructores", href="/instructors")),
                             rx.menu.item(rx.link("Contacto", href="/#")),
                             rx.menu.item(rx.link("Login", href="/#")),
                         ),

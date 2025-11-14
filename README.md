@@ -298,6 +298,20 @@ MongoDB es una base de datos no relacional, lo que permite flexibilidad en el di
 - **Limpiar archivos compilados**: `reflex clean`
 - **Inicializar base de datos**: `reflex db init`
 
+### Despliegue en Reflex Cloud
+
+Para desplegar la aplicación en Reflex Cloud:
+
+```bash
+reflex deploy --project 80b9f062-22e7-44e5-ab3c-4a5485a994bb --envfile .env
+```
+
+**Notas:**
+
+- El ID del proyecto (`80b9f062-22e7-44e5-ab3c-4a5485a994bb`) es único para esta aplicación
+- El flag `--envfile .env` carga las variables de entorno desde el archivo `.env`
+- Asegúrate de tener configuradas las credenciales de Reflex con `reflex login`
+
 ## Git Flow
 
 - Nombre de la **rama principal**: `main`

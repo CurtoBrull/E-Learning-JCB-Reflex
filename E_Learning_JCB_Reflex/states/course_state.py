@@ -6,6 +6,7 @@ from E_Learning_JCB_Reflex.services.course_service import (
     get_all_courses,
     get_course_by_id,
 )
+from E_Learning_JCB_Reflex.services.user_service import get_users_by_ids
 
 
 class CourseState(rx.State):
@@ -131,10 +132,15 @@ class CourseState(rx.State):
                     }
                     for lesson in course.lessons
                 ]
+
+                # Obtener nombres de estudiantes para las reviews
+                student_ids = [review.student for review in course.reviews if review.student]
+                students_dict = await get_users_by_ids(student_ids) if student_ids else {}
+
                 self.reviews = [
                     {
                         "id": review.id,
-                        "student": review.student,
+                        "student": students_dict[review.student].get_full_name() if review.student in students_dict else "Usuario Desconocido",
                         "rating": review.rating,
                         "comment": review.comment,
                         "created_at": str(review.created_at),
