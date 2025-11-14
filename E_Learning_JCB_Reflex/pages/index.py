@@ -23,14 +23,14 @@ def index() -> rx.Component:
                 rx.text(
                     "¡Aprende y Crece con nosotros!",
                     size="8",
-                    color="gray.600",
+                    color=rx.color("gray", 11),
                     margin_bottom="8",
                     text_align="center",
                 ),
                 rx.text(
                     "Descubre nuestros cursos online impartidos por expertos en programación, administración de sistemas y más. Aprende a tu ritmo, mejora tus habilidades y obtén certificaciones reconocidas en el sector IT.",
                     size="6",
-                    color="gray.600",
+                    color=rx.color("gray", 11),
                     margin_bottom="8",
                     text_align="center",
                 ),
@@ -71,7 +71,7 @@ def index() -> rx.Component:
                     rx.box(
                         rx.text(
                             "No hay cursos disponibles en este momento.",
-                            color="gray.500",
+                            color=rx.color("gray", 10),
                             text_align="center",
                         ),
                         padding="8",
