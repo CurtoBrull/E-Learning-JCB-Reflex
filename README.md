@@ -298,6 +298,18 @@ MongoDB es una base de datos no relacional, lo que permite flexibilidad en el di
 - **Limpiar archivos compilados**: `reflex clean`
 - **Inicializar base de datos**: `reflex db init`
 
+### Detener Servicios
+
+Para detener los servicios de Reflex corriendo en los puertos 3000 y 8000:
+
+```bash
+# Detener servicios en puertos específicos
+lsof -ti:3000,8000 | xargs kill -9
+
+# Verificar que los puertos estén liberados
+lsof -i:3000,8000
+```
+
 ### Despliegue en Reflex Cloud
 
 Para desplegar la aplicación en Reflex Cloud:

@@ -161,10 +161,10 @@ class CourseState(rx.State):
     async def load_course_from_url(self):
         """Cargar curso usando el ID de la URL."""
         # Obtener el course_id desde los parámetros de la ruta
-        course_id = self.router.page.params.get("course_id", "")
+        course_id = self.router.url.params.get("course_id", "")
         if course_id:
             await self.load_course_by_id(course_id)
-        
+
         print(f"Course id: {course_id}")
         print(f"Course title: {self.course_title}")
     

@@ -1,42 +1,79 @@
-alembic==1.17.1
-annotated-types==0.7.0
-anyio==4.11.0
-bidict==0.23.1
-certifi==2025.10.5
-click==8.3.0
-dnspython==2.8.0
-granian==2.5.7
-greenlet==3.2.4
-h11==0.16.0
-httpcore==1.0.9
-httpx==0.28.1
-idna==3.11
-Mako==1.3.10
-markdown-it-py==4.0.0
-MarkupSafe==3.0.3
-mdurl==0.1.2
-motor==3.7.1
-packaging==25.0
-platformdirs==4.5.0
-pydantic==2.12.4
-pydantic_core==2.41.5
-Pygments==2.19.2
-pymongo==4.15.4
-python-dotenv==1.2.1
-python-engineio==4.12.3
-python-multipart==0.0.20
-python-socketio==5.14.3
-redis==7.0.1
-reflex==0.8.19
-reflex-hosting-cli==0.1.59
-rich==14.2.0
-simple-websocket==1.1.0
-sniffio==1.3.1
-SQLAlchemy==2.0.44
-sqlmodel==0.0.27
-starlette==0.50.0
-typing-inspection==0.4.2
-typing_extensions==4.15.0
-watchfiles==1.1.1
-wrapt==2.0.1
-wsproto==1.2.0
+# ============================================
+# E-Learning JCB Reflex - Dependencias
+# ============================================
+
+# --- Framework Principal ---
+reflex==0.8.19                    # Framework full-stack Python para desarrollo web
+reflex-hosting-cli==0.1.59        # CLI para desplegar aplicaciones Reflex en Reflex Cloud
+
+# --- Base de Datos MongoDB ---
+motor==3.7.1                      # Driver asíncrono de MongoDB para Python
+pymongo==4.15.4                   # Driver oficial de MongoDB para Python
+dnspython==2.8.0                  # Requerido para conexiones MongoDB+srv (Atlas)
+
+# --- Base de Datos SQL (Opcional/Reflex) ---
+alembic==1.17.1                   # Herramienta de migración de bases de datos SQL
+SQLAlchemy==2.0.44                # ORM SQL para Python
+sqlmodel==0.0.27                  # Wrapper de SQLAlchemy con integración Pydantic
+
+# --- Validación y Serialización ---
+pydantic==2.12.4                  # Validación de datos y parsing con type hints
+pydantic_core==2.41.5             # Core de Pydantic escrito en Rust (más rápido)
+annotated-types==0.7.0            # Tipos anotados para Pydantic
+
+# --- Variables de Entorno ---
+python-dotenv==1.2.1              # Carga variables de entorno desde archivos .env
+
+# --- Servidor Web ---
+granian==2.5.7                    # Servidor HTTP asíncrono de alto rendimiento
+starlette==0.50.0                 # Framework web ligero ASGI (usado por Reflex/FastAPI)
+
+# --- HTTP y WebSockets ---
+httpx==0.28.1                     # Cliente HTTP asíncrono moderno
+httpcore==1.0.9                   # Core HTTP de bajo nivel para httpx
+h11==0.16.0                       # Implementación HTTP/1.1
+wsproto==1.2.0                    # Protocolo WebSocket
+
+# --- WebSockets en Tiempo Real ---
+python-socketio==5.14.3           # Librería Socket.IO para comunicación en tiempo real
+python-engineio==4.12.3           # Motor de bajo nivel para Socket.IO
+simple-websocket==1.1.0           # Cliente/servidor WebSocket simple
+bidict==0.23.1                    # Diccionario bidireccional (usado por socketio)
+
+# --- Caché y Estado ---
+redis==7.0.1                      # Cliente Redis para caché y estado en tiempo real
+
+# --- Utilidades de I/O ---
+anyio==4.11.0                     # Librería async/await compatible con asyncio y trio
+sniffio==1.3.1                    # Detectar qué librería async se está usando
+
+# --- Sistema de Archivos ---
+watchfiles==1.1.1                 # Monitoreo de cambios en archivos (hot reload)
+
+# --- Plantillas y Renderizado ---
+Mako==1.3.10                      # Motor de plantillas (usado por Alembic)
+MarkupSafe==3.0.3                 # Manejo seguro de strings HTML/XML
+
+# --- Markdown y Documentación ---
+markdown-it-py==4.0.0             # Parser Markdown rápido y extensible
+mdurl==0.1.2                      # Parser de URLs para Markdown
+rich==14.2.0                      # Formateo de texto rico en terminal
+
+# --- Utilidades Web ---
+python-multipart==0.0.20          # Parser multipart/form-data (uploads)
+certifi==2025.10.5                # Certificados SSL raíz de Mozilla
+idna==3.11                        # Soporte para nombres de dominio internacionalizados
+
+# --- Utilidades de Sistema ---
+click==8.3.0                      # Framework CLI (usado por Reflex)
+packaging==25.0                   # Parsing y comparación de versiones
+platformdirs==4.5.0               # Rutas de directorios específicas por plataforma
+greenlet==3.2.4                   # Lightweight concurrent programming
+
+# --- Type Checking y Typing ---
+typing-inspection==0.4.2          # Introspección avanzada de tipos
+typing_extensions==4.15.0         # Backport de features de typing de Python nuevos
+
+# --- Highlighting y UI ---
+Pygments==2.19.2                  # Syntax highlighting (código en terminal/web)
+wrapt==2.0.1                      # Decoradores y proxies (usado por varios paquetes)

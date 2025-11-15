@@ -116,6 +116,6 @@ class InstructorState(rx.State):
     async def load_instructor_from_url(self):
         """Cargar instructor usando el ID de la URL."""
         # Obtener el instructor_id desde los parámetros de la ruta
-        instructor_id = self.router.page.params.get("instructor_id", "")
+        instructor_id = self.router.url.params.get("instructor_id", "")
         if instructor_id:
             await self.load_instructor_by_id(instructor_id)
