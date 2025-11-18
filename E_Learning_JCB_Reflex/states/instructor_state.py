@@ -6,6 +6,7 @@ from E_Learning_JCB_Reflex.services.user_service import (
     get_user_by_id,
 )
 from E_Learning_JCB_Reflex.services.course_service import get_all_courses
+from E_Learning_JCB_Reflex.utils.route_helpers import get_dynamic_id
 
 
 class InstructorState(rx.State):
@@ -116,6 +117,6 @@ class InstructorState(rx.State):
     async def load_instructor_from_url(self):
         """Cargar instructor usando el ID de la URL."""
         # Obtener el instructor_id desde los parámetros de la ruta
-        instructor_id = self.router.url.params.get("instructor_id", "")
+        instructor_id = get_dynamic_id(self.router.url.path)
         if instructor_id:
             await self.load_instructor_by_id(instructor_id)

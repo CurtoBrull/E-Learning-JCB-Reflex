@@ -7,6 +7,7 @@ from E_Learning_JCB_Reflex.services.course_service import (
     get_course_by_id,
 )
 from E_Learning_JCB_Reflex.services.user_service import get_users_by_ids
+from E_Learning_JCB_Reflex.utils.route_helpers import get_dynamic_id
 
 
 class CourseState(rx.State):
@@ -160,8 +161,8 @@ class CourseState(rx.State):
 
     async def load_course_from_url(self):
         """Cargar curso usando el ID de la URL."""
-        # Obtener el course_id desde los parámetros de la ruta
-        course_id = self.router.url.params.get("course_id", "")
+        # Obtener el course_id desde los parámetros de la url
+        course_id = get_dynamic_id(self.router.url.path)
         if course_id:
             await self.load_course_by_id(course_id)
 
