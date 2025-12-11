@@ -21,6 +21,7 @@
   - [Requisitos Previos](#requisitos-previos)
   - [Instalación](#instalación)
   - [Configuración de Variables de Entorno](#configuración-de-variables-de-entorno)
+  - [Autenticación y Usuarios](#autenticación-y-usuarios)
   - [Modelado de la Base de Datos](#modelado-de-la-base-de-datos)
     - [Relaciones entre las Colecciones](#relaciones-entre-las-colecciones)
     - [Colecciones](#colecciones)
@@ -145,6 +146,14 @@ E-Learning-JCB-Reflex/
    Backend API: http://localhost:8000/
    ```
 
+7. (Opcional) Crear usuarios de ejemplo para testing:
+
+   ```bash
+   python scripts/create_sample_users.py
+   ```
+
+   Ver [Usuarios de Ejemplo](docs/USUARIOS_EJEMPLO.md) para credenciales de acceso.
+
 ## Configuración de Variables de Entorno
 
 Crea un archivo `.env` en la raíz del proyecto basándote en `.env.example`:
@@ -161,6 +170,45 @@ API_URL=http://localhost:8000
 ```
 
 **Nota**: Nunca subas el archivo `.env` al repositorio. Usa `.env.example` como plantilla.
+
+## Autenticación y Usuarios
+
+La plataforma cuenta con un sistema de autenticación completo con bcrypt para hash de contraseñas.
+
+### Características de Seguridad
+
+- 🔐 **Hash de contraseñas**: Bcrypt con salt automático
+- 🔑 **Validación de email**: Formato correcto y unicidad
+- 🛡️ **Gestión de sesiones**: Estado persistente de autenticación
+- 👥 **Sistema de roles**: Student, Instructor, Admin
+
+### Usuarios de Ejemplo
+
+Para facilitar el testing y desarrollo, se han creado usuarios de ejemplo:
+
+| Rol | Email | Contraseña | Nombre |
+|-----|-------|-----------|--------|
+| 👨‍🎓 Student | maria.garcia@elearningjcb.com | student123 | María García |
+| 👨‍🏫 Instructor | carlos.rodriguez@elearningjcb.com | instructor123 | Carlos Rodríguez |
+| 👨‍💼 Admin | ana.martinez@elearningjcb.com | admin123 | Ana Martínez |
+
+📖 **Documentación completa**: Ver [docs/USUARIOS_EJEMPLO.md](docs/USUARIOS_EJEMPLO.md)
+
+### Páginas de Autenticación
+
+- **Login**: `/login` - Inicio de sesión con email y contraseña
+- **Registro**: `/register` - Creación de cuenta con selección de rol
+- **Logout**: Disponible desde cualquier página cuando estés autenticado
+
+### Crear Usuarios Adicionales
+
+```bash
+# Ejecutar script de creación de usuarios
+python scripts/create_sample_users.py
+
+# O crear manualmente desde la interfaz web
+# Navegar a http://localhost:3000/register
+```
 
 ## Modelado de la Base de Datos
 
@@ -204,17 +252,22 @@ MongoDB es una base de datos no relacional, lo que permite flexibilidad en el di
 ```python
 {
   "_id": ObjectId,
-  "first_name": str,
-  "last_name": str,
+  "firstName": str,
+  "lastName": str,
   "email": str (único),
-  "password": str (hasheado),
-  "role": str ("student" | "instructor"),
-  "profile_image": str (opcional),
-  "bio": str (opcional),
-  "created_at": datetime,
-  "updated_at": datetime
+  "password": str (hasheado con bcrypt),
+  "role": str ("student" | "instructor" | "admin"),
+  "instructorProfile": dict (opcional),
+  "enrollments": [ObjectId] (opcional),
+  "coursesCreated": [ObjectId] (opcional),
+  "createdAt": datetime
 }
 ```
+
+**Roles disponibles:**
+- **student**: Usuario que aprende cursos
+- **instructor**: Usuario que crea y gestiona cursos
+- **admin**: Usuario con acceso completo a la plataforma
 
 #### Course (colección)
 
