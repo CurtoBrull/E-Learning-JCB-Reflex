@@ -8,6 +8,8 @@ from E_Learning_JCB_Reflex.pages.course_detail import course_detail_page
 from E_Learning_JCB_Reflex.pages.instructors import instructors_page
 from E_Learning_JCB_Reflex.pages.instructor_detail import instructor_detail_page
 from E_Learning_JCB_Reflex.pages.contact import contact_page
+from E_Learning_JCB_Reflex.pages.login import login_page
+from E_Learning_JCB_Reflex.pages.register import register_page
 
 # Configuración de la aplicación
 app = rx.App()
@@ -19,3 +21,5 @@ app.add_page(course_detail_page, route="/courses/[course_id]")
 app.add_page(instructors_page, route="/instructors")
 app.add_page(instructor_detail_page, route="/instructors/[instructor_id]")
 app.add_page(contact_page, route="/contact")
+app.add_page(login_page, route="/login")
+app.add_page(register_page, route="/register")

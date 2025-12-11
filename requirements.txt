@@ -77,3 +77,4 @@ typing_extensions==4.15.0         # Backport de features de typing de Python nue
 # --- Highlighting y UI ---
 Pygments==2.19.2                  # Syntax highlighting (código en terminal/web)
 wrapt==2.0.1                      # Decoradores y proxies (usado por varios paquetes)
+bcrypt==5.0.0

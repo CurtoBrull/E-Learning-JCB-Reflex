@@ -48,18 +48,31 @@ class User:
         )
 
     def to_dict(self) -> dict:
-        """Convertir instancia de User a diccionario."""
-        return {
-            "id": self.id,
-            "first_name": self.first_name,
-            "last_name": self.last_name,
+        """Convertir instancia de User a diccionario para MongoDB (camelCase)."""
+        user_dict = {
+            "firstName": self.first_name,
+            "lastName": self.last_name,
             "email": self.email,
             "role": self.role,
-            "instructor_profile": self.instructor_profile,
-            "enrollments": self.enrollments,
-            "courses_created": self.courses_created,
-            "created_at": self.created_at,
+            "createdAt": self.created_at,
         }
+
+        # Añadir password solo si existe
+        if self.password:
+            user_dict["password"] = self.password
+
+        # Añadir campos opcionales solo si tienen contenido
+        if self.instructor_profile:
+            user_dict["instructorProfile"] = self.instructor_profile
+
+        if self.enrollments:
+            user_dict["enrollments"] = self.enrollments
+
+        if self.courses_created:
+            user_dict["coursesCreated"] = self.courses_created
+
+        # No incluir 'id' ya que MongoDB usa '_id'
+        return user_dict
 
     def get_full_name(self) -> str:
         """Obtener nombre completo del usuario."""

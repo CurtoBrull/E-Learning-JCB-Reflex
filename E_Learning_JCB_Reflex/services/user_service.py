@@ -4,6 +4,7 @@ from typing import List, Dict
 from bson import ObjectId
 from E_Learning_JCB_Reflex.models.user import User
 from E_Learning_JCB_Reflex.database import MongoDB
+from E_Learning_JCB_Reflex.utils.password import hash_password
 
 
 async def get_user_by_id(user_id: str) -> User | None:
@@ -102,3 +103,84 @@ async def get_all_instructors() -> List[User]:
     except Exception as e:
         print(f"Error fetching instructors: {e}")
         return []
+
+
+async def get_user_by_email(email: str) -> User | None:
+    """Obtener un usuario por email."""
+    try:
+        await MongoDB.connect()
+        db = MongoDB.get_db()
+
+        users_collection = db["users"]
+        user_data = await users_collection.find_one({"email": email})
+
+        if user_data:
+            return User.from_dict(user_data)
+        return None
+
+    except Exception as e:
+        print(f"Error fetching user by email: {e}")
+        return None
+
+
+async def create_user(
+    first_name: str,
+    last_name: str,
+    email: str,
+    password: str,
+    role: str = "student"
+) -> bool:
+    """Crear un nuevo usuario en la base de datos con password hasheado."""
+    try:
+        await MongoDB.connect()
+        db = MongoDB.get_db()
+
+        users_collection = db["users"]
+
+        # Hashear la contraseña con bcrypt
+        hashed_password = hash_password(password)
+
+        # Crear el objeto de usuario con password hasheado
+        user = User(
+            first_name=first_name,
+            last_name=last_name,
+            email=email,
+            password=hashed_password,
+            role=role
+        )
+
+        # Convertir a diccionario para MongoDB
+        user_dict = user.to_dict()
+
+        # Remover el id si está presente (MongoDB lo generará)
+        if "id" in user_dict:
+            del user_dict["id"]
+
+        # Insertar en la base de datos
+        result = await users_collection.insert_one(user_dict)
+
+        return result.acknowledged
+
+    except Exception as e:
+        print(f"Error creating user: {e}")
+        return False
+
+
+async def update_user(user_id: str, update_data: dict) -> bool:
+    """Actualizar un usuario existente."""
+    try:
+        await MongoDB.connect()
+        db = MongoDB.get_db()
+
+        users_collection = db["users"]
+
+        result = await users_collection.update_one(
+            {"_id": ObjectId(user_id)},
+            {"$set": update_data}
+        )
+
+        return result.modified_count > 0
+
+    except Exception as e:
+        print(f"Error updating user: {e}")
+        return False
