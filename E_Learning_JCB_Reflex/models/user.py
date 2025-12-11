@@ -87,3 +87,8 @@ class User:
     def is_student(self) -> bool:
         """Verificar si el usuario es estudiante."""
         return self.role == "student"
+
+    @property
+    def is_admin(self) -> bool:
+        """Verificar si el usuario es administrador."""
+        return self.role == "admin"

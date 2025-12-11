@@ -147,7 +147,7 @@ def register_page() -> rx.Component:
                                 weight="bold",
                             ),
                             rx.select(
-                                ["student", "instructor"],
+                                ["student", "instructor", "admin"],
                                 placeholder="Selecciona tu rol",
                                 value=AuthState.register_role,
                                 on_change=AuthState.set_register_role,
@@ -161,6 +161,11 @@ def register_page() -> rx.Component:
                             ),
                             rx.text(
                                 "• Instructor: Para crear y enseñar cursos",
+                                size="2",
+                                color=rx.color("gray", 10),
+                            ),
+                            rx.text(
+                                "• Admin: Gestión completa de la plataforma",
                                 size="2",
                                 color=rx.color("gray", 10),
                             ),

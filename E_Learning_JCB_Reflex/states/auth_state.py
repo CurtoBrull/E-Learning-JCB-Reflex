@@ -215,3 +215,18 @@ class AuthState(rx.State):
         if self.is_authenticated and self.current_user:
             return self.current_user.get("role", "student")
         return "student"
+
+    @rx.var
+    def is_user_admin(self) -> bool:
+        """Verificar si el usuario actual es administrador."""
+        return self.is_authenticated and self.user_role == "admin"
+
+    @rx.var
+    def is_user_instructor(self) -> bool:
+        """Verificar si el usuario actual es instructor."""
+        return self.is_authenticated and self.user_role == "instructor"
+
+    @rx.var
+    def is_user_student(self) -> bool:
+        """Verificar si el usuario actual es estudiante."""
+        return self.is_authenticated and self.user_role == "student"
