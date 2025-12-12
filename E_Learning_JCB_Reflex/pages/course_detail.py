@@ -2,13 +2,139 @@
 
 import reflex as rx
 from E_Learning_JCB_Reflex.states.course_state import CourseState
+from E_Learning_JCB_Reflex.states.enrollment_state import EnrollmentState
+from E_Learning_JCB_Reflex.states.auth_state import AuthState
 from E_Learning_JCB_Reflex.components.navbar import navbar
+from E_Learning_JCB_Reflex.utils.route_helpers import get_dynamic_id
+
+
+def enrollment_result_dialog() -> rx.Component:
+    """Diálogo que muestra el resultado de la inscripción con opciones de navegación."""
+    return rx.alert_dialog.root(
+        rx.alert_dialog.content(
+            rx.cond(
+                EnrollmentState.enrollment_was_successful,
+                rx.vstack(
+                    rx.hstack(
+                        rx.icon("check-circle", size=32, color=rx.color("green", 9)),
+                        rx.alert_dialog.title("¡Inscripción Exitosa!"),
+                        spacing="3",
+                        align_items="center",
+                    ),
+                    rx.alert_dialog.description(
+                        EnrollmentState.success,
+                        size="3",
+                    ),
+                    rx.divider(margin_y="4"),
+                    rx.text(
+                        "¿Qué deseas hacer ahora?",
+                        size="3",
+                        weight="bold",
+                        margin_bottom="3",
+                    ),
+                    rx.vstack(
+                        rx.link(
+                            rx.button(
+                                rx.hstack(
+                                    rx.icon("graduation-cap", size=18),
+                                    rx.text("Ir a Mi Dashboard"),
+                                    spacing="2",
+                                ),
+                                variant="solid",
+                                color_scheme="blue",
+                                size="3",
+                                width="100%",
+                            ),
+                            href="/student/dashboard",
+                            width="100%",
+                        ),
+                        rx.link(
+                            rx.button(
+                                rx.hstack(
+                                    rx.icon("book-open", size=18),
+                                    rx.text("Ver Detalles del Curso"),
+                                    spacing="2",
+                                ),
+                                variant="soft",
+                                color_scheme="green",
+                                size="3",
+                                width="100%",
+                                on_click=EnrollmentState.close_enrollment_result_dialog,
+                            ),
+                            width="100%",
+                        ),
+                        rx.link(
+                            rx.button(
+                                rx.hstack(
+                                    rx.icon("search", size=18),
+                                    rx.text("Explorar Más Cursos"),
+                                    spacing="2",
+                                ),
+                                variant="soft",
+                                color_scheme="gray",
+                                size="3",
+                                width="100%",
+                            ),
+                            href="/courses",
+                            width="100%",
+                        ),
+                        spacing="3",
+                        width="100%",
+                    ),
+                    spacing="3",
+                    align_items="start",
+                    width="100%",
+                ),
+                rx.vstack(
+                    rx.hstack(
+                        rx.icon("triangle-alert", size=32, color=rx.color("red", 9)),
+                        rx.alert_dialog.title("Error en la Inscripción"),
+                        spacing="3",
+                        align_items="center",
+                    ),
+                    rx.alert_dialog.description(
+                        EnrollmentState.error,
+                        size="3",
+                    ),
+                    rx.divider(margin_y="4"),
+                    rx.vstack(
+                        rx.button(
+                            "Intentar de Nuevo",
+                            variant="solid",
+                            color_scheme="blue",
+                            size="3",
+                            width="100%",
+                            on_click=EnrollmentState.close_enrollment_result_dialog,
+                        ),
+                        rx.link(
+                            rx.button(
+                                "Ver Otros Cursos",
+                                variant="soft",
+                                color_scheme="gray",
+                                size="3",
+                                width="100%",
+                            ),
+                            href="/courses",
+                            width="100%",
+                        ),
+                        spacing="3",
+                        width="100%",
+                    ),
+                    spacing="3",
+                    align_items="start",
+                    width="100%",
+                ),
+            ),
+        ),
+        open=EnrollmentState.show_enrollment_result_dialog,
+    )
 
 
 def course_detail_page() -> rx.Component:
     """Página de detalles de un curso."""
     return rx.vstack(
         navbar(),
+        enrollment_result_dialog(),
         rx.container(
             rx.vstack(
                 # Estado de carga
@@ -19,7 +145,7 @@ def course_detail_page() -> rx.Component:
                         height="50vh",
                     ),
                 ),
-                # Mensaje de error
+                # Mensaje de error del curso
                 rx.cond(
                     CourseState.error != "",
                     rx.callout(
@@ -262,12 +388,46 @@ def course_detail_page() -> rx.Component:
                             ),
                         ),
                         # BOTÓN DE INSCRIPCIÓN
-                        rx.button(
-                            "Inscribirse al curso",
-                            size="4",
-                            width="100%",
-                            margin_top="6",
-                            color_scheme="green",
+                        rx.cond(
+                            AuthState.is_user_student,
+                            rx.button(
+                                rx.cond(
+                                    EnrollmentState.loading,
+                                    rx.hstack(
+                                        rx.spinner(size="3"),
+                                        rx.text("Inscribiendo..."),
+                                        spacing="2",
+                                    ),
+                                    "Inscribirse al curso",
+                                ),
+                                size="4",
+                                width="100%",
+                                margin_top="6",
+                                color_scheme="green",
+                                on_click=EnrollmentState.enroll_in_current_course,
+                                disabled=EnrollmentState.loading,
+                            ),
+                            rx.cond(
+                                AuthState.is_authenticated,
+                                rx.button(
+                                    "Solo estudiantes pueden inscribirse",
+                                    size="4",
+                                    width="100%",
+                                    margin_top="6",
+                                    color_scheme="gray",
+                                    disabled=True,
+                                ),
+                                rx.link(
+                                    rx.button(
+                                        "Inicia sesión para inscribirte",
+                                        size="4",
+                                        width="100%",
+                                        margin_top="6",
+                                        color_scheme="blue",
+                                    ),
+                                    href="/login",
+                                ),
+                            ),
                         ),
                         spacing="4",
                         width="100%",

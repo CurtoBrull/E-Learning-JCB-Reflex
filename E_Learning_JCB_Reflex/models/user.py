@@ -57,6 +57,10 @@ class User:
             "createdAt": self.created_at,
         }
 
+        # Añadir _id si existe
+        if self.id:
+            user_dict["_id"] = self.id
+
         # Añadir password solo si existe
         if self.password:
             user_dict["password"] = self.password
@@ -71,7 +75,6 @@ class User:
         if self.courses_created:
             user_dict["coursesCreated"] = self.courses_created
 
-        # No incluir 'id' ya que MongoDB usa '_id'
         return user_dict
 
     def get_full_name(self) -> str:
