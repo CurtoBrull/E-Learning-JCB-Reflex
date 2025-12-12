@@ -9,8 +9,8 @@ class AuthState(rx.State):
     """Estado de autenticación de usuarios."""
 
     # Usuario autenticado
-    is_authenticated: bool = False
-    current_user: dict = {}
+    is_authenticated: bool = rx.Cookie(False, name="is_authenticated", max_age=86400)  # 24 horas
+    current_user: dict = rx.LocalStorage({})
 
     # Campos del formulario de login
     login_email: str = ""
@@ -121,8 +121,13 @@ class AuthState(rx.State):
             self.login_email = ""
             self.login_password = ""
 
-            # Redirigir al home después de un breve delay
-            yield rx.redirect("/")
+            # Redirigir al dashboard correspondiente según el rol
+            if user.role == "admin":
+                yield rx.redirect("/admin/dashboard")
+            elif user.role == "instructor":
+                yield rx.redirect("/instructor/dashboard")
+            else:  # student
+                yield rx.redirect("/student/dashboard")
 
         except Exception as e:
             print(f"Error during login: {e}")
@@ -205,14 +210,14 @@ class AuthState(rx.State):
     @rx.var
     def user_name(self) -> str:
         """Obtener el nombre del usuario actual."""
-        if self.is_authenticated and self.current_user:
+        if self.is_authenticated and isinstance(self.current_user, dict) and self.current_user:
             return self.current_user.get("first_name", "Usuario")
         return ""
 
     @rx.var
     def user_role(self) -> str:
         """Obtener el rol del usuario actual."""
-        if self.is_authenticated and self.current_user:
+        if self.is_authenticated and isinstance(self.current_user, dict) and self.current_user:
             return self.current_user.get("role", "student")
         return "student"
 
