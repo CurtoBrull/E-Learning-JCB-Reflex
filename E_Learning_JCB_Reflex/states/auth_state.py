@@ -9,8 +9,8 @@ class AuthState(rx.State):
     """Estado de autenticación de usuarios."""
 
     # Usuario autenticado
-    is_authenticated: bool = rx.Cookie(False, name="is_authenticated", max_age=86400)  # 24 horas
-    current_user: dict = rx.LocalStorage({})
+    is_authenticated: bool = False
+    current_user: dict = {}
 
     # Campos del formulario de login
     login_email: str = ""
@@ -211,7 +211,7 @@ class AuthState(rx.State):
     def user_name(self) -> str:
         """Obtener el nombre del usuario actual."""
         if self.is_authenticated and isinstance(self.current_user, dict) and self.current_user:
-            return self.current_user.get("first_name", "Usuario")
+            return self.current_user.get("firstName", "Usuario")
         return ""
 
     @rx.var

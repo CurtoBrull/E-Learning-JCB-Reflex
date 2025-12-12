@@ -47,23 +47,19 @@ def require_role(component: rx.Component, allowed_roles: list[str]) -> rx.Compon
         component: Componente a mostrar si el usuario tiene el rol requerido
         allowed_roles: Lista de roles permitidos (ej: ["admin", "instructor"])
     """
-    # Verificar si el usuario tiene uno de los roles permitidos
-    has_permission = rx.cond(
-        AuthState.is_authenticated,
-        # Si está autenticado, verificar el rol
-        rx.cond(
-            AuthState.user_role.is_in(allowed_roles),  # Verificar si el rol está en la lista
-            True,
-            False,
-        ),
-        False,
-    )
+    # Crear la condición de rol basada en los roles permitidos
+    if len(allowed_roles) == 1:
+        role_condition = AuthState.user_role == allowed_roles[0]
+    else:
+        # Para múltiples roles, usar OR
+        role_condition = (AuthState.user_role == allowed_roles[0])
+        for role in allowed_roles[1:]:
+            role_condition = role_condition | (AuthState.user_role == role)
 
     return rx.cond(
         AuthState.is_authenticated,
         rx.cond(
-            # Verificar cada rol permitido
-            sum([AuthState.user_role == role for role in allowed_roles]) > 0,
+            role_condition,
             component,
             # No tiene permiso
             rx.center(
@@ -71,7 +67,7 @@ def require_role(component: rx.Component, allowed_roles: list[str]) -> rx.Compon
                     rx.icon("shield-x", size=50, color=rx.color("red", 9)),
                     rx.heading("Acceso Denegado", size="8"),
                     rx.text(
-                        f"No tienes permisos para acceder a esta página",
+                        "No tienes permisos para acceder a esta página",
                         size="4",
                         color=rx.color("gray", 11),
                     ),
