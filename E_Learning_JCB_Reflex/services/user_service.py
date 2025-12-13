@@ -4,7 +4,7 @@ from typing import List, Dict
 from bson import ObjectId
 from E_Learning_JCB_Reflex.models.user import User
 from E_Learning_JCB_Reflex.database import MongoDB
-from E_Learning_JCB_Reflex.utils.password import hash_password
+from E_Learning_JCB_Reflex.utils.password import hash_password, verify_password
 
 
 async def get_user_by_id(user_id: str) -> User | None:
@@ -179,8 +179,88 @@ async def update_user(user_id: str, update_data: dict) -> bool:
             {"$set": update_data}
         )
 
-        return result.modified_count > 0
+        # Retornar True si se encontró el usuario (matched_count > 0)
+        # No importa si se modificó o no (modified_count puede ser 0 si los valores son iguales)
+        return result.matched_count > 0
 
     except Exception as e:
         print(f"Error updating user: {e}")
         return False
+
+
+async def change_password(user_id: str, current_password: str, new_password: str) -> bool:
+    """Cambiar la contraseña de un usuario."""
+    try:
+        await MongoDB.connect()
+        db = MongoDB.get_db()
+
+        users_collection = db["users"]
+
+        # Obtener el usuario actual
+        user_data = await users_collection.find_one({"_id": ObjectId(user_id)})
+
+        if not user_data:
+            return False
+
+        # Verificar la contraseña actual
+        if not verify_password(current_password, user_data.get("password", "")):
+            return False
+
+        # Hashear la nueva contraseña
+        hashed_new_password = hash_password(new_password)
+
+        # Actualizar la contraseña
+        result = await users_collection.update_one(
+            {"_id": ObjectId(user_id)},
+            {"$set": {"password": hashed_new_password}}
+        )
+
+        return result.modified_count > 0
+
+    except Exception as e:
+        print(f"Error changing password: {e}")
+        return False
+
+
+class UserService:
+    """Clase para centralizar los servicios de usuario."""
+
+    @staticmethod
+    async def get_user_by_id(user_id: str) -> User | None:
+        return await get_user_by_id(user_id)
+
+    @staticmethod
+    async def get_users_by_ids(user_ids: List[str]) -> Dict[str, User]:
+        return await get_users_by_ids(user_ids)
+
+    @staticmethod
+    async def get_user_name(user_id: str) -> str:
+        return await get_user_name(user_id)
+
+    @staticmethod
+    async def get_all_students() -> List[User]:
+        return await get_all_students()
+
+    @staticmethod
+    async def get_all_instructors() -> List[User]:
+        return await get_all_instructors()
+
+    @staticmethod
+    async def get_user_by_email(email: str) -> User | None:
+        return await get_user_by_email(email)
+
+    @staticmethod
+    async def create_user(first_name: str, last_name: str, email: str, password: str, role: str = "student") -> bool:
+        return await create_user(first_name, last_name, email, password, role)
+
+    @staticmethod
+    async def update_user(user_id: str, update_data: dict) -> bool:
+        return await update_user(user_id, update_data)
+
+    @staticmethod
+    async def change_password(user_id: str, current_password: str, new_password: str) -> bool:
+        return await change_password(user_id, current_password, new_password)
+
+
+# Instancia global del servicio
+user_service = UserService()
