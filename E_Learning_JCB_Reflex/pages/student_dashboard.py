@@ -395,6 +395,8 @@ def student_dashboard_content() -> rx.Component:
                 on_mount=EnrollmentState.load_enrolled_courses,
             ),
             max_width="1400px",
+            padding_x=["4", "6", "8"],
+            margin_x="auto",
         ),
         width="100%",
         spacing="0",
