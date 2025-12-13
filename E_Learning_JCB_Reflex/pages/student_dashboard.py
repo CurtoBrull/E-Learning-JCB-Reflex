@@ -30,8 +30,8 @@ def unenroll_confirmation_dialog() -> rx.Component:
                     rx.button(
                         "Desinscribirse",
                         color_scheme="red",
-                        on_click=EnrollmentState.confirm_unenroll,
                     ),
+                    on_click=EnrollmentState.confirm_unenroll,
                 ),
                 spacing="3",
                 justify_content="end",
@@ -279,7 +279,7 @@ def student_dashboard_content() -> rx.Component:
                                                     size="2",
                                                     variant="soft",
                                                     color_scheme="red",
-                                                    on_click=lambda c_id=course["id"], c_title=course["title"]: EnrollmentState.open_unenroll_dialog(c_id, c_title),
+                                                    on_click=lambda _, c_id=course["id"], c_title=course["title"]: EnrollmentState.open_unenroll_dialog(c_id, c_title),
                                                 ),
                                                 width="100%",
                                                 justify_content="space-between",

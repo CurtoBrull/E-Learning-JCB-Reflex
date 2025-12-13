@@ -131,7 +131,7 @@ class EnrollmentState(AuthState):
         if course_id:
             await self.enroll_in_course(course_id)
 
-    def open_unenroll_dialog(self, course_id: str, course_title: str):
+    def open_unenroll_dialog(self, course_id: str, course_title: str, *args, **kwargs):
         """Abrir el diálogo de confirmación para desinscripción."""
         self.course_to_unenroll_id = course_id
         self.course_to_unenroll_title = course_title
@@ -161,14 +161,14 @@ class EnrollmentState(AuthState):
         self.success = ""
 
         try:
-            user_id = self.current_user.get("_id")
+            user_id = str(self.current_user.get("_id"))
             if not user_id:
                 self.error = "Usuario no identificado"
                 self.loading = False
                 self.close_unenroll_dialog()
                 return
 
-            result = await enrollment_service.unenroll_student(user_id, self.course_to_unenroll_id)
+            result = await enrollment_service.unenroll_student(user_id, str(self.course_to_unenroll_id))
 
             if result:
                 self.success = "Desinscripción exitosa"

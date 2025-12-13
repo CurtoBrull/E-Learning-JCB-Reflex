@@ -152,6 +152,12 @@ E-Learning-JCB-Reflex/
    python scripts/create_sample_users.py
    ```
 
+8. En el caso de ya tener el proyecto instalado, podemos arrancarlo con:
+
+   ```bash
+   source reflex-env/bin/activate && reflex run
+   ```
+
    Ver [Usuarios de Ejemplo](docs/USUARIOS_EJEMPLO.md) para credenciales de acceso.
 
 ## Configuración de Variables de Entorno
