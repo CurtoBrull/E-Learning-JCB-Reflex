@@ -3,7 +3,7 @@
 import reflex as rx
 from E_Learning_JCB_Reflex.components.navbar import navbar
 from E_Learning_JCB_Reflex.components.protected import admin_only
-from E_Learning_JCB_Reflex.states.auth_state import AuthState
+from E_Learning_JCB_Reflex.states.admin_dashboard_state import AdminDashboardState
 
 
 def admin_dashboard_content() -> rx.Component:
@@ -16,7 +16,7 @@ def admin_dashboard_content() -> rx.Component:
                 rx.hstack(
                     rx.vstack(
                         rx.heading(
-                            f"Bienvenido, {AuthState.user_name}",
+                            f"Bienvenido, {AdminDashboardState.user_name}",
                             size="9",
                         ),
                         rx.text(
@@ -43,7 +43,7 @@ def admin_dashboard_content() -> rx.Component:
                             rx.hstack(
                                 rx.icon("users", size=24, color=rx.color("blue", 9)),
                                 rx.spacer(),
-                                rx.badge("0", size="2", color_scheme="gray"),
+                                rx.badge(AdminDashboardState.total_users.to_string(), size="2", color_scheme="blue"),
                             ),
                             rx.text("Usuarios Totales", size="3", weight="bold"),
                             rx.text(
@@ -60,7 +60,7 @@ def admin_dashboard_content() -> rx.Component:
                             rx.hstack(
                                 rx.icon("book-open", size=24, color=rx.color("purple", 9)),
                                 rx.spacer(),
-                                rx.badge("0", size="2", color_scheme="gray"),
+                                rx.badge(AdminDashboardState.total_courses.to_string(), size="2", color_scheme="purple"),
                             ),
                             rx.text("Cursos Totales", size="3", weight="bold"),
                             rx.text(
@@ -77,7 +77,7 @@ def admin_dashboard_content() -> rx.Component:
                             rx.hstack(
                                 rx.icon("user-check", size=24, color=rx.color("green", 9)),
                                 rx.spacer(),
-                                rx.badge("0", size="2", color_scheme="gray"),
+                                rx.badge(AdminDashboardState.total_enrollments.to_string(), size="2", color_scheme="green"),
                             ),
                             rx.text("Inscripciones", size="3", weight="bold"),
                             rx.text(
@@ -94,11 +94,11 @@ def admin_dashboard_content() -> rx.Component:
                             rx.hstack(
                                 rx.icon("trending-up", size=24, color=rx.color("orange", 9)),
                                 rx.spacer(),
-                                rx.badge("$0", size="2", color_scheme="gray"),
+                                rx.badge("N/A", size="2", color_scheme="gray"),
                             ),
                             rx.text("Ingresos Totales", size="3", weight="bold"),
                             rx.text(
-                                "Ingresos generados por la plataforma",
+                                "Funcionalidad pendiente de implementar",
                                 size="2",
                                 color=rx.color("gray", 10),
                             ),
@@ -121,7 +121,7 @@ def admin_dashboard_content() -> rx.Component:
                                     rx.icon("users", size=20, color=rx.color("blue", 9)),
                                     rx.vstack(
                                         rx.text("Estudiantes", size="3", weight="bold"),
-                                        rx.text("0 usuarios", size="2", color=rx.color("gray", 10)),
+                                        rx.text(f"{AdminDashboardState.total_students.to_string()} usuarios", size="2", color=rx.color("gray", 10)),
                                         spacing="1",
                                         align_items="start",
                                     ),
@@ -132,7 +132,7 @@ def admin_dashboard_content() -> rx.Component:
                                     rx.icon("graduation-cap", size=20, color=rx.color("purple", 9)),
                                     rx.vstack(
                                         rx.text("Instructores", size="3", weight="bold"),
-                                        rx.text("0 usuarios", size="2", color=rx.color("gray", 10)),
+                                        rx.text(f"{AdminDashboardState.total_instructors.to_string()} usuarios", size="2", color=rx.color("gray", 10)),
                                         spacing="1",
                                         align_items="start",
                                     ),
@@ -143,7 +143,7 @@ def admin_dashboard_content() -> rx.Component:
                                     rx.icon("shield", size=20, color=rx.color("red", 9)),
                                     rx.vstack(
                                         rx.text("Administradores", size="3", weight="bold"),
-                                        rx.text("0 usuarios", size="2", color=rx.color("gray", 10)),
+                                        rx.text(f"{AdminDashboardState.total_admins.to_string()} usuarios", size="2", color=rx.color("gray", 10)),
                                         spacing="1",
                                         align_items="start",
                                     ),
@@ -176,7 +176,7 @@ def admin_dashboard_content() -> rx.Component:
                                     rx.icon("book-open", size=20, color=rx.color("purple", 9)),
                                     rx.vstack(
                                         rx.text("Cursos Publicados", size="3", weight="bold"),
-                                        rx.text("0 cursos", size="2", color=rx.color("gray", 10)),
+                                        rx.text(f"{AdminDashboardState.total_courses.to_string()} cursos", size="2", color=rx.color("gray", 10)),
                                         spacing="1",
                                         align_items="start",
                                     ),
@@ -187,7 +187,7 @@ def admin_dashboard_content() -> rx.Component:
                                     rx.icon("clock", size=20, color=rx.color("orange", 9)),
                                     rx.vstack(
                                         rx.text("Pendientes Revisión", size="3", weight="bold"),
-                                        rx.text("0 cursos", size="2", color=rx.color("gray", 10)),
+                                        rx.text("Funcionalidad pendiente", size="2", color=rx.color("gray", 10)),
                                         spacing="1",
                                         align_items="start",
                                     ),
@@ -198,7 +198,7 @@ def admin_dashboard_content() -> rx.Component:
                                     rx.icon("tag", size=20, color=rx.color("green", 9)),
                                     rx.vstack(
                                         rx.text("Categorías", size="3", weight="bold"),
-                                        rx.text("0 categorías", size="2", color=rx.color("gray", 10)),
+                                        rx.text("Funcionalidad pendiente", size="2", color=rx.color("gray", 10)),
                                         spacing="1",
                                         align_items="start",
                                     ),
@@ -313,8 +313,11 @@ def admin_dashboard_content() -> rx.Component:
                 spacing="6",
                 width="100%",
                 padding_y="4",
+                on_mount=AdminDashboardState.load_statistics,
             ),
             max_width="1400px",
+            padding_x=["4", "6", "8"],
+            margin_x="auto",
         ),
         width="100%",
         spacing="0",

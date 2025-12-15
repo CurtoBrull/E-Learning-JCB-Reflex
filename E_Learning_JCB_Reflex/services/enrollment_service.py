@@ -195,3 +195,30 @@ async def get_student_enrollments(user_id: str) -> List[dict]:
     except Exception as e:
         print(f"Error al obtener inscripciones: {e}")
         return []
+
+
+async def count_total_enrollments() -> int:
+    """
+    Contar el total de inscripciones activas en la plataforma.
+
+    Returns:
+        int: Número total de inscripciones
+    """
+    try:
+        await MongoDB.connect()
+        db = MongoDB.get_db()
+
+        users_collection = db["users"]
+
+        # Contar inscripciones de todos los estudiantes
+        total = 0
+        cursor = users_collection.find({"role": "student"})
+        async for user in cursor:
+            if "enrolledCourses" in user:
+                total += len(user["enrolledCourses"])
+
+        return total
+
+    except Exception as e:
+        print(f"Error al contar inscripciones: {e}")
+        return 0
