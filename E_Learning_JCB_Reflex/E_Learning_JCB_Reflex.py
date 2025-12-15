@@ -14,6 +14,7 @@ from E_Learning_JCB_Reflex.pages.student_dashboard import student_dashboard_page
 from E_Learning_JCB_Reflex.pages.instructor_dashboard import instructor_dashboard_page
 from E_Learning_JCB_Reflex.pages.admin_dashboard import admin_dashboard_page
 from E_Learning_JCB_Reflex.pages.profile import profile_page
+from E_Learning_JCB_Reflex.pages.user_management import user_management_page
 
 # Configuración de la aplicación
 app = rx.App()
@@ -35,3 +36,6 @@ app.add_page(admin_dashboard_page, route="/admin/dashboard")
 
 # Registro de rutas protegidas - Perfil
 app.add_page(profile_page, route="/profile")
+
+# Registro de rutas protegidas - Administración
+app.add_page(user_management_page, route="/admin/users")

@@ -123,6 +123,23 @@ async def get_user_by_email(email: str) -> User | None:
         return None
 
 
+async def get_all_admins() -> List[User]:
+    """Obtener todos los usuarios con role='admin'."""
+    try:
+        await MongoDB.connect()
+        db = MongoDB.get_db()
+
+        users_collection = db["users"]
+        cursor = users_collection.find({"role": "admin"})
+        users_data = await cursor.to_list(length=None)
+
+        return [User.from_dict(user_data) for user_data in users_data]
+
+    except Exception as e:
+        print(f"Error fetching admins: {e}")
+        return []
+
+
 async def create_user(
     first_name: str,
     last_name: str,
@@ -222,6 +239,47 @@ async def change_password(user_id: str, current_password: str, new_password: str
         return False
 
 
+async def admin_change_password(user_id: str, new_password: str) -> bool:
+    """Cambiar la contraseña de un usuario (solo para admin, sin verificar contraseña actual)."""
+    try:
+        await MongoDB.connect()
+        db = MongoDB.get_db()
+
+        users_collection = db["users"]
+
+        # Hashear la nueva contraseña
+        hashed_new_password = hash_password(new_password)
+
+        # Actualizar la contraseña
+        result = await users_collection.update_one(
+            {"_id": ObjectId(user_id)},
+            {"$set": {"password": hashed_new_password}}
+        )
+
+        return result.matched_count > 0
+
+    except Exception as e:
+        print(f"Error changing password (admin): {e}")
+        return False
+
+
+async def delete_user(user_id: str) -> bool:
+    """Eliminar un usuario del sistema."""
+    try:
+        await MongoDB.connect()
+        db = MongoDB.get_db()
+
+        users_collection = db["users"]
+
+        result = await users_collection.delete_one({"_id": ObjectId(user_id)})
+
+        return result.deleted_count > 0
+
+    except Exception as e:
+        print(f"Error deleting user: {e}")
+        return False
+
+
 class UserService:
     """Clase para centralizar los servicios de usuario."""
 
@@ -260,6 +318,18 @@ class UserService:
     @staticmethod
     async def change_password(user_id: str, current_password: str, new_password: str) -> bool:
         return await change_password(user_id, current_password, new_password)
+
+    @staticmethod
+    async def get_all_admins() -> List[User]:
+        return await get_all_admins()
+
+    @staticmethod
+    async def admin_change_password(user_id: str, new_password: str) -> bool:
+        return await admin_change_password(user_id, new_password)
+
+    @staticmethod
+    async def delete_user(user_id: str) -> bool:
+        return await delete_user(user_id)
 
 
 # Instancia global del servicio

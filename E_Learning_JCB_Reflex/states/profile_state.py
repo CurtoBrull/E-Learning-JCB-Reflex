@@ -22,6 +22,30 @@ class ProfileState(AuthState):
     loading: bool = False
     show_password_section: bool = False
 
+    def set_first_name(self, value: str):
+        """Setter para first_name."""
+        self.first_name = value
+
+    def set_last_name(self, value: str):
+        """Setter para last_name."""
+        self.last_name = value
+
+    def set_email(self, value: str):
+        """Setter para email."""
+        self.email = value
+
+    def set_current_password(self, value: str):
+        """Setter para current_password."""
+        self.current_password = value
+
+    def set_new_password(self, value: str):
+        """Setter para new_password."""
+        self.new_password = value
+
+    def set_confirm_password(self, value: str):
+        """Setter para confirm_password."""
+        self.confirm_password = value
+
     def load_profile_data(self):
         """Cargar datos del perfil del usuario actual."""
         if self.current_user:
