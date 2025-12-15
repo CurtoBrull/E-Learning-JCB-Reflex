@@ -214,7 +214,7 @@ def users_table() -> rx.Component:
                                     size="2",
                                     variant="soft",
                                     color_scheme="blue",
-                                    on_click=lambda user_id=user["_id"], first_name=user["firstName"], last_name=user["lastName"], email=user["email"], role=user["role"]: UserManagementState.open_edit_user_dialog(
+                                    on_click=lambda _, user_id=user["_id"], first_name=user["firstName"], last_name=user["lastName"], email=user["email"], role=user["role"]: UserManagementState.open_edit_user_dialog(
                                         user_id, first_name, last_name, email, role
                                     ),
                                 ),
@@ -223,7 +223,7 @@ def users_table() -> rx.Component:
                                     size="2",
                                     variant="soft",
                                     color_scheme="red",
-                                    on_click=lambda user_id=user["_id"], user_name=f"{user['firstName']} {user['lastName']}": UserManagementState.open_delete_dialog(
+                                    on_click=lambda _, user_id=user["_id"], user_name=f"{user['firstName']} {user['lastName']}": UserManagementState.open_delete_dialog(
                                         user_id, user_name
                                     ),
                                 ),
