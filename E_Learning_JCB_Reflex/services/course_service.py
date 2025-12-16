@@ -65,3 +65,58 @@ async def get_course_by_id(course_id: str) -> Course | None:
     except Exception as e:
         print(f"Error fetching course: {e}")
         return None
+
+
+async def create_course(course_data: dict) -> bool:
+    """Crear un nuevo curso."""
+    try:
+        await MongoDB.connect()
+        db = MongoDB.get_db()
+
+        courses_collection = db["courses"]
+
+        # Agregar campos por defecto
+        from datetime import datetime, timezone
+        course_data["createdAt"] = datetime.now(timezone.utc)
+        course_data["studentsEnrolled"] = 0
+
+        result = await courses_collection.insert_one(course_data)
+        return result.inserted_id is not None
+    except Exception as e:
+        print(f"Error creating course: {e}")
+        return False
+
+
+async def update_course(course_id: str, update_data: dict) -> bool:
+    """Actualizar un curso existente."""
+    try:
+        await MongoDB.connect()
+        db = MongoDB.get_db()
+
+        courses_collection = db["courses"]
+
+        result = await courses_collection.update_one(
+            {"_id": ObjectId(course_id)},
+            {"$set": update_data}
+        )
+
+        return result.matched_count > 0
+    except Exception as e:
+        print(f"Error updating course: {e}")
+        return False
+
+
+async def delete_course(course_id: str) -> bool:
+    """Eliminar un curso del sistema."""
+    try:
+        await MongoDB.connect()
+        db = MongoDB.get_db()
+
+        courses_collection = db["courses"]
+
+        result = await courses_collection.delete_one({"_id": ObjectId(course_id)})
+
+        return result.deleted_count > 0
+    except Exception as e:
+        print(f"Error deleting course: {e}")
+        return False
