@@ -160,6 +160,16 @@ E-Learning-JCB-Reflex/
 
    Ver [Usuarios de Ejemplo](docs/USUARIOS_EJEMPLO.md) para credenciales de acceso.
 
+9. Para detener el servicio de Reflex:
+
+   ```bash
+   # Detener servicios en puertos 3000 y 8000
+   lsof -ti:3000,8000 | xargs kill -9
+
+   # Verificar que los puertos estén liberados
+   lsof -i:3000,8000
+   ```
+
 ## Configuración de Variables de Entorno
 
 Crea un archivo `.env` en la raíz del proyecto basándote en `.env.example`:
