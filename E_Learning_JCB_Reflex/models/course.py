@@ -1,11 +1,32 @@
-"""Modelo de curso para la plataforma E-Learning."""
+"""
+Modelos de curso para la plataforma E-Learning.
+
+Este módulo define las clases necesarias para representar cursos en el sistema:
+- Course: Modelo principal de curso
+- Instructor: Información del instructor embebida en el curso
+- Lesson: Lecciones individuales del curso
+- Review: Reseñas y calificaciones de estudiantes
+"""
 
 from datetime import datetime, timezone
 from typing import Optional, List
 
 
 class Instructor:
-    """Modelo de instructor embebido en un curso."""
+    """
+    Modelo de instructor embebido en un curso.
+
+    Representa la información del instructor asociada a un curso específico.
+    Esta información se almacena como un objeto embebido dentro del documento
+    de curso en MongoDB para optimizar las consultas.
+
+    Atributos:
+        name (str): Nombre completo del instructor
+        email (str): Correo electrónico del instructor
+        user_id (str): ID del usuario instructor en la colección users
+        avatar_url (str): URL del avatar/foto del instructor
+        bio (str): Biografía o descripción del instructor
+    """
 
     def __init__(
         self,
@@ -15,6 +36,16 @@ class Instructor:
         avatar_url: str = "/default-avatar.png",
         bio: str = "",
     ):
+        """
+        Inicializa una nueva instancia de Instructor.
+
+        Args:
+            name: Nombre completo del instructor
+            email: Correo electrónico del instructor
+            user_id: ID del usuario instructor (referencia a colección users)
+            avatar_url: URL del avatar del instructor
+            bio: Biografía del instructor
+        """
         self.name = name
         self.email = email
         self.user_id = user_id
@@ -23,7 +54,15 @@ class Instructor:
 
     @classmethod
     def from_dict(cls, data: dict) -> "Instructor":
-        """Crear instancia desde diccionario."""
+        """
+        Crear instancia de Instructor desde un diccionario.
+
+        Args:
+            data: Diccionario con los datos del instructor desde MongoDB
+
+        Returns:
+            Instructor: Nueva instancia con los datos proporcionados
+        """
         return cls(
             name=data.get("name", "Unknown"),
             email=data.get("email", ""),
@@ -33,7 +72,12 @@ class Instructor:
         )
 
     def to_dict(self) -> dict:
-        """Convertir a diccionario."""
+        """
+        Convertir instancia a diccionario.
+
+        Returns:
+            dict: Diccionario con los datos del instructor
+        """
         return {
             "name": self.name,
             "email": self.email,
@@ -44,7 +88,19 @@ class Instructor:
 
 
 class Lesson:
-    """Modelo de lección embebida en un curso."""
+    """
+    Modelo de lección embebida en un curso.
+
+    Representa una lección individual dentro de un curso. Las lecciones se
+    almacenan como un array embebido en el documento de curso.
+
+    Atributos:
+        id (str): Identificador único de la lección
+        title (str): Título de la lección
+        content (str): Contenido de la lección (puede ser texto, HTML, markdown, etc.)
+        order (int): Orden de la lección en el curso (para mantener secuencia)
+        duration (int): Duración estimada de la lección en minutos
+    """
 
     def __init__(
         self,
@@ -54,15 +110,33 @@ class Lesson:
         duration: int = 0,
         _id: Optional[str] = None,
     ):
+        """
+        Inicializa una nueva instancia de Lesson.
+
+        Args:
+            title: Título de la lección
+            content: Contenido de la lección
+            order: Posición de la lección en el curso (1, 2, 3...)
+            duration: Duración en minutos
+            _id: ID único de la lección
+        """
         self.id = str(_id) if _id else None
         self.title = title
         self.content = content
-        self.order = order
-        self.duration = duration
+        self.order = order  # Orden de la lección en el curso
+        self.duration = duration  # Duración en minutos
 
     @classmethod
     def from_dict(cls, data: dict) -> "Lesson":
-        """Crear instancia desde diccionario."""
+        """
+        Crear instancia de Lesson desde un diccionario.
+
+        Args:
+            data: Diccionario con los datos de la lección
+
+        Returns:
+            Lesson: Nueva instancia con los datos proporcionados
+        """
         return cls(
             _id=data.get("_id"),
             title=data.get("title", ""),
@@ -72,7 +146,12 @@ class Lesson:
         )
 
     def to_dict(self) -> dict:
-        """Convertir a diccionario."""
+        """
+        Convertir instancia a diccionario.
+
+        Returns:
+            dict: Diccionario con los datos de la lección
+        """
         return {
             "id": self.id,
             "title": self.title,
@@ -83,7 +162,19 @@ class Lesson:
 
 
 class Review:
-    """Modelo de review embebida en un curso."""
+    """
+    Modelo de reseña/calificación embebida en un curso.
+
+    Representa una reseña y calificación que un estudiante hace de un curso.
+    Las reseñas se almacenan como un array embebido en el documento de curso.
+
+    Atributos:
+        id (str): Identificador único de la reseña
+        student (str): ID del estudiante que escribió la reseña
+        rating (int): Calificación del curso (1-5 estrellas)
+        comment (str): Comentario o reseña escrita por el estudiante
+        created_at (datetime): Fecha y hora de creación de la reseña
+    """
 
     def __init__(
         self,
@@ -93,15 +184,33 @@ class Review:
         created_at: Optional[datetime] = None,
         _id: Optional[str] = None,
     ):
+        """
+        Inicializa una nueva instancia de Review.
+
+        Args:
+            student: ID del estudiante que escribió la reseña
+            rating: Calificación de 1 a 5 estrellas
+            comment: Comentario del estudiante
+            created_at: Fecha de creación de la reseña
+            _id: ID único de la reseña
+        """
         self.id = str(_id) if _id else None
-        self.student = student
-        self.rating = rating
+        self.student = student  # ID del estudiante
+        self.rating = rating  # Calificación de 1 a 5
         self.comment = comment
         self.created_at = created_at or datetime.now(timezone.utc)
 
     @classmethod
     def from_dict(cls, data: dict) -> "Review":
-        """Crear instancia desde diccionario."""
+        """
+        Crear instancia de Review desde un diccionario.
+
+        Args:
+            data: Diccionario con los datos de la reseña
+
+        Returns:
+            Review: Nueva instancia con los datos proporcionados
+        """
         return cls(
             _id=data.get("_id"),
             student=data.get("student", ""),
@@ -111,7 +220,12 @@ class Review:
         )
 
     def to_dict(self) -> dict:
-        """Convertir a diccionario."""
+        """
+        Convertir instancia a diccionario.
+
+        Returns:
+            dict: Diccionario con los datos de la reseña
+        """
         return {
             "id": self.id,
             "student": self.student,
@@ -122,7 +236,29 @@ class Review:
 
 
 class Course:
-    """Modelo completo de curso para MongoDB."""
+    """
+    Modelo completo de curso para MongoDB.
+
+    Representa un curso en la plataforma E-Learning con toda su información:
+    datos básicos, instructor, lecciones, estudiantes inscritos y reseñas.
+
+    Atributos:
+        id (str): Identificador único del curso (ObjectId de MongoDB)
+        title (str): Título del curso
+        description (str): Descripción detallada del curso
+        instructor (Instructor): Objeto con información del instructor
+        price (float): Precio del curso en la moneda configurada
+        thumbnail (str): URL de la imagen de portada del curso
+        level (str): Nivel del curso ("beginner", "intermediate", "advanced")
+        category (str): Categoría principal del curso
+        categories (List[str]): Lista de categorías a las que pertenece el curso
+        students (List[str]): Lista de IDs de estudiantes inscritos
+        lessons (List[Lesson]): Lista de lecciones del curso
+        reviews (List[Review]): Lista de reseñas del curso
+        average_rating (int): Calificación promedio del curso (calculada)
+        total_reviews (int): Número total de reseñas (calculado)
+        created_at (datetime): Fecha y hora de creación del curso
+    """
 
     def __init__(
         self,
@@ -142,34 +278,69 @@ class Course:
         _id: Optional[str] = None,
         created_at: Optional[datetime] = None,
     ):
+        """
+        Inicializa una nueva instancia de Course.
+
+        Args:
+            title: Título del curso
+            description: Descripción detallada del curso
+            instructor: Objeto Instructor con la información del instructor
+            price: Precio del curso (por defecto 0.0 para cursos gratuitos)
+            thumbnail: URL de la imagen del curso
+            level: Nivel de dificultad ("beginner", "intermediate", "advanced")
+            category: Categoría principal del curso
+            categories: Lista de categorías
+            students: Lista de IDs de estudiantes inscritos
+            lessons: Lista de objetos Lesson
+            reviews: Lista de objetos Review
+            average_rating: Calificación promedio (calculada automáticamente)
+            total_reviews: Total de reseñas (calculado automáticamente)
+            _id: ID de MongoDB
+            created_at: Fecha de creación
+        """
         self.id = str(_id) if _id else None
         self.title = title
         self.description = description
-        self.instructor = instructor
+        self.instructor = instructor  # Objeto Instructor embebido
         self.price = price
         self.thumbnail = thumbnail
-        self.level = level
+        self.level = level  # "beginner", "intermediate", "advanced"
         self.category = category
         self.categories = categories or []
-        self.students = students or []
-        self.lessons = lessons or []
-        self.reviews = reviews or []
-        self.average_rating = average_rating
-        self.total_reviews = total_reviews
+        self.students = students or []  # IDs de estudiantes inscritos
+        self.lessons = lessons or []  # Lecciones del curso
+        self.reviews = reviews or []  # Reseñas del curso
+        self.average_rating = average_rating  # Calculado de las reviews
+        self.total_reviews = total_reviews  # Calculado de las reviews
         self.created_at = created_at or datetime.now(timezone.utc)
 
     @classmethod
     def from_dict(cls, data: dict) -> "Course":
-        """Crear instancia de Course desde un documento de MongoDB."""
-        # Parsear instructor
+        """
+        Crear instancia de Course desde un documento de MongoDB.
+
+        Este método deserializa un documento de MongoDB y crea objetos Python
+        completos incluyendo todos los objetos embebidos (instructor, lecciones, reviews).
+
+        Args:
+            data: Diccionario con el documento de curso desde MongoDB
+
+        Returns:
+            Course: Nueva instancia con todos los datos deserializados
+
+        Ejemplo:
+            >>> course_doc = db.courses.find_one({"_id": ObjectId(...)})
+            >>> course = Course.from_dict(course_doc)
+        """
+        # Parsear instructor (objeto embebido)
         instructor_data = data.get("instructor", {})
         instructor = Instructor.from_dict(instructor_data) if isinstance(instructor_data, dict) else Instructor()
 
-        # Parsear lecciones
+        # Parsear lecciones (array de objetos embebidos)
         lessons_data = data.get("lessons", [])
         lessons = [Lesson.from_dict(lesson) for lesson in lessons_data] if isinstance(lessons_data, list) else []
 
-        # Parsear reviews
+        # Parsear reviews (array de objetos embebidos)
         reviews_data = data.get("reviews", [])
         reviews = [Review.from_dict(review) for review in reviews_data] if isinstance(reviews_data, list) else []
 
@@ -192,7 +363,20 @@ class Course:
         )
 
     def to_dict(self) -> dict:
-        """Convertir instancia de Course a diccionario."""
+        """
+        Convertir instancia de Course a diccionario.
+
+        Serializa el objeto Course y todos sus objetos embebidos a un
+        diccionario compatible con MongoDB.
+
+        Returns:
+            dict: Diccionario con todos los datos del curso serializados
+
+        Ejemplo:
+            >>> course = Course(title="Python Básico", ...)
+            >>> course_dict = course.to_dict()
+            >>> # Listo para insertar en MongoDB
+        """
         return {
             "id": self.id,
             "title": self.title,
@@ -213,5 +397,17 @@ class Course:
 
     @property
     def instructor_name(self) -> str:
-        """Propiedad para compatibilidad con código existente."""
+        """
+        Obtener nombre del instructor del curso.
+
+        Propiedad de conveniencia para acceder al nombre del instructor
+        sin necesidad de acceder al objeto instructor directamente.
+
+        Returns:
+            str: Nombre completo del instructor
+
+        Ejemplo:
+            >>> course.instructor_name
+            'Dr. Juan Pérez'
+        """
         return self.instructor.name

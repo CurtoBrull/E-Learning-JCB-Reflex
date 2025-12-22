@@ -1,4 +1,27 @@
-"""Dashboard para instructores."""
+"""
+Dashboard para instructores de la plataforma E-Learning JCB.
+
+Este módulo proporciona el panel de control principal para usuarios
+con rol de instructor. Muestra estadísticas de sus cursos y permite
+gestionar el contenido educativo que imparten.
+
+Funcionalidades:
+- Bienvenida personalizada con nombre del instructor
+- Estadísticas del instructor (cursos creados, estudiantes, valoración media, ingresos)
+- Sección de cursos creados por el instructor
+- Mensaje de bienvenida para instructores nuevos sin cursos
+- Acciones rápidas (crear curso, mis cursos, estadísticas, perfil)
+- Protección de acceso solo para instructores
+
+Ruta: /instructor/dashboard
+Acceso: Protegida (solo instructores autenticados)
+Estado: AuthState (información del usuario)
+Protección: instructor_only HOC
+
+Notas:
+    - Las estadísticas actuales muestran valores estáticos (0)
+    - Funcionalidad pendiente: integración con datos reales de cursos del instructor
+"""
 
 import reflex as rx
 from E_Learning_JCB_Reflex.components.navbar import navbar
@@ -7,7 +30,24 @@ from E_Learning_JCB_Reflex.states.auth_state import AuthState
 
 
 def instructor_dashboard_content() -> rx.Component:
-    """Contenido del dashboard del instructor."""
+    """
+    Renderiza el contenido completo del dashboard del instructor.
+
+    Muestra todas las secciones del dashboard organizadas verticalmente:
+    1. Header con bienvenida y badge de rol "Instructor"
+    2. Estadísticas en 4 tarjetas (cursos, estudiantes, valoración, ingresos)
+    3. Sección "Mis Cursos" con mensaje para crear primer curso
+    4. Sección "Acciones Rápidas" con enlaces útiles
+
+    Returns:
+        rx.Component: Contenido completo del dashboard del instructor
+
+    Notas:
+        - Las estadísticas actuales muestran valores placeholder (0, $0, 0.0)
+        - Incluye múltiples CTAs para crear el primer curso
+        - Los enlaces redirigen a rutas de instructor (/instructor/courses/new, etc.)
+        - Max width de 1400px para mejor legibilidad
+    """
     return rx.vstack(
         navbar(),
         rx.container(
@@ -248,5 +288,18 @@ def instructor_dashboard_content() -> rx.Component:
 
 
 def instructor_dashboard_page() -> rx.Component:
-    """Página de dashboard del instructor con protección."""
+    """
+    Renderiza la página de dashboard del instructor con protección.
+
+    Envuelve el contenido del dashboard con el HOC instructor_only
+    para garantizar que solo usuarios con rol "instructor" puedan acceder.
+
+    Returns:
+        rx.Component: Dashboard protegido para instructores
+
+    Notas:
+        - Utiliza el HOC instructor_only de components.protected
+        - Si el usuario no es instructor, redirige o muestra acceso denegado
+        - Esta es la función principal exportada para el routing
+    """
     return instructor_only(instructor_dashboard_content())

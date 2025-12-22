@@ -1,4 +1,25 @@
-"""Dashboard para estudiantes."""
+"""
+Dashboard para estudiantes de la plataforma E-Learning JCB.
+
+Este módulo proporciona el panel de control principal para usuarios
+con rol de estudiante. Muestra estadísticas, cursos inscritos y
+permite gestionar inscripciones.
+
+Funcionalidades:
+- Bienvenida personalizada con nombre del usuario
+- Estadísticas del estudiante (cursos inscritos, completados, progreso, certificados)
+- Lista de cursos inscritos con información de progreso
+- Barra de progreso visual para cada curso
+- Opciones para continuar curso o desinscribirse
+- Diálogo de confirmación para desinscripción
+- Acciones rápidas (explorar cursos, inscripciones, perfil)
+- Protección de acceso solo para estudiantes
+
+Ruta: /student/dashboard
+Acceso: Protegida (solo estudiantes autenticados)
+Estados: AuthState (usuario), EnrollmentState (inscripciones)
+Protección: student_only HOC
+"""
 
 import reflex as rx
 from E_Learning_JCB_Reflex.components.navbar import navbar
@@ -9,7 +30,22 @@ from E_Learning_JCB_Reflex.states.enrollment_state import EnrollmentState
 
 
 def unenroll_confirmation_dialog() -> rx.Component:
-    """Diálogo de confirmación para desinscripción."""
+    """
+    Renderiza un diálogo de confirmación para desinscribirse de un curso.
+
+    Muestra un alert dialog que solicita confirmación antes de desinscribir
+    al estudiante de un curso. Advierte que se perderá todo el progreso.
+
+    Returns:
+        rx.Component: Alert dialog de confirmación
+
+    Notas:
+        - Se muestra cuando EnrollmentState.show_unenroll_dialog es True
+        - Muestra el título del curso desde EnrollmentState.course_to_unenroll_title
+        - Botón "Cancelar" cierra el diálogo sin acción
+        - Botón "Desinscribirse" ejecuta EnrollmentState.confirm_unenroll
+        - El botón de acción tiene color_scheme="red" para indicar acción destructiva
+    """
     return rx.alert_dialog.root(
         rx.alert_dialog.content(
             rx.alert_dialog.title("Confirmar Desinscripción"),
@@ -43,7 +79,26 @@ def unenroll_confirmation_dialog() -> rx.Component:
 
 
 def student_dashboard_content() -> rx.Component:
-    """Contenido del dashboard del estudiante."""
+    """
+    Renderiza el contenido completo del dashboard del estudiante.
+
+    Muestra todas las secciones del dashboard organizadas verticalmente:
+    1. Header con bienvenida y badge de rol
+    2. Estadísticas en 4 tarjetas (cursos inscritos, completados, progreso, certificados)
+    3. Sección "Mis Cursos" con cuadrícula de cursos inscritos
+    4. Sección "Acciones Rápidas" con enlaces útiles
+
+    Returns:
+        rx.Component: Contenido completo del dashboard
+
+    Notas:
+        - Utiliza on_mount con EnrollmentState.load_enrolled_courses
+        - Muestra callouts de error/éxito según EnrollmentState
+        - Los cursos se muestran en cuadrícula de 3 columnas con altura fija
+        - Cada curso incluye barra de progreso visual
+        - Si no hay cursos, muestra mensaje con botón para explorar
+        - Max width de 1400px para mejor legibilidad
+    """
     return rx.vstack(
         navbar(),
         unenroll_confirmation_dialog(),
@@ -404,5 +459,18 @@ def student_dashboard_content() -> rx.Component:
 
 
 def student_dashboard_page() -> rx.Component:
-    """Página de dashboard del estudiante con protección."""
+    """
+    Renderiza la página de dashboard del estudiante con protección.
+
+    Envuelve el contenido del dashboard con el HOC student_only
+    para garantizar que solo usuarios con rol "student" puedan acceder.
+
+    Returns:
+        rx.Component: Dashboard protegido para estudiantes
+
+    Notas:
+        - Utiliza el HOC student_only de components.protected
+        - Si el usuario no es estudiante, redirige o muestra acceso denegado
+        - Esta es la función principal exportada para el routing
+    """
     return student_only(student_dashboard_content())

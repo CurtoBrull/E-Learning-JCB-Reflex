@@ -1,4 +1,19 @@
-"""Página de login de la plataforma E-Learning JCB."""
+"""
+Página de inicio de sesión (login).
+
+Proporciona el formulario de autenticación para que los usuarios accedan
+a la plataforma con sus credenciales (email y contraseña).
+
+Funcionalidades:
+- Formulario de login con validación
+- Mensajes de error y éxito
+- Redirección automática al dashboard según rol del usuario
+- Link a página de registro para nuevos usuarios
+
+Ruta: /login
+Acceso: Pública
+Estado: AuthState para manejar autenticación
+"""
 
 import reflex as rx
 from E_Learning_JCB_Reflex.states.auth_state import AuthState
@@ -6,7 +21,19 @@ from E_Learning_JCB_Reflex.components.navbar import navbar
 
 
 def login_page() -> rx.Component:
-    """Página de login con formulario."""
+    """
+    Renderizar la página de inicio de sesión.
+
+    Muestra un formulario con campos de email y contraseña. Al enviar,
+    AuthState.handle_login() valida las credenciales y redirige al
+    dashboard correspondiente según el rol del usuario.
+
+    Returns:
+        rx.Component: Página con formulario de login
+
+    Eventos:
+        - on_submit: AuthState.handle_login
+    """
     return rx.vstack(
         navbar(),
         rx.container(

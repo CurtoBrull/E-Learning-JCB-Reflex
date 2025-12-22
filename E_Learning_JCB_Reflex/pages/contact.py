@@ -1,4 +1,23 @@
-"""Página de contacto de la plataforma E-Learning JCB."""
+"""
+Página de contacto de la plataforma E-Learning JCB.
+
+Este módulo proporciona un formulario de contacto para que los usuarios
+puedan enviar consultas, sugerencias o reportar problemas al equipo
+de la plataforma.
+
+Funcionalidades:
+- Formulario de contacto con validación
+- Campos: nombre, email y mensaje (textarea)
+- Botón para limpiar el formulario
+- Botón de envío con estado de carga
+- Mensajes de éxito y error
+- Información adicional de contacto (email, teléfono, dirección)
+- Iconos descriptivos para cada método de contacto
+
+Ruta: /contact
+Acceso: Pública (sin autenticación requerida)
+Estado: ContactState para manejar el envío de mensajes
+"""
 
 import reflex as rx
 from E_Learning_JCB_Reflex.states.contact_state import ContactState
@@ -6,7 +25,24 @@ from E_Learning_JCB_Reflex.components.navbar import navbar
 
 
 def contact_page() -> rx.Component:
-    """Página de contacto con formulario."""
+    """
+    Renderiza la página de contacto con formulario.
+
+    Muestra un formulario completo para que los usuarios puedan
+    contactar con el equipo de E-Learning JCB. Incluye campos
+    de nombre, email y mensaje, junto con botones de acción.
+
+    Returns:
+        rx.Component: Componente de Reflex con el formulario de contacto
+
+    Notas:
+        - Utiliza ContactState para manejar el estado del formulario y el envío
+        - Muestra callout de éxito cuando ContactState.success es True
+        - Muestra callout de error cuando ContactState.error no está vacío
+        - El formulario está limitado a un max_width de 600px
+        - Incluye sección adicional con información de contacto alternativa
+        - El textarea tiene min_height de 200px para mensajes largos
+    """
     return rx.vstack(
         navbar(),
         rx.container(

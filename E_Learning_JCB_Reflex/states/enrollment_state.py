@@ -1,4 +1,16 @@
-"""Estado de gestión de inscripciones de estudiantes."""
+"""
+Estado de gestión de inscripciones de estudiantes.
+
+Este módulo maneja toda la lógica de inscripción y desinscripción de estudiantes
+en cursos. Proporciona funcionalidades para:
+- Ver cursos disponibles para inscripción
+- Inscribirse en un curso
+- Desinscribirse de un curso
+- Ver cursos en los que el estudiante ya está inscrito
+- Calcular estadísticas de progreso
+
+Hereda de AuthState para acceder a la información del usuario autenticado.
+"""
 
 import reflex as rx
 from E_Learning_JCB_Reflex.states.auth_state import AuthState
@@ -7,7 +19,38 @@ from E_Learning_JCB_Reflex.services.course_service import get_all_courses
 
 
 class EnrollmentState(AuthState):
-    """Estado de inscripciones de estudiantes."""
+    """
+    Estado para gestionar inscripciones de estudiantes en cursos.
+
+    Extiende AuthState para tener acceso al usuario autenticado actual.
+    Maneja el ciclo completo de inscripción: cargar cursos disponibles,
+    inscribirse, desinscribirse, y visualizar progreso.
+
+    Atributos de estado:
+        # Listas de cursos
+        available_courses (list[dict]): Todos los cursos disponibles para inscripción
+        enrolled_courses (list[dict]): Cursos en los que el estudiante está inscrito
+
+        # Estados de UI
+        loading (bool): Indicador de operación en progreso
+        error (str): Mensajes de error
+        success (str): Mensajes de éxito
+
+        # Diálogo de confirmación de desinscripción
+        show_unenroll_dialog (bool): Mostrar/ocultar diálogo de confirmación
+        course_to_unenroll_id (str): ID del curso a desinscribir
+        course_to_unenroll_title (str): Título del curso a desinscribir
+
+        # Diálogo de resultado de inscripción
+        show_enrollment_result_dialog (bool): Mostrar/ocultar diálogo de resultado
+        enrollment_was_successful (bool): Indica si la inscripción fue exitosa
+        enrollment_course_id (str): ID del curso en el que se intentó inscribir
+
+    Propiedades computadas:
+        total_enrolled_courses (int): Número total de cursos inscritos
+        completed_courses (int): Cursos con progreso 100%
+        average_progress (float): Progreso promedio en todos los cursos
+    """
 
     # Cursos disponibles para inscripción
     available_courses: list[dict] = []
@@ -31,7 +74,18 @@ class EnrollmentState(AuthState):
     enrollment_course_id: str = ""
 
     async def load_available_courses(self):
-        """Cargar todos los cursos disponibles."""
+        """
+        Cargar todos los cursos disponibles para inscripción.
+
+        Obtiene el catálogo completo de cursos de la plataforma y los convierte
+        a diccionarios para mostrarlos en la UI. Utilizado en páginas donde
+        los estudiantes pueden explorar y seleccionar cursos para inscribirse.
+
+        Actualiza el estado:
+            - available_courses: Lista de diccionarios con info básica de cada curso
+            - loading: True durante carga, False al terminar
+            - error: Mensaje si no hay cursos o hay error
+        """
         self.loading = True
         self.error = ""
         try:
@@ -60,7 +114,22 @@ class EnrollmentState(AuthState):
             self.loading = False
 
     async def load_enrolled_courses(self):
-        """Cargar cursos en los que el estudiante está inscrito."""
+        """
+        Cargar cursos en los que el estudiante está inscrito.
+
+        Obtiene de la base de datos todos los cursos en los que el usuario
+        actual está inscrito, incluyendo información de progreso y estado
+        de inscripción. Solo funciona si el usuario está autenticado.
+
+        Actualiza el estado:
+            - enrolled_courses: Lista con cursos inscritos y datos de progreso
+            - loading: True durante carga, False al terminar
+            - error: Mensaje si el usuario no está identificado o hay error
+
+        Precondiciones:
+            - El usuario debe estar autenticado (is_authenticated = True)
+            - current_user debe contener el ID del usuario
+        """
         if not self.is_authenticated or not self.current_user:
             return
 
@@ -83,7 +152,27 @@ class EnrollmentState(AuthState):
             self.loading = False
 
     async def enroll_in_course(self, course_id: str):
-        """Inscribir al estudiante en un curso."""
+        """
+        Inscribir al estudiante autenticado en un curso específico.
+
+        Crea una nueva inscripción en la base de datos vinculando al estudiante
+        con el curso. Inicializa el progreso en 0% y marca el estado como "active".
+        También incrementa el contador de estudiantes inscritos del curso.
+
+        Args:
+            course_id: ID del curso en el que se desea inscribir
+
+        Actualiza el estado:
+            - success: Mensaje de éxito si la inscripción funciona
+            - error: Mensaje si falla (usuario no autenticado, ya inscrito, etc.)
+            - enrollment_was_successful: True si exitoso, False si falla
+            - show_enrollment_result_dialog: True para mostrar resultado
+            - enrolled_courses: Recarga la lista de cursos inscritos
+
+        Nota:
+            Si el estudiante ya está inscrito en el curso, la operación falla
+            y se muestra un mensaje apropiado.
+        """
         if not self.is_authenticated or not self.current_user:
             self.error = "Debes iniciar sesión para inscribirte"
             self.enrollment_was_successful = False

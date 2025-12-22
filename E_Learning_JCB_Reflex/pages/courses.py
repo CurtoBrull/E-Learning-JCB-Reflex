@@ -1,4 +1,21 @@
-"""Página de todos los cursos."""
+"""
+Página de catálogo de cursos de la plataforma E-Learning JCB.
+
+Este módulo muestra el catálogo completo de todos los cursos disponibles
+en la plataforma. Los cursos se presentan en una cuadrícula utilizando
+el componente course_card para mantener consistencia visual.
+
+Funcionalidades:
+- Catálogo completo de cursos disponibles
+- Visualización en cuadrícula responsive (3 columnas)
+- Estado de carga mientras se obtienen los datos
+- Manejo de errores con mensajes visuales
+- Carga automática de cursos al montar la página
+
+Ruta: /courses
+Acceso: Pública (sin autenticación requerida)
+Estado: CourseState para cargar y mostrar todos los cursos
+"""
 
 import reflex as rx
 from E_Learning_JCB_Reflex.states.course_state import CourseState
@@ -8,7 +25,23 @@ from E_Learning_JCB_Reflex.components.course_card import course_card
 
 
 def courses_page() -> rx.Component:
-    """Página de todos los cursos."""
+    """
+    Renderiza la página con el catálogo completo de cursos.
+
+    Muestra todos los cursos disponibles en la plataforma organizados
+    en una cuadrícula de 3 columnas. Cada curso se renderiza usando
+    el componente course_card que muestra información básica y permite
+    navegar a los detalles del curso.
+
+    Returns:
+        rx.Component: Componente de Reflex con el catálogo de cursos
+
+    Notas:
+        - Utiliza on_mount para cargar automáticamente los cursos al abrir la página
+        - Muestra un spinner mientras CourseState.loading es True
+        - Muestra callout de error si CourseState.error no está vacío
+        - La cuadrícula solo se muestra si hay cursos disponibles (CourseState.courses.length() > 0)
+    """
     return rx.vstack(
         navbar(),
         rx.container(

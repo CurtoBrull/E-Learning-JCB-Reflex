@@ -1,10 +1,60 @@
-"""Componente de tarjeta de curso."""
+"""
+Componente de tarjeta de curso (course card).
+
+Este módulo define el componente visual de tarjeta que representa un curso
+en las páginas de listado (catálogo, homepage, etc.). Cada tarjeta muestra
+información resumida del curso y es clicable para navegar al detalle.
+
+Características visuales:
+- Imagen thumbnail del curso con bordes redondeados y sombras
+- Título del curso (máximo altura definida)
+- Descripción limitada a 3 líneas
+- Badge de nivel (beginner/intermediate/advanced)
+- Precio con formato de moneda
+- Nombre del instructor
+- Efectos hover para interactividad (elevación y sombra)
+"""
 
 import reflex as rx
 
 
 def course_card(course: dict) -> rx.Component:
-    """Componente de tarjeta de curso."""
+    """
+    Crear una tarjeta visual para mostrar información de un curso.
+
+    Genera un componente de tarjeta clicable que muestra la información
+    esencial de un curso. Al hacer clic, redirige a la página de detalles
+    del curso (/courses/[course_id]).
+
+    Args:
+        course: Diccionario con la información del curso. Campos esperados:
+            - id (str): ID del curso para la URL
+            - thumbnail (str): URL de la imagen del curso
+            - title (str): Título del curso
+            - description (str): Descripción del curso
+            - level (str): Nivel del curso (beginner/intermediate/advanced)
+            - price (float): Precio del curso
+            - instructor_name (str): Nombre del instructor
+
+    Returns:
+        rx.Component: Tarjeta de curso completa y estilizada
+
+    Ejemplo:
+        >>> course_data = {
+        ...     "id": "123",
+        ...     "title": "Python para principiantes",
+        ...     "description": "Aprende Python desde cero",
+        ...     "level": "beginner",
+        ...     "price": 49.99,
+        ...     "instructor_name": "Juan Pérez"
+        ... }
+        >>> card = course_card(course_data)
+
+    Nota:
+        - La imagen se contiene (object_fit="contain") para evitar distorsión
+        - La descripción se limita a 3 líneas con no_of_lines=3
+        - Los valores por defecto se usan si faltan campos en el diccionario
+    """
     return rx.link(
         rx.box(
             rx.vstack(

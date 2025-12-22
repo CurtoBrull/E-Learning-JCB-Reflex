@@ -1,4 +1,24 @@
-"""Dashboard para administradores."""
+"""
+Dashboard para administradores de la plataforma E-Learning JCB.
+
+Este módulo proporciona el panel de control principal para usuarios
+con rol de administrador. Muestra estadísticas globales de la plataforma
+y proporciona acceso rápido a las herramientas de gestión.
+
+Funcionalidades:
+- Bienvenida personalizada con nombre del administrador
+- Estadísticas globales (usuarios, cursos, inscripciones, ingresos)
+- Desglose de usuarios por rol (estudiantes, instructores, admins)
+- Información sobre cursos publicados y pendientes
+- Acciones rápidas (usuarios, cursos, categorías, estadísticas, configuración)
+- Protección de acceso solo para administradores
+- Carga dinámica de estadísticas al montar la página
+
+Ruta: /admin/dashboard
+Acceso: Protegida (solo administradores autenticados)
+Estado: AdminDashboardState (estadísticas de la plataforma)
+Protección: admin_only HOC
+"""
 
 import reflex as rx
 from E_Learning_JCB_Reflex.components.navbar import navbar
@@ -7,7 +27,25 @@ from E_Learning_JCB_Reflex.states.admin_dashboard_state import AdminDashboardSta
 
 
 def admin_dashboard_content() -> rx.Component:
-    """Contenido del dashboard del administrador."""
+    """
+    Renderiza el contenido completo del dashboard del administrador.
+
+    Muestra todas las secciones del dashboard organizadas verticalmente:
+    1. Header con bienvenida y badge de rol "Administrador"
+    2. Estadísticas globales en 4 tarjetas (usuarios, cursos, inscripciones, ingresos)
+    3. Grid de 2 columnas con gestión de usuarios y cursos
+    4. Sección "Acciones Rápidas" con enlaces a herramientas administrativas
+
+    Returns:
+        rx.Component: Contenido completo del dashboard del administrador
+
+    Notas:
+        - Utiliza on_mount con AdminDashboardState.load_statistics
+        - Las estadísticas se cargan dinámicamente desde la base de datos
+        - Incluye desglose por tipo de usuario (students, instructors, admins)
+        - La tarjeta de ingresos muestra "N/A" (funcionalidad pendiente)
+        - Max width de 1400px para mejor legibilidad
+    """
     return rx.vstack(
         navbar(),
         rx.container(
@@ -325,5 +363,18 @@ def admin_dashboard_content() -> rx.Component:
 
 
 def admin_dashboard_page() -> rx.Component:
-    """Página de dashboard del administrador con protección."""
+    """
+    Renderiza la página de dashboard del administrador con protección.
+
+    Envuelve el contenido del dashboard con el HOC admin_only
+    para garantizar que solo usuarios con rol "admin" puedan acceder.
+
+    Returns:
+        rx.Component: Dashboard protegido para administradores
+
+    Notas:
+        - Utiliza el HOC admin_only de components.protected
+        - Si el usuario no es administrador, redirige o muestra acceso denegado
+        - Esta es la función principal exportada para el routing
+    """
     return admin_only(admin_dashboard_content())

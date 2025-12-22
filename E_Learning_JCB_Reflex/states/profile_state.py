@@ -1,4 +1,15 @@
-"""Estado para gestión de perfil de usuario."""
+"""
+Estado para gestión de perfil de usuario.
+
+Este módulo maneja la edición del perfil del usuario autenticado,
+incluyendo actualización de datos personales y cambio de contraseña.
+
+Funcionalidades principales:
+- Editar nombre, apellido y email
+- Cambiar contraseña validando la contraseña actual
+- Mostrar/ocultar sección de cambio de contraseña
+- Validaciones de formulario
+"""
 
 import reflex as rx
 from E_Learning_JCB_Reflex.states.auth_state import AuthState
@@ -6,7 +17,27 @@ from E_Learning_JCB_Reflex.services.user_service import user_service
 
 
 class ProfileState(AuthState):
-    """Estado para gestionar el perfil del usuario."""
+    """
+    Estado para gestionar el perfil del usuario autenticado.
+
+    Extiende AuthState para tener acceso al usuario actual y proporciona
+    funcionalidades de edición de perfil y cambio de contraseña.
+
+    Atributos de estado:
+        # Campos editables del perfil
+        first_name (str): Nombre editable del usuario
+        last_name (str): Apellido editable del usuario
+        email (str): Email editable del usuario
+
+        # Campos para cambio de contraseña
+        current_password (str): Contraseña actual (para validación)
+        new_password (str): Nueva contraseña deseada
+        confirm_password (str): Confirmación de nueva contraseña
+
+        # Estados de UI
+        loading (bool): Indicador de operación en progreso
+        show_password_section (bool): Mostrar/ocultar sección de cambio de contraseña
+    """
 
     # Campos editables
     first_name: str = ""
@@ -63,7 +94,27 @@ class ProfileState(AuthState):
             self.confirm_password = ""
 
     async def update_profile(self):
-        """Actualizar información del perfil."""
+        """
+        Actualizar la información del perfil del usuario.
+
+        Valida los campos del formulario y actualiza los datos del usuario
+        en la base de datos. Tras actualizar, también actualiza el objeto
+        current_user en memoria para que los cambios se reflejen inmediatamente
+        en la UI.
+
+        Validaciones:
+            - Nombre y apellido son obligatorios
+            - Email debe contener "@"
+            - Usuario debe estar autenticado
+
+        Actualiza el estado:
+            - current_user: Actualiza con los nuevos datos
+            - loading: True durante la operación
+            - Muestra toast de éxito o error
+
+        Returns:
+            rx.toast: Mensaje de éxito o error para mostrar al usuario
+        """
         if not self.is_authenticated:
             return rx.toast.error("Debes iniciar sesión")
 
@@ -105,7 +156,33 @@ class ProfileState(AuthState):
             self.loading = False
 
     async def change_password(self):
-        """Cambiar la contraseña del usuario."""
+        """
+        Cambiar la contraseña del usuario autenticado.
+
+        Verifica la contraseña actual antes de permitir el cambio.
+        Si es exitoso, limpia los campos y oculta la sección de cambio
+        de contraseña.
+
+        Validaciones:
+            - Contraseña actual es obligatoria (para verificación)
+            - Nueva contraseña es obligatoria
+            - Nueva contraseña debe tener al menos 6 caracteres
+            - Nueva contraseña debe coincidir con confirmación
+            - Usuario debe estar autenticado
+
+        Actualiza el estado:
+            - Limpia campos de contraseña si es exitoso
+            - show_password_section: False si es exitoso
+            - loading: True durante la operación
+            - Muestra toast de éxito o error
+
+        Returns:
+            rx.toast: Mensaje de éxito o error para mostrar al usuario
+
+        Nota:
+            La contraseña actual se valida mediante bcrypt en el servicio,
+            comparando con el hash almacenado en la base de datos.
+        """
         if not self.is_authenticated:
             return rx.toast.error("Debes iniciar sesión")
 

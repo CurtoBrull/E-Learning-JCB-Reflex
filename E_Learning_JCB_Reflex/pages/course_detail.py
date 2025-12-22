@@ -1,4 +1,25 @@
-"""Página de detalles de un curso específico."""
+"""
+Página de detalles de un curso específico en la plataforma E-Learning JCB.
+
+Este módulo muestra toda la información detallada de un curso individual,
+incluyendo descripción, instructor, lecciones, reviews y permite la inscripción
+de estudiantes autenticados.
+
+Funcionalidades:
+- Vista completa del curso con toda su información
+- Sección de instructor con avatar, nombre, email y biografía
+- Estadísticas del curso (estudiantes, rating, reviews)
+- Lista de categorías del curso
+- Contenido del curso (lecciones con duración)
+- Opiniones y valoraciones de estudiantes
+- Botón de inscripción (solo para estudiantes autenticados)
+- Diálogo de resultado de inscripción con opciones de navegación
+- Carga dinámica del curso desde la URL
+
+Ruta: /courses/[course_id]
+Acceso: Pública (inscripción solo para usuarios autenticados con rol student)
+Estados: CourseState (información del curso), EnrollmentState (inscripciones), AuthState (autenticación)
+"""
 
 import reflex as rx
 from E_Learning_JCB_Reflex.states.course_state import CourseState
@@ -9,7 +30,23 @@ from E_Learning_JCB_Reflex.utils.route_helpers import get_dynamic_id
 
 
 def enrollment_result_dialog() -> rx.Component:
-    """Diálogo que muestra el resultado de la inscripción con opciones de navegación."""
+    """
+    Renderiza un diálogo modal con el resultado de la inscripción.
+
+    Muestra un diálogo diferente según el resultado de la inscripción:
+    - Éxito: Muestra mensaje de éxito con 3 opciones de navegación
+      (ir al dashboard, ver detalles del curso, explorar más cursos)
+    - Error: Muestra mensaje de error con opciones para reintentar
+      o ver otros cursos
+
+    Returns:
+        rx.Component: Alert dialog que se muestra/oculta según EnrollmentState.show_enrollment_result_dialog
+
+    Notas:
+        - El contenido cambia según EnrollmentState.enrollment_was_successful
+        - Incluye iconos descriptivos (check-circle para éxito, triangle-alert para error)
+        - Los botones tienen esquemas de color apropiados al resultado
+    """
     return rx.alert_dialog.root(
         rx.alert_dialog.content(
             rx.cond(
@@ -131,7 +168,30 @@ def enrollment_result_dialog() -> rx.Component:
 
 
 def course_detail_page() -> rx.Component:
-    """Página de detalles de un curso."""
+    """
+    Renderiza la página completa de detalles de un curso.
+
+    Muestra toda la información del curso organizada en secciones:
+    1. Header con imagen del curso y información principal (título, descripción, nivel, precio)
+    2. Información del instructor con avatar y biografía
+    3. Estadísticas (estudiantes, rating, reviews)
+    4. Categorías del curso
+    5. Contenido del curso (lista de lecciones)
+    6. Opiniones de estudiantes (reviews)
+    7. Botón de inscripción (condicional según autenticación y rol)
+
+    Returns:
+        rx.Component: Componente de Reflex con toda la información del curso
+
+    Notas:
+        - Utiliza on_mount con CourseState.load_course_from_url para cargar el curso desde la URL
+        - Muestra spinner mientras CourseState.loading es True
+        - El botón de inscripción solo aparece para estudiantes autenticados
+        - Para usuarios no autenticados, muestra botón que redirige a login
+        - Para instructores/admins, muestra botón deshabilitado con mensaje informativo
+        - Incluye el diálogo de resultado de inscripción
+        - Max width de 1200px para mejor legibilidad
+    """
     return rx.vstack(
         navbar(),
         enrollment_result_dialog(),

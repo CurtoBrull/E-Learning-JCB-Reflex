@@ -1,16 +1,59 @@
-"""Componente de navegación principal."""
+"""
+Componente de navegación principal (navbar).
+
+Este módulo define la barra de navegación responsive de la aplicación,
+que se adapta a dispositivos móviles, tabletas y escritorio. Incluye:
+- Logo y título de la aplicación
+- Links de navegación a páginas principales
+- Menú de usuario con opciones específicas según rol
+- Botón de cambio de tema (dark/light mode)
+- Versión móvil con menú hamburguesa
+
+El navbar cambia dinámicamente según el estado de autenticación del usuario.
+"""
 
 import reflex as rx
 from E_Learning_JCB_Reflex.states.auth_state import AuthState
 
 
 def navbar_link(text: str, url: str) -> rx.Component:
-    """Enlace de la barra de navegación."""
+    """
+    Crear un enlace estilizado para la barra de navegación.
+
+    Args:
+        text: Texto a mostrar en el enlace
+        url: URL de destino del enlace
+
+    Returns:
+        rx.Component: Link con estilo consistente para la navbar
+
+    Ejemplo:
+        >>> navbar_link("Cursos", "/courses")
+        # Crea un enlace a la página de cursos con tamaño de texto 4
+    """
     return rx.link(rx.text(text, size="4", weight="medium"), href=url)
 
 
 def user_menu() -> rx.Component:
-    """Menú de usuario autenticado."""
+    """
+    Menú desplegable para usuarios autenticados.
+
+    Muestra un menú con el nombre del usuario y opciones contextuales
+    según su rol. Las opciones incluyen:
+    - Dashboard específico del rol (admin/instructor/student)
+    - Acceso al perfil de usuario
+    - Botón de cerrar sesión
+
+    El menú se construye dinámicamente usando rx.cond para mostrar
+    solo las opciones relevantes al rol del usuario actual.
+
+    Returns:
+        rx.Component: Menú desplegable con avatar y opciones de usuario
+
+    Nota:
+        Utiliza AuthState.user_name, AuthState.user_role y propiedades
+        computadas como is_user_admin para determinar qué mostrar.
+    """
     return rx.menu.root(
         rx.menu.trigger(
             rx.hstack(
@@ -83,7 +126,30 @@ def user_menu() -> rx.Component:
 
 
 def navbar() -> rx.Component:
-    """Barra de navegación principal."""
+    """
+    Barra de navegación principal responsive de la aplicación.
+
+    Componente principal de navegación que se adapta automáticamente al
+    tamaño de pantalla del dispositivo. Proporciona dos vistas:
+
+    1. Desktop: Barra horizontal con logo, links y menú de usuario
+    2. Mobile/Tablet: Versión compacta con menú hamburguesa
+
+    Características:
+        - Logo y título clicables que redirigen a la página de inicio
+        - Links a las secciones principales (Inicio, Cursos, Instructores, Contacto)
+        - Menú de usuario autenticado o botón de login según estado
+        - Botón de cambio de tema claro/oscuro
+        - Fondo con color de acento del sistema de diseño
+
+    Returns:
+        rx.Component: Barra de navegación completa y responsive
+
+    Nota:
+        - Usa rx.desktop_only() y rx.mobile_and_tablet() para responsive design
+        - El menú cambia según AuthState.is_authenticated
+        - La navegación móvil incluye información del rol del usuario
+    """
     return rx.box(
         rx.desktop_only(
             rx.hstack(

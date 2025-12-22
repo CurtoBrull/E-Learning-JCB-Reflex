@@ -1,4 +1,16 @@
-"""Estado de gestión de cursos."""
+"""
+Estado de gestión de cursos.
+
+Este módulo maneja todo el estado relacionado con cursos en la aplicación,
+incluyendo la carga de listas de cursos, detalles individuales de cursos,
+y la visualización de información del instructor y reseñas.
+
+Funcionalidades principales:
+- Cargar cursos populares para mostrar en homepage
+- Cargar catálogo completo de cursos
+- Cargar detalles de un curso específico con lecciones y reseñas
+- Extraer IDs de cursos desde URLs dinámicas
+"""
 
 import reflex as rx
 from E_Learning_JCB_Reflex.services.course_service import (
@@ -11,7 +23,43 @@ from E_Learning_JCB_Reflex.utils.route_helpers import get_dynamic_id
 
 
 class CourseState(rx.State):
-    """Estado de la aplicación para cursos."""
+    """
+    Estado para gestión de cursos en Reflex.
+
+    Maneja el estado de la aplicación relacionado con cursos, incluyendo
+    listados, detalles individuales, información del instructor, lecciones
+    y reseñas. Proporciona métodos para cargar datos desde la base de datos
+    de forma asíncrona.
+
+    Atributos de estado:
+        courses (list[dict]): Lista de cursos (para catálogo y homepage)
+        loading (bool): Indicador de carga en progreso
+        error (str): Mensaje de error si la operación falla
+
+        # Información del curso seleccionado
+        course_title (str): Título del curso actual
+        course_description (str): Descripción completa del curso
+        course_thumbnail (str): URL de la imagen del curso
+        course_price (float): Precio del curso
+        course_level (str): Nivel del curso (beginner, intermediate, advanced)
+        course_category (str): Categoría principal del curso
+
+        # Información del instructor
+        instructor_name (str): Nombre del instructor
+        instructor_email (str): Email de contacto del instructor
+        instructor_avatar (str): URL del avatar del instructor
+        instructor_bio (str): Biografía del instructor
+
+        # Estadísticas del curso
+        students_count (int): Número de estudiantes inscritos
+        average_rating (int): Calificación promedio (1-5)
+        total_reviews (int): Número total de reseñas
+
+        # Listas anidadas
+        categories (list[str]): Categorías del curso
+        lessons (list[dict]): Lecciones del curso con título, contenido, orden y duración
+        reviews (list[dict]): Reseñas con estudiante, calificación y comentario
+    """
 
     courses: list[dict] = []
     loading: bool = False
@@ -42,7 +90,22 @@ class CourseState(rx.State):
     reviews: list[dict] = []
 
     async def load_popular_courses(self):
-        """Cargar cursos desde la base de datos."""
+        """
+        Cargar cursos populares desde la base de datos.
+
+        Carga un número limitado de cursos (por defecto 6) para mostrar en
+        la página de inicio u otras secciones destacadas. Los cursos se
+        convierten de objetos Course a diccionarios planos para ser compatibles
+        con el sistema de estado de Reflex.
+
+        Actualiza el estado:
+            - courses: Lista de diccionarios con información básica de cada curso
+            - loading: True durante la carga, False al terminar
+            - error: Mensaje de error si la operación falla
+
+        Nota:
+            Si no se encuentran cursos, establece un mensaje de error apropiado.
+        """
         self.loading = True
         self.error = ""
         try:
@@ -69,7 +132,21 @@ class CourseState(rx.State):
             self.loading = False
             
     async def load_courses(self):
-        """Cargar todos los cursos desde la base de datos."""
+        """
+        Cargar el catálogo completo de cursos desde la base de datos.
+
+        A diferencia de load_popular_courses, esta función carga TODOS los
+        cursos disponibles sin límite. Se utiliza para mostrar el catálogo
+        completo en la página de cursos.
+
+        Actualiza el estado:
+            - courses: Lista completa de diccionarios con información de todos los cursos
+            - loading: True durante la carga, False al terminar
+            - error: Mensaje de error si la operación falla
+
+        Nota:
+            Para catálogos muy grandes, considerar implementar paginación.
+        """
         self.loading = True
         self.error = ""
         try:
@@ -96,7 +173,30 @@ class CourseState(rx.State):
             self.loading = False
 
     async def load_course_by_id(self, course_id: str):
-        """Cargar un curso específico por ID."""
+        """
+        Cargar todos los detalles de un curso específico por ID.
+
+        Carga información completa de un curso incluyendo:
+        - Datos básicos del curso (título, descripción, precio, nivel, etc.)
+        - Información completa del instructor (nombre, email, avatar, bio)
+        - Estadísticas (estudiantes inscritos, calificación promedio, total de reseñas)
+        - Lista de lecciones con contenido y duración
+        - Reseñas de estudiantes con sus nombres
+
+        Args:
+            course_id: ID del curso en formato string (ObjectId de MongoDB)
+
+        Actualiza el estado:
+            - Variables del curso (course_title, course_description, etc.)
+            - Variables del instructor (instructor_name, instructor_email, etc.)
+            - Estadísticas (students_count, average_rating, total_reviews)
+            - Listas (categories, lessons, reviews)
+            - error: Mensaje si el curso no existe
+
+        Nota:
+            Las reseñas requieren una consulta adicional a la base de datos
+            para obtener los nombres de los estudiantes que las escribieron.
+        """
         self.loading = True
         self.error = ""
         try:
@@ -160,7 +260,22 @@ class CourseState(rx.State):
             self.loading = False
 
     async def load_course_from_url(self):
-        """Cargar curso usando el ID de la URL."""
+        """
+        Cargar curso usando el ID extraído de la URL actual.
+
+        Utiliza el helper get_dynamic_id() para extraer el ID del curso
+        desde la URL dinámica (ej: /courses/[course_id]). Una vez extraído,
+        llama a load_course_by_id() para cargar todos los datos del curso.
+
+        Este método se ejecuta típicamente en el evento on_load de la página
+        de detalles del curso.
+
+        Ejemplo de URL:
+            /courses/507f1f77bcf86cd799439011 -> course_id = "507f1f77bcf86cd799439011"
+
+        Nota:
+            Imprime el ID y título del curso para debugging.
+        """
         # Obtener el course_id desde los parámetros de la url
         course_id = get_dynamic_id(self.router.url.path)
         if course_id:

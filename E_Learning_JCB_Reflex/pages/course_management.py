@@ -1,4 +1,26 @@
-"""Página de gestión de cursos para administradores."""
+"""
+Página de gestión de cursos para administradores de la plataforma E-Learning JCB.
+
+Este módulo proporciona una interfaz completa de CRUD (Create, Read, Update, Delete)
+para que los administradores gestionen todos los cursos de la plataforma.
+
+Funcionalidades:
+- Tabla con todos los cursos del sistema
+- Filtros de búsqueda por título, descripción o categoría
+- Filtro por nivel (all, beginner, intermediate, advanced)
+- Creación de nuevos cursos mediante diálogo modal
+- Edición de cursos existentes
+- Eliminación de cursos con confirmación
+- Estadísticas de cursos totales y filtrados
+- Badges de color según el nivel del curso
+- Información del instructor para cada curso
+- Protección de acceso solo para administradores
+
+Ruta: /admin/courses
+Acceso: Protegida (solo administradores autenticados)
+Estado: CourseManagementState (gestión de cursos)
+Protección: admin_only HOC
+"""
 
 import reflex as rx
 from E_Learning_JCB_Reflex.components.navbar import navbar
@@ -7,7 +29,21 @@ from E_Learning_JCB_Reflex.states.course_management_state import CourseManagemen
 
 
 def get_level_badge(level: str) -> rx.Component:
-    """Obtener badge de nivel con color."""
+    """
+    Genera un badge con el nivel del curso en español y color apropiado.
+
+    Args:
+        level: Nivel del curso ("beginner", "intermediate" o "advanced")
+
+    Returns:
+        rx.Component: Badge con el nivel traducido y color según el tipo
+
+    Notas:
+        - beginner -> Badge verde "Principiante"
+        - intermediate -> Badge naranja "Intermedio"
+        - advanced -> Badge rojo "Avanzado"
+        - Otros valores -> Badge gris sin traducción
+    """
     level_colors = {
         "beginner": "green",
         "intermediate": "orange",
@@ -26,7 +62,24 @@ def get_level_badge(level: str) -> rx.Component:
 
 
 def course_dialog() -> rx.Component:
-    """Diálogo para crear/editar curso."""
+    """
+    Renderiza el diálogo modal para crear o editar un curso.
+
+    Muestra un formulario completo con todos los campos necesarios
+    para crear o modificar un curso, incluyendo información del instructor.
+
+    Returns:
+        rx.Component: Dialog modal con formulario de curso
+
+    Notas:
+        - El título cambia según CourseManagementState.dialog_mode ("create" vs "edit")
+        - Incluye campos: título, descripción, precio, nivel, categoría, imagen
+        - Sección separada para información del instructor (nombre y email)
+        - Los campos están vinculados a course_* variables del state
+        - El botón ejecuta CourseManagementState.save_course
+        - Se muestra cuando CourseManagementState.show_course_dialog es True
+        - Max width de 600px para mejor legibilidad del formulario
+    """
     return rx.dialog.root(
         rx.dialog.content(
             rx.dialog.title(
@@ -143,7 +196,21 @@ def course_dialog() -> rx.Component:
 
 
 def delete_confirmation_dialog() -> rx.Component:
-    """Diálogo de confirmación para eliminar curso."""
+    """
+    Renderiza el diálogo de confirmación para eliminar un curso.
+
+    Muestra un alert dialog que solicita confirmación antes de eliminar
+    un curso. Advierte que la acción no se puede deshacer.
+
+    Returns:
+        rx.Component: Alert dialog de confirmación de eliminación
+
+    Notas:
+        - Muestra el título del curso desde CourseManagementState.course_to_delete_title
+        - Se muestra cuando CourseManagementState.show_delete_dialog es True
+        - El botón "Eliminar" ejecuta CourseManagementState.confirm_delete_course
+        - El botón tiene color_scheme="red" para indicar acción destructiva
+    """
     return rx.alert_dialog.root(
         rx.alert_dialog.content(
             rx.alert_dialog.title("Confirmar Eliminación"),
@@ -171,7 +238,24 @@ def delete_confirmation_dialog() -> rx.Component:
 
 
 def courses_table() -> rx.Component:
-    """Tabla de cursos."""
+    """
+    Renderiza la tabla con todos los cursos filtrados.
+
+    Muestra una tabla con columnas: Título, Categoría, Nivel, Precio,
+    Estudiantes y Acciones. Cada fila incluye botones para editar
+    y eliminar el curso.
+
+    Returns:
+        rx.Component: Card con tabla de cursos
+
+    Notas:
+        - Muestra CourseManagementState.filtered_courses (ya filtrados)
+        - Los botones de editar/eliminar usan lambdas para pasar todos los parámetros
+        - El botón editar abre el diálogo con datos precargados del curso
+        - El botón eliminar abre el diálogo de confirmación
+        - El nivel se muestra usando get_level_badge para color apropiado
+        - El precio se formatea con símbolo de euro
+    """
     return rx.card(
         rx.table.root(
             rx.table.header(
@@ -224,7 +308,20 @@ def courses_table() -> rx.Component:
 
 
 def statistics_cards() -> rx.Component:
-    """Tarjetas de estadísticas."""
+    """
+    Renderiza las tarjetas de estadísticas de cursos.
+
+    Muestra dos tarjetas con información agregada:
+    - Total de cursos en la plataforma
+    - Cursos filtrados (después de aplicar búsqueda/nivel)
+
+    Returns:
+        rx.Component: Grid con 2 tarjetas de estadísticas
+
+    Notas:
+        - Las estadísticas se calculan dinámicamente desde los arrays del state
+        - Útil para ver el impacto de los filtros aplicados
+    """
     return rx.grid(
         rx.card(
             rx.vstack(
@@ -257,7 +354,24 @@ def statistics_cards() -> rx.Component:
 
 
 def course_management_content() -> rx.Component:
-    """Contenido de la página de gestión de cursos."""
+    """
+    Renderiza el contenido completo de la página de gestión de cursos.
+
+    Muestra todas las secciones de la página organizadas verticalmente:
+    1. Header con título y botón "Nuevo Curso"
+    2. Tarjetas de estadísticas
+    3. Card con filtros (búsqueda y selector de nivel)
+    4. Tabla de cursos con acciones
+
+    Returns:
+        rx.Component: Contenido completo de la página de gestión
+
+    Notas:
+        - Utiliza on_mount con CourseManagementState.load_courses
+        - Los filtros actualizan automáticamente la tabla
+        - Incluye los diálogos modales (course_dialog y delete_confirmation_dialog)
+        - Max width de 1400px para mejor legibilidad
+    """
     return rx.vstack(
         navbar(),
         rx.container(
@@ -315,5 +429,18 @@ def course_management_content() -> rx.Component:
 
 
 def course_management_page() -> rx.Component:
-    """Página de gestión de cursos con protección."""
+    """
+    Renderiza la página de gestión de cursos con protección.
+
+    Envuelve el contenido de gestión con el HOC admin_only
+    para garantizar que solo administradores puedan acceder.
+
+    Returns:
+        rx.Component: Página protegida de gestión de cursos
+
+    Notas:
+        - Utiliza el HOC admin_only de components.protected
+        - Si el usuario no es administrador, redirige o muestra acceso denegado
+        - Esta es la función principal exportada para el routing
+    """
     return admin_only(course_management_content())

@@ -1,4 +1,15 @@
-"""Página principal de la plataforma E-Learning JCB."""
+"""
+Página principal (homepage) de la plataforma E-Learning JCB.
+
+Esta página es el punto de entrada principal de la aplicación. Muestra:
+- Mensaje de bienvenida y descripción de la plataforma
+- Sección de cursos populares (máximo 6 cursos destacados)
+- Navegación principal (navbar)
+
+Ruta: /
+Acceso: Pública (sin autenticación requerida)
+Estado: CourseState para cargar cursos populares
+"""
 
 import reflex as rx
 from E_Learning_JCB_Reflex.states.course_state import CourseState
@@ -7,7 +18,19 @@ from E_Learning_JCB_Reflex.components.course_card import course_card
 
 
 def index() -> rx.Component:
-    """Página principal de la plataforma E-Learning JCB."""
+    """
+    Renderizar la página principal de la plataforma.
+
+    Carga automáticamente los cursos populares al montarse la página
+    usando CourseState.load_popular_courses(). Muestra los cursos en
+    un grid responsive de 3 columnas.
+
+    Returns:
+        rx.Component: Página completa con navbar, header y grid de cursos
+
+    Eventos:
+        - on_mount: Carga cursos populares al cargar la página
+    """
     return rx.vstack(
         navbar(),
         rx.container(

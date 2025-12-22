@@ -1,4 +1,18 @@
-"""Estado para la gestión de autenticación de usuarios."""
+"""
+Estado para la gestión de autenticación de usuarios.
+
+Este módulo define AuthState, el estado principal de autenticación que maneja
+todo el ciclo de vida de la sesión del usuario: login, registro, logout y
+gestión del usuario actual.
+
+Características:
+- Autenticación con email y contraseña
+- Registro de nuevos usuarios con validación
+- Manejo de sesión de usuario
+- Propiedades computadas para verificar roles
+- Validaciones de formularios
+- Manejo de errores y mensajes de éxito
+"""
 
 import reflex as rx
 from E_Learning_JCB_Reflex.services import user_service
@@ -6,28 +20,82 @@ from E_Learning_JCB_Reflex.utils.password import verify_password
 
 
 class AuthState(rx.State):
-    """Estado de autenticación de usuarios."""
+    """
+    Estado de autenticación de usuarios.
+
+    Este estado maneja toda la lógica de autenticación de la aplicación,
+    incluyendo login, registro y gestión de la sesión del usuario actual.
+    Es la clase base de la que heredan muchos otros estados para acceder
+    a la información del usuario autenticado.
+
+    Atributos de sesión:
+        is_authenticated (bool): Indica si hay un usuario autenticado
+        current_user (dict): Diccionario con los datos del usuario actual
+                            Estructura: {id, firstName, lastName, email, role}
+
+    Campos de formulario de login:
+        login_email (str): Email ingresado en el formulario de login
+        login_password (str): Contraseña ingresada en el formulario de login
+
+    Campos de formulario de registro:
+        register_first_name (str): Nombre del nuevo usuario
+        register_last_name (str): Apellido del nuevo usuario
+        register_email (str): Email del nuevo usuario
+        register_password (str): Contraseña del nuevo usuario
+        register_confirm_password (str): Confirmación de contraseña
+        register_role (str): Rol del nuevo usuario ("student", "instructor", "admin")
+
+    Estados de la UI:
+        loading (bool): Indica si hay una operación en curso
+        error (str): Mensaje de error a mostrar al usuario
+        success (str): Mensaje de éxito a mostrar al usuario
+
+    Propiedades computadas:
+        user_name: Nombre completo del usuario autenticado
+        user_role: Rol del usuario autenticado
+        is_user_admin: True si el usuario es administrador
+        is_user_instructor: True si el usuario es instructor
+        is_user_student: True si el usuario es estudiante
+
+    Métodos principales:
+        handle_login(): Procesa el login del usuario
+        handle_register(): Procesa el registro de un nuevo usuario
+        logout(): Cierra la sesión del usuario
+    """
+
+    # ========================================================================
+    # ATRIBUTOS DE SESIÓN
+    # ========================================================================
 
     # Usuario autenticado
-    is_authenticated: bool = False
-    current_user: dict = {}
+    is_authenticated: bool = False  # Indica si hay un usuario autenticado
+    current_user: dict = {}  # Datos del usuario actual (id, firstName, lastName, email, role)
 
-    # Campos del formulario de login
-    login_email: str = ""
-    login_password: str = ""
+    # ========================================================================
+    # CAMPOS DEL FORMULARIO DE LOGIN
+    # ========================================================================
 
-    # Campos del formulario de registro
-    register_first_name: str = ""
-    register_last_name: str = ""
-    register_email: str = ""
-    register_password: str = ""
-    register_confirm_password: str = ""
-    register_role: str = "student"  # Por defecto, student
+    login_email: str = ""  # Email del formulario de login
+    login_password: str = ""  # Contraseña del formulario de login
 
-    # Estados de la UI
-    loading: bool = False
-    error: str = ""
-    success: str = ""
+    # ========================================================================
+    # CAMPOS DEL FORMULARIO DE REGISTRO
+    # ========================================================================
+
+    register_first_name: str = ""  # Nombre del nuevo usuario
+    register_last_name: str = ""  # Apellido del nuevo usuario
+    register_email: str = ""  # Email del nuevo usuario
+    register_password: str = ""  # Contraseña del nuevo usuario
+    register_confirm_password: str = ""  # Confirmación de contraseña
+    register_role: str = "student"  # Rol por defecto: estudiante
+
+    # ========================================================================
+    # ESTADOS DE LA UI
+    # ========================================================================
+
+    loading: bool = False  # Indica operación en curso
+    error: str = ""  # Mensaje de error para mostrar
+    success: str = ""  # Mensaje de éxito para mostrar
 
     # Métodos para login
     def set_login_email(self, value: str):
@@ -82,54 +150,88 @@ class AuthState(rx.State):
         self.success = ""
 
     async def handle_login(self):
-        """Procesar el login de usuario."""
-        # Validación
+        """
+        Procesar el inicio de sesión de un usuario.
+
+        Este método realiza las siguientes operaciones:
+        1. Valida que se hayan ingresado email y contraseña
+        2. Valida el formato del email
+        3. Busca el usuario en la base de datos por email
+        4. Verifica la contraseña usando bcrypt
+        5. Si es exitoso, establece la sesión y redirige al dashboard correspondiente
+
+        El método maneja los estados de loading, error y success automáticamente
+        para que la UI pueda mostrar retroalimentación al usuario.
+
+        Returns:
+            Generator: Yield con rx.redirect() para redirigir al dashboard apropiado
+
+        Efectos secundarios:
+            - Actualiza is_authenticated a True si el login es exitoso
+            - Actualiza current_user con los datos del usuario
+            - Limpia el formulario de login
+            - Redirige al usuario a su dashboard correspondiente:
+              * Admin -> /admin/dashboard
+              * Instructor -> /instructor/dashboard
+              * Student -> /student/dashboard
+
+        Manejo de errores:
+            - Email o contraseña vacíos
+            - Email con formato inválido
+            - Usuario no encontrado
+            - Contraseña incorrecta
+            - Errores de base de datos
+        """
+        # Validación de campos obligatorios
         if not self.login_email or not self.login_password:
             self.error = "Email y contraseña son obligatorios"
             return
 
+        # Validación básica del formato de email
         if "@" not in self.login_email or "." not in self.login_email:
             self.error = "Por favor, introduce un email válido"
             return
 
-        # Resetear estados
+        # Resetear estados de UI para nueva operación
         self.loading = True
         self.error = ""
         self.success = ""
 
         try:
-            # Buscar usuario por email
+            # Buscar usuario por email en la base de datos
             user = await user_service.get_user_by_email(self.login_email)
 
+            # Verificar si el usuario existe
             if not user:
                 self.error = "Email o contraseña incorrectos"
                 self.loading = False
                 return
 
-            # Verificar password con bcrypt
+            # Verificar password con bcrypt (compara hash almacenado)
             if not verify_password(self.login_password, user.password):
                 self.error = "Email o contraseña incorrectos"
                 self.loading = False
                 return
 
-            # Login exitoso
+            # Login exitoso: establecer sesión
             self.is_authenticated = True
-            self.current_user = user.to_dict()
+            self.current_user = user.to_dict()  # Convertir a dict para serialización
             self.success = f"¡Bienvenido, {user.first_name}!"
 
-            # Limpiar formulario
+            # Limpiar formulario de login por seguridad
             self.login_email = ""
             self.login_password = ""
 
-            # Redirigir al dashboard correspondiente según el rol
+            # Redirigir al dashboard correspondiente según el rol del usuario
             if user.role == "admin":
                 yield rx.redirect("/admin/dashboard")
             elif user.role == "instructor":
                 yield rx.redirect("/instructor/dashboard")
-            else:  # student
+            else:  # student (rol por defecto)
                 yield rx.redirect("/student/dashboard")
 
         except Exception as e:
+            # Capturar cualquier error inesperado
             print(f"Error during login: {e}")
             self.error = "Error al iniciar sesión. Por favor, inténtalo de nuevo."
 

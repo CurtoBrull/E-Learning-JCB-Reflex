@@ -1,4 +1,21 @@
-"""Página de registro de la plataforma E-Learning JCB."""
+"""
+Página de registro de nuevos usuarios en la plataforma E-Learning JCB.
+
+Este módulo proporciona el formulario de registro para que nuevos usuarios
+puedan crear una cuenta en la plataforma. Permite seleccionar el rol
+(estudiante, instructor o administrador) durante el proceso de registro.
+
+Funcionalidades:
+- Formulario de registro con validación
+- Campos: nombre, apellido, email, contraseña, confirmación de contraseña y rol
+- Mensajes de éxito y error
+- Redirección automática al login después del registro exitoso
+- Link a página de login para usuarios existentes
+
+Ruta: /register
+Acceso: Pública (sin autenticación requerida)
+Estado: AuthState para manejar el proceso de registro
+"""
 
 import reflex as rx
 from E_Learning_JCB_Reflex.states.auth_state import AuthState
@@ -6,7 +23,27 @@ from E_Learning_JCB_Reflex.components.navbar import navbar
 
 
 def register_page() -> rx.Component:
-    """Página de registro con formulario."""
+    """
+    Renderiza la página de registro de nuevos usuarios.
+
+    Muestra un formulario completo de registro que incluye:
+    - Campos de nombre y apellido (en una fila horizontal)
+    - Campo de email con validación de formato
+    - Campo de contraseña (mínimo 6 caracteres)
+    - Campo de confirmación de contraseña
+    - Selector de rol de usuario (student, instructor, admin)
+    - Descripción de cada tipo de rol disponible
+    - Botón de envío con estado de carga
+    - Link a la página de login
+
+    Returns:
+        rx.Component: Componente de Reflex con el formulario de registro completo
+
+    Notas:
+        - Utiliza AuthState para manejar la lógica de validación y creación de usuario
+        - Muestra callouts de éxito/error basados en AuthState.success y AuthState.error
+        - El formulario está limitado a un max_width de 550px para mejor legibilidad
+    """
     return rx.vstack(
         navbar(),
         rx.container(

@@ -1,4 +1,25 @@
-"""Página de gestión de usuarios (solo administradores)."""
+"""
+Página de gestión de usuarios para administradores de la plataforma E-Learning JCB.
+
+Este módulo proporciona una interfaz completa de CRUD (Create, Read, Update, Delete)
+para que los administradores gestionen todos los usuarios de la plataforma.
+
+Funcionalidades:
+- Tabla con todos los usuarios del sistema
+- Filtros de búsqueda por nombre o email
+- Filtro por rol (all, student, instructor, admin)
+- Creación de nuevos usuarios mediante diálogo modal
+- Edición de usuarios existentes
+- Eliminación de usuarios con confirmación
+- Estadísticas de usuarios totales y filtrados
+- Badges de color según el rol del usuario
+- Protección de acceso solo para administradores
+
+Ruta: /admin/users
+Acceso: Protegida (solo administradores autenticados)
+Estado: UserManagementState (gestión de usuarios)
+Protección: admin_only HOC
+"""
 
 import reflex as rx
 from E_Learning_JCB_Reflex.components.navbar import navbar
@@ -7,7 +28,23 @@ from E_Learning_JCB_Reflex.states.user_management_state import UserManagementSta
 
 
 def user_dialog() -> rx.Component:
-    """Diálogo para crear/editar usuario."""
+    """
+    Renderiza el diálogo modal para crear o editar un usuario.
+
+    Muestra un formulario completo con todos los campos necesarios
+    para crear o modificar un usuario. El título y comportamiento
+    cambian según el modo (crear vs editar).
+
+    Returns:
+        rx.Component: Dialog modal con formulario de usuario
+
+    Notas:
+        - El título cambia según UserManagementState.edit_mode
+        - En modo edición, la contraseña es opcional (solo si se desea cambiar)
+        - Los campos están vinculados a form_* variables del state
+        - El botón ejecuta UserManagementState.save_user
+        - Se muestra cuando UserManagementState.show_user_dialog es True
+    """
     return rx.dialog.root(
         rx.dialog.content(
             rx.dialog.title(
@@ -131,7 +168,22 @@ def user_dialog() -> rx.Component:
 
 
 def delete_confirmation_dialog() -> rx.Component:
-    """Diálogo de confirmación para eliminar usuario."""
+    """
+    Renderiza el diálogo de confirmación para eliminar un usuario.
+
+    Muestra un alert dialog que solicita confirmación antes de eliminar
+    un usuario. Advierte que la acción no se puede deshacer.
+
+    Returns:
+        rx.Component: Alert dialog de confirmación de eliminación
+
+    Notas:
+        - Muestra el nombre del usuario desde UserManagementState.user_to_delete_name
+        - Se muestra cuando UserManagementState.show_delete_dialog es True
+        - El botón "Eliminar" ejecuta UserManagementState.confirm_delete_user
+        - El botón tiene color_scheme="red" para indicar acción destructiva
+        - Incluye estado de loading durante la eliminación
+    """
     return rx.alert_dialog.root(
         rx.alert_dialog.content(
             rx.alert_dialog.title("Confirmar Eliminación"),
@@ -173,7 +225,21 @@ def delete_confirmation_dialog() -> rx.Component:
 
 
 def get_role_badge(role: str) -> rx.Component:
-    """Obtener badge de rol con color apropiado."""
+    """
+    Genera un badge con el rol del usuario en español y color apropiado.
+
+    Args:
+        role: Rol del usuario ("student", "instructor" o "admin")
+
+    Returns:
+        rx.Component: Badge con el rol traducido y color según el tipo
+
+    Notas:
+        - student -> Badge azul "Estudiante"
+        - instructor -> Badge verde "Instructor"
+        - admin -> Badge rojo "Admin"
+        - Otros valores -> Badge sin color específico
+    """
     return rx.match(
         role,
         ("student", rx.badge("Estudiante", color_scheme="blue", size="2")),
@@ -184,7 +250,22 @@ def get_role_badge(role: str) -> rx.Component:
 
 
 def users_table() -> rx.Component:
-    """Tabla de usuarios."""
+    """
+    Renderiza la tabla con todos los usuarios filtrados.
+
+    Muestra una tabla con columnas: Nombre, Email, Rol, Fecha Creación y Acciones.
+    Cada fila incluye botones para editar y eliminar el usuario.
+
+    Returns:
+        rx.Component: Card con tabla de usuarios
+
+    Notas:
+        - Muestra UserManagementState.filtered_users (ya filtrados por búsqueda/rol)
+        - Los botones de editar/eliminar usan lambdas para pasar parámetros
+        - El botón editar abre el diálogo con datos precargados
+        - El botón eliminar abre el diálogo de confirmación
+        - Las fechas se muestran en formato ISO
+    """
     return rx.card(
         rx.table.root(
             rx.table.header(
@@ -238,7 +319,24 @@ def users_table() -> rx.Component:
 
 
 def user_management_content() -> rx.Component:
-    """Contenido de la página de gestión de usuarios."""
+    """
+    Renderiza el contenido completo de la página de gestión de usuarios.
+
+    Muestra todas las secciones de la página organizadas verticalmente:
+    1. Header con título y botón "Crear Usuario"
+    2. Card con filtros (búsqueda y selector de rol)
+    3. Estadísticas (total de usuarios y filtrados)
+    4. Tabla de usuarios con acciones
+
+    Returns:
+        rx.Component: Contenido completo de la página de gestión
+
+    Notas:
+        - Utiliza on_mount con UserManagementState.load_users
+        - Los filtros actualizan automáticamente la tabla
+        - Incluye los diálogos modales (user_dialog y delete_confirmation_dialog)
+        - Max width de 1400px para mejor legibilidad
+    """
     return rx.vstack(
         navbar(),
         user_dialog(),
@@ -357,5 +455,18 @@ def user_management_content() -> rx.Component:
 
 
 def user_management_page() -> rx.Component:
-    """Página de gestión de usuarios con protección de admin."""
+    """
+    Renderiza la página de gestión de usuarios con protección.
+
+    Envuelve el contenido de gestión con el HOC admin_only
+    para garantizar que solo administradores puedan acceder.
+
+    Returns:
+        rx.Component: Página protegida de gestión de usuarios
+
+    Notas:
+        - Utiliza el HOC admin_only de components.protected
+        - Si el usuario no es administrador, redirige o muestra acceso denegado
+        - Esta es la función principal exportada para el routing
+    """
     return admin_only(user_management_content())

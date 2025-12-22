@@ -1,4 +1,22 @@
-"""Página de detalles de un instructor específico."""
+"""
+Página de perfil detallado de un instructor en la plataforma E-Learning JCB.
+
+Este módulo muestra toda la información de un instructor específico,
+incluyendo sus datos personales, estadísticas y todos los cursos que
+imparte en la plataforma.
+
+Funcionalidades:
+- Perfil completo del instructor con avatar grande
+- Información personal (nombre, email, expertise, biografía)
+- Estadísticas del instructor (cursos creados, total de estudiantes)
+- Cuadrícula con todos los cursos que imparte
+- Cada curso muestra: imagen, título, descripción, nivel, precio, estudiantes y rating
+- Carga dinámica del instructor desde la URL
+
+Ruta: /instructors/[instructor_id]
+Acceso: Pública (sin autenticación requerida)
+Estado: InstructorState para cargar información del instructor y sus cursos
+"""
 
 import reflex as rx
 from E_Learning_JCB_Reflex.states.instructor_state import InstructorState
@@ -6,7 +24,26 @@ from E_Learning_JCB_Reflex.components.navbar import navbar
 
 
 def instructor_detail_page() -> rx.Component:
-    """Página de detalles de un instructor."""
+    """
+    Renderiza la página completa de perfil de un instructor.
+
+    Muestra toda la información del instructor organizada en secciones:
+    1. Header con avatar grande y datos personales (nombre, expertise, email, biografía)
+    2. Estadísticas (total de cursos creados, total de estudiantes)
+    3. Cuadrícula con todos los cursos que imparte el instructor
+
+    Returns:
+        rx.Component: Componente de Reflex con el perfil completo del instructor
+
+    Notas:
+        - Utiliza on_mount con InstructorState.load_instructor_from_url para cargar desde URL
+        - Muestra spinner mientras InstructorState.loading es True
+        - Muestra callout de error si InstructorState.error no está vacío
+        - El contenido solo se muestra si instructor_name no está vacío
+        - Los cursos se muestran en cuadrícula de 3 columnas con hover effects
+        - Cada curso es clickeable y redirige a /courses/{course_id}
+        - Max width de 1200px para mejor legibilidad
+    """
     return rx.vstack(
         navbar(),
         rx.container(

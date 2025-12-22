@@ -1,4 +1,17 @@
-"""Estado para la gestión de cursos (admin)."""
+"""
+Estado para la gestión de cursos (administradores).
+
+Este módulo proporciona toda la funcionalidad de administración de cursos
+del sistema. Solo accesible para usuarios con rol "admin".
+
+Funcionalidades principales:
+- Listar todos los cursos del sistema
+- Crear nuevos cursos con información del instructor
+- Editar cursos existentes
+- Eliminar cursos del sistema (operación irreversible)
+- Buscar y filtrar cursos por título, descripción o nivel
+- Validar campos del formulario de cursos
+"""
 
 import reflex as rx
 from E_Learning_JCB_Reflex.states.auth_state import AuthState
@@ -11,7 +24,44 @@ from E_Learning_JCB_Reflex.services.course_service import (
 
 
 class CourseManagementState(AuthState):
-    """Estado para gestionar cursos desde el panel de administrador."""
+    """
+    Estado para gestión completa de cursos del sistema (CRUD).
+
+    Extiende AuthState y proporciona funcionalidades de administración
+    de cursos. Solo debe ser accesible para usuarios con rol "admin".
+
+    Atributos de estado:
+        # Listas de cursos
+        courses (list[dict]): Todos los cursos del sistema
+        filtered_courses (list[dict]): Cursos filtrados por búsqueda/nivel
+
+        # Búsqueda y filtros
+        search_query (str): Texto de búsqueda (título, descripción, categoría)
+        level_filter (str): Filtro por nivel ("all", "beginner", "intermediate", "advanced")
+
+        # Formulario de curso
+        show_course_dialog (bool): Mostrar/ocultar diálogo de edición
+        dialog_mode (str): "create" = crear nuevo, "edit" = editar existente
+        selected_course_id (str): ID del curso seleccionado para edición
+
+        # Campos del formulario
+        course_title (str): Título del curso
+        course_description (str): Descripción del curso
+        course_price (str): Precio del curso (como string para input)
+        course_level (str): Nivel del curso (beginner/intermediate/advanced)
+        course_category (str): Categoría del curso
+        course_image (str): URL de la imagen del curso
+        course_instructor_name (str): Nombre del instructor
+        course_instructor_email (str): Email del instructor
+
+        # Diálogo de confirmación de eliminación
+        show_delete_dialog (bool): Mostrar/ocultar diálogo de confirmación
+        course_to_delete_id (str): ID del curso a eliminar
+        course_to_delete_title (str): Título del curso a eliminar (para mostrar)
+
+        # Estados de UI
+        loading (bool): Indicador de operación en progreso
+    """
 
     # Lista de cursos
     courses: list[dict] = []
@@ -190,7 +240,32 @@ class CourseManagementState(AuthState):
         self.show_course_dialog = False
 
     async def save_course(self):
-        """Guardar curso (crear o editar)."""
+        """
+        Guardar curso (crear nuevo o actualizar existente).
+
+        Valida los campos del formulario y ejecuta la operación correspondiente
+        según el dialog_mode ("create" o "edit"). Después de guardar exitosamente,
+        recarga la lista de cursos y cierra el diálogo.
+
+        Validaciones realizadas:
+            - Título y descripción son obligatorios
+            - Datos del instructor (nombre y email) son obligatorios
+            - Precio debe ser un número válido y no negativo
+
+        Actualiza el estado:
+            - loading: True durante la operación
+            - courses: Recarga la lista después de guardar
+            - show_course_dialog: False si es exitoso
+            - Muestra toast de éxito o error
+
+        Returns:
+            rx.toast: Mensaje de éxito o error para mostrar al usuario
+
+        Nota:
+            El precio se convierte de string a float antes de guardarlo.
+            Si dialog_mode es "create" llama a create_course(), si es "edit"
+            llama a update_course() con el selected_course_id.
+        """
         # Validaciones
         if not self.course_title or not self.course_description:
             return rx.toast.error("Título y descripción son obligatorios")

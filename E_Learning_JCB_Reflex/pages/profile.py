@@ -1,4 +1,22 @@
-"""Página de perfil de usuario."""
+"""
+Página de perfil de usuario de la plataforma E-Learning JCB.
+
+Este módulo proporciona una interfaz para que los usuarios autenticados
+puedan ver y editar su información personal, cambiar su contraseña y
+gestionar su cuenta.
+
+Funcionalidades:
+- Edición de información personal (nombre, apellido, email)
+- Cambio de contraseña con validación
+- Visualización de información de cuenta (rol, fecha de creación)
+- Secciones organizadas en tarjetas (cards)
+- Botón de retorno al dashboard según el rol del usuario
+- Protección de autenticación
+
+Ruta: /profile
+Acceso: Protegida (requiere autenticación)
+Estado: ProfileState para gestionar información del perfil
+"""
 
 import reflex as rx
 from E_Learning_JCB_Reflex.components.navbar import navbar
@@ -6,7 +24,21 @@ from E_Learning_JCB_Reflex.states.profile_state import ProfileState
 
 
 def profile_info_section() -> rx.Component:
-    """Sección de información personal."""
+    """
+    Renderiza la sección de información personal del usuario.
+
+    Muestra un formulario con los campos editables del perfil:
+    nombre, apellido y email. Incluye un botón para guardar cambios
+    con estado de carga.
+
+    Returns:
+        rx.Component: Card con formulario de información personal
+
+    Notas:
+        - Los campos están vinculados a ProfileState (first_name, last_name, email)
+        - El botón ejecuta ProfileState.update_profile al hacer click
+        - Muestra spinner mientras ProfileState.loading es True
+    """
     return rx.card(
         rx.vstack(
             rx.heading("Información Personal", size="6"),
@@ -77,7 +109,23 @@ def profile_info_section() -> rx.Component:
 
 
 def password_section() -> rx.Component:
-    """Sección de cambio de contraseña."""
+    """
+    Renderiza la sección de cambio de contraseña.
+
+    Muestra una sección colapsable con un formulario para cambiar
+    la contraseña. Requiere la contraseña actual y confirmación
+    de la nueva contraseña.
+
+    Returns:
+        rx.Component: Card con formulario de cambio de contraseña
+
+    Notas:
+        - La sección se expande/colapsa con ProfileState.toggle_password_section
+        - Requiere contraseña actual, nueva contraseña y confirmación
+        - El botón ejecuta ProfileState.change_password al hacer click
+        - Muestra spinner mientras ProfileState.loading es True
+        - El botón tiene color_scheme="orange" para indicar acción sensible
+    """
     return rx.card(
         rx.vstack(
             rx.hstack(
@@ -177,7 +225,21 @@ def password_section() -> rx.Component:
 
 
 def account_info_section() -> rx.Component:
-    """Sección de información de la cuenta."""
+    """
+    Renderiza la sección de información de cuenta (solo lectura).
+
+    Muestra información no editable de la cuenta del usuario:
+    rol actual y fecha de creación de la cuenta.
+
+    Returns:
+        rx.Component: Card con información de cuenta
+
+    Notas:
+        - El rol se muestra con un badge de color según el tipo
+        - Los colores son: student=blue, instructor=green, admin=red
+        - La fecha se obtiene de ProfileState.current_user
+        - Todos los campos son de solo lectura
+    """
     return rx.card(
         rx.vstack(
             rx.heading("Información de la Cuenta", size="6"),
@@ -233,7 +295,23 @@ def account_info_section() -> rx.Component:
 
 
 def profile_page_content() -> rx.Component:
-    """Contenido de la página de perfil."""
+    """
+    Renderiza el contenido completo de la página de perfil.
+
+    Organiza las secciones del perfil en un layout de 2 columnas:
+    - Columna izquierda: información personal y cambio de contraseña
+    - Columna derecha: información de cuenta
+
+    Returns:
+        rx.Component: Contenido completo de la página de perfil
+
+    Notas:
+        - Incluye header con título y botón de retorno al dashboard
+        - El botón de retorno redirige al dashboard según el rol del usuario
+        - Utiliza on_mount con ProfileState.load_profile_data
+        - Max width de 1200px para mejor legibilidad
+        - Layout responsive con grid de 2 columnas
+    """
     return rx.vstack(
         navbar(),
         rx.container(
@@ -308,7 +386,21 @@ def profile_page_content() -> rx.Component:
 
 
 def profile_page() -> rx.Component:
-    """Página de perfil con protección de autenticación."""
+    """
+    Renderiza la página de perfil con protección de autenticación.
+
+    Verifica si el usuario está autenticado antes de mostrar el contenido.
+    Si no está autenticado, muestra mensaje de acceso denegado con
+    botón para ir al login.
+
+    Returns:
+        rx.Component: Página de perfil o mensaje de acceso denegado
+
+    Notas:
+        - Verifica ProfileState.is_authenticated antes de mostrar contenido
+        - Si no autenticado, muestra pantalla completa centrada con mensaje
+        - Incluye botón que redirige a /login
+    """
     return rx.cond(
         ProfileState.is_authenticated,
         profile_page_content(),

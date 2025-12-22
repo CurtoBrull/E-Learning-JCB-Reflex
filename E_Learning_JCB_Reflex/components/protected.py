@@ -1,4 +1,26 @@
-"""Componentes para proteger rutas según autenticación y roles."""
+"""
+Componentes para proteger rutas según autenticación y roles.
+
+Este módulo proporciona componentes de alto orden (HOC) para controlar el acceso
+a páginas y secciones de la aplicación basándose en el estado de autenticación
+y el rol del usuario.
+
+Componentes principales:
+- require_auth: Requiere que el usuario esté autenticado
+- require_role: Requiere que el usuario tenga un rol específico
+- admin_only: Solo accesible para administradores
+- instructor_only: Solo accesible para instructores
+- student_only: Solo accesible para estudiantes
+- instructor_or_admin: Accesible para instructores y administradores
+
+Uso típico:
+    >>> from E_Learning_JCB_Reflex.components.protected import admin_only
+    >>>
+    >>> def admin_panel():
+    ...     return admin_only(
+    ...         rx.box("Panel de administración")
+    ...     )
+"""
 
 import reflex as rx
 from E_Learning_JCB_Reflex.states.auth_state import AuthState
@@ -6,12 +28,32 @@ from E_Learning_JCB_Reflex.states.auth_state import AuthState
 
 def require_auth(component: rx.Component) -> rx.Component:
     """
-    Componente que requiere autenticación.
-    Redirige a /login si el usuario no está autenticado.
+    Protege un componente requiriendo autenticación.
+
+    Envuelve un componente para que solo sea visible si el usuario está autenticado.
+    Si el usuario no está autenticado, muestra un mensaje de "Acceso Restringido"
+    con un botón para ir a la página de login.
+
+    Args:
+        component: Componente de Reflex a proteger
+
+    Returns:
+        rx.Component: Componente protegido que verifica autenticación
+
+    Ejemplo:
+        >>> def my_profile_page():
+        ...     return require_auth(
+        ...         rx.box("Mi perfil privado")
+        ...     )
+
+    Nota:
+        Este componente solo verifica autenticación, no roles específicos.
+        Para protección basada en roles, usar require_role().
     """
     return rx.cond(
-        AuthState.is_authenticated,
-        component,
+        AuthState.is_authenticated,  # Verificar si está autenticado
+        component,  # Mostrar componente si está autenticado
+        # Mostrar mensaje de acceso restringido si NO está autenticado
         rx.center(
             rx.vstack(
                 rx.icon("lock", size=50, color=rx.color("red", 9)),

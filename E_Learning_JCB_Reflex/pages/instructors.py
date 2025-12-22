@@ -1,4 +1,21 @@
-"""Página de todos los instructores."""
+"""
+Página de catálogo de instructores de la plataforma E-Learning JCB.
+
+Este módulo muestra el directorio completo de todos los instructores
+registrados en la plataforma. Los instructores se presentan en una
+cuadrícula utilizando el componente instructor_card.
+
+Funcionalidades:
+- Directorio completo de instructores de la plataforma
+- Visualización en cuadrícula responsive (4 columnas)
+- Estado de carga mientras se obtienen los datos
+- Manejo de errores con mensajes visuales
+- Carga automática de instructores al montar la página
+
+Ruta: /instructors
+Acceso: Pública (sin autenticación requerida)
+Estado: InstructorState para cargar y mostrar todos los instructores
+"""
 
 import reflex as rx
 from E_Learning_JCB_Reflex.states.instructor_state import InstructorState
@@ -7,7 +24,23 @@ from E_Learning_JCB_Reflex.components.instructor_card import instructor_card
 
 
 def instructors_page() -> rx.Component:
-    """Página de todos los instructores."""
+    """
+    Renderiza la página con el catálogo completo de instructores.
+
+    Muestra todos los instructores registrados en la plataforma
+    organizados en una cuadrícula de 4 columnas. Cada instructor
+    se renderiza usando el componente instructor_card que muestra
+    información básica y permite navegar a su perfil detallado.
+
+    Returns:
+        rx.Component: Componente de Reflex con el directorio de instructores
+
+    Notas:
+        - Utiliza on_mount para cargar automáticamente los instructores al abrir la página
+        - Muestra un spinner mientras InstructorState.loading es True
+        - Muestra callout de error si InstructorState.error no está vacío
+        - La cuadrícula solo se muestra si hay instructores disponibles
+    """
     return rx.vstack(
         navbar(),
         rx.container(

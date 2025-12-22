@@ -1,4 +1,17 @@
-"""Estado para gestión de usuarios (solo administradores)."""
+"""
+Estado para gestión de usuarios (solo administradores).
+
+Este módulo proporciona toda la funcionalidad de administración de usuarios
+del sistema. Solo accesible para usuarios con rol "admin".
+
+Funcionalidades principales:
+- Listar todos los usuarios del sistema (estudiantes, instructores, admins)
+- Crear nuevos usuarios con cualquier rol
+- Editar información de usuarios existentes
+- Eliminar usuarios del sistema
+- Buscar y filtrar usuarios por nombre, email o rol
+- Cambiar contraseñas de usuarios como administrador
+"""
 
 import reflex as rx
 from E_Learning_JCB_Reflex.states.auth_state import AuthState
@@ -6,7 +19,41 @@ from E_Learning_JCB_Reflex.services.user_service import user_service
 
 
 class UserManagementState(AuthState):
-    """Estado para gestionar usuarios del sistema."""
+    """
+    Estado para gestión completa de usuarios del sistema (CRUD).
+
+    Extiende AuthState y proporciona funcionalidades de administración
+    de usuarios. Solo debe ser accesible para usuarios con rol "admin".
+
+    Atributos de estado:
+        # Listas de usuarios
+        users (list[dict]): Todos los usuarios del sistema
+        filtered_users (list[dict]): Usuarios filtrados por búsqueda/rol
+
+        # Filtros y búsqueda
+        search_query (str): Texto de búsqueda (nombre o email)
+        role_filter (str): Filtro por rol ("all", "student", "instructor", "admin")
+
+        # Formulario de usuario
+        show_user_dialog (bool): Mostrar/ocultar diálogo de edición
+        edit_mode (bool): True = editar existente, False = crear nuevo
+        selected_user_id (str): ID del usuario seleccionado para edición
+
+        # Campos del formulario
+        form_first_name (str): Nombre en el formulario
+        form_last_name (str): Apellido en el formulario
+        form_email (str): Email en el formulario
+        form_password (str): Contraseña en el formulario (opcional en modo edición)
+        form_role (str): Rol en el formulario ("student", "instructor", "admin")
+
+        # Diálogo de confirmación de eliminación
+        show_delete_dialog (bool): Mostrar/ocultar diálogo de confirmación
+        user_to_delete_id (str): ID del usuario a eliminar
+        user_to_delete_name (str): Nombre del usuario a eliminar (para mostrar)
+
+        # UI states
+        loading (bool): Indicador de operación en progreso
+    """
 
     # Lista de usuarios
     users: list[dict] = []

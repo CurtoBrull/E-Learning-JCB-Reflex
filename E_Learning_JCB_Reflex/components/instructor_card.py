@@ -1,10 +1,58 @@
-"""Componente de tarjeta de instructor."""
+"""
+Componente de tarjeta de instructor (instructor card).
+
+Este módulo define el componente visual de tarjeta que representa un instructor
+en las páginas de listado de instructores. Cada tarjeta muestra información
+del instructor y es clicable para navegar a su perfil detallado.
+
+Características visuales:
+- Avatar circular del instructor con fallback
+- Nombre del instructor
+- Badge de área de expertise (opcional)
+- Biografía limitada a 3 líneas
+- Estadísticas (número de cursos creados)
+- Efectos hover para interactividad (elevación y sombra)
+"""
 
 import reflex as rx
 
 
 def instructor_card(instructor: dict) -> rx.Component:
-    """Componente de tarjeta de instructor."""
+    """
+    Crear una tarjeta visual para mostrar información de un instructor.
+
+    Genera un componente de tarjeta clicable que muestra la información
+    esencial de un instructor. Al hacer clic, redirige a la página de perfil
+    del instructor (/instructors/[instructor_id]).
+
+    Args:
+        instructor: Diccionario con la información del instructor. Campos esperados:
+            - id (str): ID del instructor para la URL
+            - avatar (str): URL de la imagen de perfil del instructor
+            - name (str): Nombre completo del instructor
+            - expertise (str, opcional): Área de especialización
+            - bio (str): Biografía del instructor
+            - total_courses (int): Número total de cursos creados
+
+    Returns:
+        rx.Component: Tarjeta de instructor completa y estilizada
+
+    Ejemplo:
+        >>> instructor_data = {
+        ...     "id": "456",
+        ...     "name": "María García",
+        ...     "expertise": "Data Science",
+        ...     "bio": "Experta en ciencia de datos con 10 años de experiencia",
+        ...     "total_courses": 12
+        ... }
+        >>> card = instructor_card(instructor_data)
+
+    Nota:
+        - El avatar usa fallback="IN" si no hay imagen disponible
+        - El badge de expertise solo se muestra si el campo no está vacío
+        - La biografía se limita a 3 líneas con no_of_lines=3
+        - Los valores por defecto se usan si faltan campos en el diccionario
+    """
     return rx.link(
         rx.box(
             rx.vstack(
