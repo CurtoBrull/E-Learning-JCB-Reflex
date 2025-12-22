@@ -26,8 +26,11 @@ RUTAS PROTEGIDAS - Gestión de perfil:
 - /profile : Página de perfil de usuario (todos los roles autenticados)
 
 RUTAS PROTEGIDAS - Administración (solo admin):
-- /admin/users : Gestión de usuarios
-- /admin/courses : Gestión de cursos
+- /admin/users : Gestión de usuarios (CRUD)
+- /admin/courses : Gestión de cursos (CRUD)
+- /admin/categories : Gestión de categorías
+- /admin/stats : Estadísticas avanzadas
+- /admin/settings : Configuración del sistema
 
 Notas:
 - Las rutas con [param] son rutas dinámicas (ej: /courses/[course_id])
@@ -53,6 +56,9 @@ from E_Learning_JCB_Reflex.pages.admin_dashboard import admin_dashboard_page
 from E_Learning_JCB_Reflex.pages.profile import profile_page
 from E_Learning_JCB_Reflex.pages.user_management import user_management_page
 from E_Learning_JCB_Reflex.pages.course_management import course_management_page
+from E_Learning_JCB_Reflex.pages.category_management import category_management_page
+from E_Learning_JCB_Reflex.pages.admin_stats import admin_stats_page
+from E_Learning_JCB_Reflex.pages.admin_settings import admin_settings_page
 
 
 # Crear la aplicación principal de Reflex
@@ -99,3 +105,6 @@ app.add_page(profile_page, route="/profile")  # Perfil de usuario
 
 app.add_page(user_management_page, route="/admin/users")  # Gestión de usuarios (CRUD)
 app.add_page(course_management_page, route="/admin/courses")  # Gestión de cursos (CRUD)
+app.add_page(category_management_page, route="/admin/categories")  # Gestión de categorías
+app.add_page(admin_stats_page, route="/admin/stats")  # Estadísticas avanzadas
+app.add_page(admin_settings_page, route="/admin/settings")  # Configuración del sistema
