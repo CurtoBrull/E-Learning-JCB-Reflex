@@ -1,0 +1,39 @@
+services:
+  # Servicio web para la aplicación Reflex
+  - type: web
+    name: jcb-daw-project-reflex
+    env: python
+    region: frankfurt  # Puedes cambiar a oregon, singapore, etc.
+    plan: free  # Cambiar a 'starter' para plan de pago
+    buildCommand: pip install -r requirements.txt && reflex init && reflex export --frontend-only --no-zip
+    startCommand: reflex run --env prod --backend-only
+    envVars:
+      # Entorno
+      - key: ENVIRONMENT
+        value: production
+
+      # Puertos
+      - key: BACKEND_PORT
+        value: 8000
+      - key: FRONTEND_PORT
+        value: 3000
+
+      # MongoDB (usar variable de entorno secreta)
+      - key: MONGODB_URI
+        sync: false  # Configurar manualmente en Render Dashboard
+
+      # URLs de la aplicación
+      - key: API_URL
+        value: https://jcb-daw-project-reflex.onrender.com
+      - key: FRONTEND_URL
+        value: https://jcb-daw-project-reflex.onrender.com
+
+      # Python
+      - key: PYTHON_VERSION
+        value: 3.14.0
+
+    # Healthcheck para mantener el servicio activo
+    healthCheckPath: /ping
+
+    # Configuración de recursos
+    autoDeploy: true
