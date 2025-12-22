@@ -1,6 +1,16 @@
 # Despliegue en Render - E-Learning JCB Reflex
 
-Guía completa para desplegar la aplicación E-Learning JCB Reflex en Render.com.
+⚠️ **DEPRECATED - ESTE ARCHIVO ESTÁ OBSOLETO**
+
+**Razón**: Los WebSockets no funcionaban correctamente en Render, incluso con configuración optimizada.
+
+**Solución**: Migración a **Reflex Cloud** (hosting oficial de Reflex).
+
+**Nueva guía**: Ver [DESPLIEGUE_REFLEX.md](./DESPLIEGUE_REFLEX.md)
+
+---
+
+Guía completa para desplegar la aplicación E-Learning JCB Reflex en Render.com (mantenida como referencia histórica).
 
 ## Problema de WebSockets en Render
 
