@@ -118,11 +118,31 @@ E-Learning-JCB-Reflex/
    cd E-Learning-JCB-Reflex
    ```
 
-2. Crear y activar un entorno virtual con Python 3.14:
+2. Crear y activar un entorno virtual:
 
+   **En Linux/macOS:**
    ```bash
-   python3.14 -m venv reflex-env
-   source reflex-env/bin/activate  # En Windows: reflex-env\Scripts\activate
+   python3 -m venv reflex-env
+   source reflex-env/bin/activate
+   ```
+
+   **En WSL (Windows Subsystem for Linux):**
+   ```bash
+   # Instalar virtualenv si no está disponible
+   sudo apt update
+   sudo apt install python3-virtualenv
+
+   # Crear entorno virtual
+   virtualenv -p python3 reflex-env
+
+   # Activar entorno virtual
+   source reflex-env/bin/activate
+   ```
+
+   **En Windows:**
+   ```bash
+   python -m venv reflex-env
+   reflex-env\Scripts\activate
    ```
 
 3. Instalar las dependencias del proyecto:
@@ -177,9 +197,6 @@ Crea un archivo `.env` en la raíz del proyecto basándote en `.env.example`:
 ```bash
 # MongoDB Configuration
 MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/database?retryWrites=true&w=majority&appName=cluster-name
-
-# JWT Secret for authentication (generate a random string)
-JWT_SECRET=your-secret-key-here
 
 # API Configuration
 API_URL=http://localhost:8000
