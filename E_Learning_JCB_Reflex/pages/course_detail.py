@@ -53,7 +53,7 @@ def enrollment_result_dialog() -> rx.Component:
                 EnrollmentState.enrollment_was_successful,
                 rx.vstack(
                     rx.hstack(
-                        rx.icon("check-circle", size=32, color=rx.color("green", 9)),
+                        rx.icon("circle-check", size=32, color=rx.color("green", 9)),
                         rx.alert_dialog.title("¡Inscripción Exitosa!"),
                         spacing="3",
                         align_items="center",
@@ -73,7 +73,7 @@ def enrollment_result_dialog() -> rx.Component:
                         rx.link(
                             rx.button(
                                 rx.hstack(
-                                    rx.icon("play-circle", size=18),
+                                    rx.icon("circle-play", size=18),
                                     rx.text("Ir al Curso"),
                                     spacing="2",
                                 ),
@@ -472,7 +472,7 @@ def course_detail_page() -> rx.Component:
                                 rx.link(
                                     rx.button(
                                         rx.hstack(
-                                            rx.icon("play-circle", size=20),
+                                            rx.icon("circle-play", size=20),
                                             rx.text("Ver Curso"),
                                             spacing="2",
                                         ),

@@ -142,7 +142,7 @@ def student_dashboard_content() -> rx.Component:
                     EnrollmentState.success != "",
                     rx.callout(
                         EnrollmentState.success,
-                        icon="check-circle",
+                        icon="circle-check",
                         color_scheme="green",
                         margin_bottom="4",
                     ),
@@ -173,7 +173,7 @@ def student_dashboard_content() -> rx.Component:
                     rx.card(
                         rx.vstack(
                             rx.hstack(
-                                rx.icon("check-circle", size=24, color=rx.color("green", 9)),
+                                rx.icon("circle-check", size=24, color=rx.color("green", 9)),
                                 rx.spacer(),
                                 rx.badge(
                                     EnrollmentState.completed_courses.to_string(),

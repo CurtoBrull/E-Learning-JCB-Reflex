@@ -13,8 +13,54 @@ Estado: CourseState para cargar cursos populares
 
 import reflex as rx
 from E_Learning_JCB_Reflex.states.course_state import CourseState
+from E_Learning_JCB_Reflex.states.auth_state import AuthState
 from E_Learning_JCB_Reflex.components.navbar import navbar
 from E_Learning_JCB_Reflex.components.course_card import course_card
+
+
+def logout_success_dialog() -> rx.Component:
+    """
+    Renderiza un diálogo modal de confirmación de cierre de sesión exitoso.
+
+    Muestra un diálogo con mensaje de éxito y botón para cerrar.
+
+    Returns:
+        rx.Component: Alert dialog de éxito de logout
+
+    Notas:
+        - Se muestra cuando AuthState.show_logout_success_message es True
+        - Incluye icono de éxito (circle-check) en color verde
+        - Botón "Cerrar" cierra el diálogo
+    """
+    return rx.alert_dialog.root(
+        rx.alert_dialog.content(
+            rx.vstack(
+                rx.hstack(
+                    rx.icon("circle-check", size=32, color=rx.color("green", 9)),
+                    rx.alert_dialog.title("Sesión Cerrada"),
+                    spacing="3",
+                    align_items="center",
+                ),
+                rx.alert_dialog.description(
+                    "Has cerrado sesión exitosamente. ¡Hasta pronto!",
+                    size="3",
+                ),
+                rx.divider(margin_y="4"),
+                rx.button(
+                    "Cerrar",
+                    variant="solid",
+                    color_scheme="blue",
+                    size="3",
+                    width="100%",
+                    on_click=AuthState.close_logout_message,
+                ),
+                spacing="3",
+                align_items="start",
+                width="100%",
+            ),
+        ),
+        open=AuthState.show_logout_success_message,
+    )
 
 
 def index() -> rx.Component:
@@ -33,6 +79,7 @@ def index() -> rx.Component:
     """
     return rx.vstack(
         navbar(),
+        logout_success_dialog(),
         rx.container(
             rx.vstack(
                 # Header

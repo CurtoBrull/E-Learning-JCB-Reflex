@@ -97,6 +97,9 @@ class AuthState(rx.State):
     error: str = ""  # Mensaje de error para mostrar
     success: str = ""  # Mensaje de éxito para mostrar
 
+    # Mensaje de logout exitoso
+    show_logout_success_message: bool = False  # Mostrar mensaje de logout exitoso en página de inicio
+
     # Métodos para login
     def set_login_email(self, value: str):
         """Actualizar el email de login."""
@@ -303,11 +306,17 @@ class AuthState(rx.State):
             self.loading = False
 
     def logout(self):
-        """Cerrar sesión del usuario."""
+        """Cerrar sesión del usuario y redirigir a la página principal."""
         self.is_authenticated = False
         self.current_user = {}
         self.success = "Sesión cerrada exitosamente"
+        self.show_logout_success_message = True
         return rx.redirect("/")
+
+    def close_logout_message(self):
+        """Cerrar el mensaje de logout exitoso."""
+        self.show_logout_success_message = False
+        self.success = ""
 
     @rx.var
     def user_name(self) -> str:
