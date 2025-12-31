@@ -73,6 +73,9 @@ class EnrollmentState(AuthState):
     enrollment_was_successful: bool = False
     enrollment_course_id: str = ""
 
+    # Estado de inscripción en curso actual (para course_detail)
+    is_enrolled_in_current_course: bool = False
+
     async def load_available_courses(self):
         """
         Cargar todos los cursos disponibles para inscripción.
@@ -216,9 +219,17 @@ class EnrollmentState(AuthState):
         """Inscribir al estudiante en el curso actual (usando el ID de la URL)."""
         from E_Learning_JCB_Reflex.utils.route_helpers import get_dynamic_id
 
-        course_id = get_dynamic_id(self.router.url.path)
-        if course_id:
+        try:
+            path = str(self.router.url.path)
+            course_id = get_dynamic_id(path)
+            print(f"Enrolling in course: {course_id}")
+
             await self.enroll_in_course(course_id)
+            # Actualizar el estado de inscripción después de inscribirse
+            await self.check_current_course_enrollment()
+        except Exception as e:
+            print(f"Error in enroll_in_current_course: {e}")
+            self.error = f"Error al inscribirse: {str(e)}"
 
     def open_unenroll_dialog(self, course_id: str, course_title: str, *args, **kwargs):
         """Abrir el diálogo de confirmación para desinscripción."""
@@ -287,6 +298,39 @@ class EnrollmentState(AuthState):
         except Exception as e:
             print(f"Error checking enrollment status: {e}")
             return False
+
+    async def check_current_course_enrollment(self):
+        """
+        Verificar si el usuario está inscrito en el curso actual.
+
+        Lee el course_id de la URL y verifica si el usuario autenticado
+        está inscrito en ese curso. Actualiza is_enrolled_in_current_course.
+        """
+        from E_Learning_JCB_Reflex.utils.route_helpers import get_dynamic_id
+
+        # Solo para estudiantes autenticados
+        if not self.is_authenticated or not self.is_user_student:
+            self.is_enrolled_in_current_course = False
+            return
+
+        try:
+            # Obtener el ID del curso desde la URL
+            path = str(self.router.url.path)
+            course_id = get_dynamic_id(path)
+
+            print(f"Checking enrollment for course: {course_id}")
+
+            # Verificar inscripción
+            user_id = self.current_user.get("_id")
+            if user_id and course_id:
+                self.is_enrolled_in_current_course = await enrollment_service.is_enrolled(str(user_id), str(course_id))
+                print(f"User {user_id} enrolled in course {course_id}: {self.is_enrolled_in_current_course}")
+            else:
+                self.is_enrolled_in_current_course = False
+
+        except Exception as e:
+            print(f"Error checking current course enrollment: {e}")
+            self.is_enrolled_in_current_course = False
 
     @rx.var
     def total_enrolled_courses(self) -> int:

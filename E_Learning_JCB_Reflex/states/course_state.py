@@ -66,6 +66,7 @@ class CourseState(rx.State):
     error: str = ""
 
     # Información básica del curso seleccionado
+    current_course_id: str = ""
     course_title: str = ""
     course_description: str = ""
     course_thumbnail: str = ""
@@ -203,6 +204,7 @@ class CourseState(rx.State):
             course = await get_course_by_id(course_id)
             if course:
                 # Asignar a variables de estado planas
+                self.current_course_id = course_id
                 self.course_title = course.title
                 self.course_description = course.description
                 self.course_thumbnail = course.thumbnail
@@ -263,24 +265,25 @@ class CourseState(rx.State):
         """
         Cargar curso usando el ID extraído de la URL actual.
 
-        Utiliza el helper get_dynamic_id() para extraer el ID del curso
-        desde la URL dinámica (ej: /courses/[course_id]). Una vez extraído,
-        llama a load_course_by_id() para cargar todos los datos del curso.
+        Extrae el course_id de la ruta usando el path completo.
+        Por ejemplo: /courses/507f1f77bcf86cd799439011 -> extrae el ID.
 
-        Este método se ejecuta típicamente en el evento on_load de la página
+        Este método se ejecuta típicamente en el evento on_mount de la página
         de detalles del curso.
-
-        Ejemplo de URL:
-            /courses/507f1f77bcf86cd799439011 -> course_id = "507f1f77bcf86cd799439011"
-
-        Nota:
-            Imprime el ID y título del curso para debugging.
         """
-        # Obtener el course_id desde los parámetros de la url
-        course_id = get_dynamic_id(self.router.url.path)
-        if course_id:
-            await self.load_course_by_id(course_id)
+        try:
+            # Obtener el path actual y extraer el ID (último segmento antes de posibles subrutas)
+            path = str(self.router.url.path)
+            print(f"Loading course from path: {path}")
 
-        print(f"Course id: {course_id}")
-        print(f"Course title: {self.course_title}")
+            # Extraer el course_id del path
+            course_id = get_dynamic_id(path)
+
+            print(f"Extracted course_id: {course_id}")
+
+            # Cargar el curso
+            await self.load_course_by_id(course_id)
+        except Exception as e:
+            print(f"Error in load_course_from_url: {e}")
+            self.error = f"Error al cargar el curso: {str(e)}"
     

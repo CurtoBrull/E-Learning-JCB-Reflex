@@ -100,6 +100,7 @@ class Lesson:
         content (str): Contenido de la lección (puede ser texto, HTML, markdown, etc.)
         order (int): Orden de la lección en el curso (para mantener secuencia)
         duration (int): Duración estimada de la lección en minutos
+        video_url (str): URL del video de YouTube para la lección
     """
 
     def __init__(
@@ -108,6 +109,7 @@ class Lesson:
         content: str = "",
         order: int = 0,
         duration: int = 0,
+        video_url: str = "",
         _id: Optional[str] = None,
     ):
         """
@@ -118,6 +120,7 @@ class Lesson:
             content: Contenido de la lección
             order: Posición de la lección en el curso (1, 2, 3...)
             duration: Duración en minutos
+            video_url: URL del video de YouTube
             _id: ID único de la lección
         """
         self.id = str(_id) if _id else None
@@ -125,6 +128,7 @@ class Lesson:
         self.content = content
         self.order = order  # Orden de la lección en el curso
         self.duration = duration  # Duración en minutos
+        self.video_url = video_url  # URL del video de YouTube
 
     @classmethod
     def from_dict(cls, data: dict) -> "Lesson":
@@ -143,6 +147,7 @@ class Lesson:
             content=data.get("content", ""),
             order=data.get("order", 0),
             duration=data.get("duration", 0),
+            video_url=data.get("video_url", ""),
         )
 
     def to_dict(self) -> dict:
@@ -158,6 +163,7 @@ class Lesson:
             "content": self.content,
             "order": self.order,
             "duration": self.duration,
+            "video_url": self.video_url,
         }
 
 

@@ -11,6 +11,7 @@ RUTAS PÚBLICAS (accesibles sin autenticación):
 - / : Página de inicio
 - /courses : Catálogo de cursos
 - /courses/[course_id] : Detalle de un curso específico
+- /courses/[course_id]/view : Visor de curso (requiere inscripción)
 - /instructors : Listado de instructores
 - /instructors/[instructor_id] : Detalle de un instructor
 - /contact : Formulario de contacto
@@ -45,6 +46,7 @@ from rxconfig import config
 from E_Learning_JCB_Reflex.pages.index import index
 from E_Learning_JCB_Reflex.pages.courses import courses_page
 from E_Learning_JCB_Reflex.pages.course_detail import course_detail_page
+from E_Learning_JCB_Reflex.pages.course_viewer import course_viewer_page
 from E_Learning_JCB_Reflex.pages.instructors import instructors_page
 from E_Learning_JCB_Reflex.pages.instructor_detail import instructor_detail_page
 from E_Learning_JCB_Reflex.pages.contact import contact_page
@@ -73,6 +75,7 @@ app = rx.App()
 app.add_page(index)  # Página de inicio - ruta: /
 app.add_page(courses_page, route="/courses")  # Catálogo de cursos
 app.add_page(course_detail_page, route="/courses/[course_id]")  # Detalle del curso (ruta dinámica)
+app.add_page(course_viewer_page, route="/courses/[course_id]/view")  # Visor de curso para estudiantes inscritos
 app.add_page(instructors_page, route="/instructors")  # Listado de instructores
 app.add_page(instructor_detail_page, route="/instructors/[instructor_id]")  # Detalle del instructor
 app.add_page(contact_page, route="/contact")  # Formulario de contacto

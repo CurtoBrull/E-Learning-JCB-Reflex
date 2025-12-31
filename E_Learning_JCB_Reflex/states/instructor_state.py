@@ -190,7 +190,14 @@ class InstructorState(rx.State):
 
     async def load_instructor_from_url(self):
         """Cargar instructor usando el ID de la URL."""
-        # Obtener el instructor_id desde los parámetros de la ruta
-        instructor_id = get_dynamic_id(self.router.url.path)
-        if instructor_id:
+        try:
+            # Obtener el instructor_id desde los parámetros de la ruta
+            path = str(self.router.url.path)
+            instructor_id = get_dynamic_id(path)
+
+            print(f"Loading instructor from path: {path}, ID: {instructor_id}")
+
             await self.load_instructor_by_id(instructor_id)
+        except Exception as e:
+            print(f"Error in load_instructor_from_url: {e}")
+            self.error = f"Error al cargar instructor: {str(e)}"

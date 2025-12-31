@@ -3,7 +3,7 @@
 # ============================================
 
 # --- Framework Principal ---
-reflex==0.8.19                    # Framework full-stack Python para desarrollo web
+reflex==0.8.24                    # Framework full-stack Python para desarrollo web
 reflex-hosting-cli==0.1.59        # CLI para desplegar aplicaciones Reflex en Reflex Cloud
 
 # --- Base de Datos MongoDB ---

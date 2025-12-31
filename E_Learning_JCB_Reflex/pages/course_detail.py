@@ -447,26 +447,48 @@ def course_detail_page() -> rx.Component:
                                 margin_top="4",
                             ),
                         ),
-                        # BOTÓN DE INSCRIPCIÓN
+                        # BOTÓN DE INSCRIPCIÓN / VER CURSO
                         rx.cond(
                             AuthState.is_user_student,
-                            rx.button(
-                                rx.cond(
-                                    EnrollmentState.loading,
-                                    rx.hstack(
-                                        rx.spinner(size="3"),
-                                        rx.text("Inscribiendo..."),
-                                        spacing="2",
+                            # Si es estudiante, mostrar botón según inscripción
+                            rx.cond(
+                                EnrollmentState.is_enrolled_in_current_course,
+                                # Si está inscrito, mostrar botón "Ver curso"
+                                rx.link(
+                                    rx.button(
+                                        rx.hstack(
+                                            rx.icon("play-circle", size=20),
+                                            rx.text("Ver Curso"),
+                                            spacing="2",
+                                        ),
+                                        size="4",
+                                        width="100%",
+                                        margin_top="6",
+                                        color_scheme="blue",
                                     ),
-                                    "Inscribirse al curso",
+                                    href=f"/courses/{CourseState.current_course_id}/view",
+                                    width="100%",
                                 ),
-                                size="4",
-                                width="100%",
-                                margin_top="6",
-                                color_scheme="green",
-                                on_click=EnrollmentState.enroll_in_current_course,
-                                disabled=EnrollmentState.loading,
+                                # Si no está inscrito, mostrar botón de inscripción
+                                rx.button(
+                                    rx.cond(
+                                        EnrollmentState.loading,
+                                        rx.hstack(
+                                            rx.spinner(size="3"),
+                                            rx.text("Inscribiendo..."),
+                                            spacing="2",
+                                        ),
+                                        "Inscribirse al curso",
+                                    ),
+                                    size="4",
+                                    width="100%",
+                                    margin_top="6",
+                                    color_scheme="green",
+                                    on_click=EnrollmentState.enroll_in_current_course,
+                                    disabled=EnrollmentState.loading,
+                                ),
                             ),
+                            # Si no es estudiante
                             rx.cond(
                                 AuthState.is_authenticated,
                                 rx.button(
@@ -496,7 +518,7 @@ def course_detail_page() -> rx.Component:
                 ),
                 spacing="4",
                 width="100%",
-                on_mount=CourseState.load_course_from_url,
+                on_mount=[CourseState.load_course_from_url, EnrollmentState.check_current_course_enrollment],
             ),
             width="100%",
             max_width="1200px",
