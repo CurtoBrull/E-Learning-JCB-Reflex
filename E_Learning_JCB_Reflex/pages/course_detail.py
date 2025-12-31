@@ -34,8 +34,8 @@ def enrollment_result_dialog() -> rx.Component:
     Renderiza un diálogo modal con el resultado de la inscripción.
 
     Muestra un diálogo diferente según el resultado de la inscripción:
-    - Éxito: Muestra mensaje de éxito con 3 opciones de navegación
-      (ir al dashboard, ver detalles del curso, explorar más cursos)
+    - Éxito: Muestra mensaje de éxito con 4 opciones de navegación
+      (ver lecciones del curso, ir al dashboard, ver detalles del curso, explorar más cursos)
     - Error: Muestra mensaje de error con opciones para reintentar
       o ver otros cursos
 
@@ -73,11 +73,26 @@ def enrollment_result_dialog() -> rx.Component:
                         rx.link(
                             rx.button(
                                 rx.hstack(
+                                    rx.icon("play-circle", size=18),
+                                    rx.text("Ir al Curso"),
+                                    spacing="2",
+                                ),
+                                variant="solid",
+                                color_scheme="green",
+                                size="3",
+                                width="100%",
+                            ),
+                            href=f"/courses/{EnrollmentState.enrollment_course_id}/view",
+                            width="100%",
+                        ),
+                        rx.link(
+                            rx.button(
+                                rx.hstack(
                                     rx.icon("graduation-cap", size=18),
                                     rx.text("Ir a Mi Dashboard"),
                                     spacing="2",
                                 ),
-                                variant="solid",
+                                variant="soft",
                                 color_scheme="blue",
                                 size="3",
                                 width="100%",
@@ -93,7 +108,7 @@ def enrollment_result_dialog() -> rx.Component:
                                     spacing="2",
                                 ),
                                 variant="soft",
-                                color_scheme="green",
+                                color_scheme="gray",
                                 size="3",
                                 width="100%",
                                 on_click=EnrollmentState.close_enrollment_result_dialog,

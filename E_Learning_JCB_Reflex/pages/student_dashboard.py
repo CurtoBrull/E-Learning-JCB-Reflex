@@ -322,12 +322,12 @@ def student_dashboard_content() -> rx.Component:
                                             rx.hstack(
                                                 rx.link(
                                                     rx.button(
-                                                        "Continuar",
+                                                        "Ir al Curso",
                                                         size="2",
                                                         variant="soft",
                                                         color_scheme="blue",
                                                     ),
-                                                    href=f"/courses/{course['id']}",
+                                                    href=f"/courses/{course['id']}/view",
                                                 ),
                                                 rx.button(
                                                     "Desinscribirse",
