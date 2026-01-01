@@ -43,21 +43,36 @@ def contact_page() -> rx.Component:
         - Incluye sección adicional con información de contacto alternativa
         - El textarea tiene min_height de 200px para mensajes largos
     """
-    return rx.vstack(
-        navbar(),
-        rx.container(
-            rx.vstack(
-                # Header
-                rx.heading(
-                    "Contáctanos",
-                    size="9",
-                    margin_bottom="2",
-                    text_align="center",
-                ),
+    return rx.box(
+        # Background image
+        rx.box(
+            position="fixed",
+            top="0",
+            left="0",
+            width="100%",
+            height="100%",
+            background_image="url(/images/bg/background_login.webp)",
+            background_size="cover",
+            background_position="center",
+            background_repeat="no-repeat",
+            opacity="0.15",
+            z_index="-1",
+        ),
+        rx.vstack(
+            navbar(),
+            rx.container(
+                rx.vstack(
+                    # Header
+                    rx.heading(
+                        "Contáctanos",
+                        size="9",
+                        margin_bottom="2",
+                        text_align="center",
+                    ),
                 rx.text(
                     "¿Tienes alguna pregunta o sugerencia? Estamos aquí para ayudarte",
                     size="5",
-                    color=rx.color("gray", 11),
+                    color=rx.color("gray", 12),
                     margin_bottom="8",
                     text_align="center",
                 ),
@@ -226,4 +241,7 @@ def contact_page() -> rx.Component:
         ),
         width="100%",
         spacing="0",
+        ),
+        width="100%",
+        position="relative",
     )

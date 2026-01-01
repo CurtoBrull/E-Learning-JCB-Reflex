@@ -258,12 +258,11 @@ def course_detail_page() -> rx.Component:
                                     rx.text(
                                         CourseState.course_description,
                                         size="4",
-                                        color="gray",
                                     ),
                                     rx.hstack(
                                         rx.badge(
                                             CourseState.course_level,
-                                            color_scheme="blue",
+                                            color_scheme="purple",
                                             size="3",
                                         ),
                                         rx.text(
@@ -285,7 +284,6 @@ def course_detail_page() -> rx.Component:
                             width="100%",
                             padding="6",
                             border_radius="lg",
-                            bg="white",
                         ),
                         # SECCIÓN 2: INFORMACIÓN DEL INSTRUCTOR
                         rx.box(
@@ -305,14 +303,13 @@ def course_detail_page() -> rx.Component:
                                     rx.text(
                                         CourseState.instructor_email,
                                         size="2",
-                                        color="gray",
                                     ),
                                     rx.cond(
                                         CourseState.instructor_bio != "",
                                         rx.text(
                                             CourseState.instructor_bio,
                                             size="2",
-                                            color="gray",
+                                            color="black",
                                         ),
                                     ),
                                     align_items="start",
@@ -326,7 +323,7 @@ def course_detail_page() -> rx.Component:
                         # SECCIÓN 3: ESTADÍSTICAS
                         rx.hstack(
                             rx.box(
-                                rx.text("Estudiantes", size="2", color="gray"),
+                                rx.text("Estudiantes", size="2"),
                                 rx.text(
                                     CourseState.students_count,
                                     size="6",
@@ -339,7 +336,7 @@ def course_detail_page() -> rx.Component:
                             rx.cond(
                                 CourseState.average_rating > 0,
                                 rx.box(
-                                    rx.text("Rating", size="2", color="gray"),
+                                    rx.text("Rating", size="2"),
                                     rx.text(
                                         CourseState.average_rating,
                                         size="6",
@@ -353,7 +350,7 @@ def course_detail_page() -> rx.Component:
                             rx.cond(
                                 CourseState.total_reviews > 0,
                                 rx.box(
-                                    rx.text("Reviews", size="2", color="gray"),
+                                    rx.text("Reviews", size="2"),
                                     rx.text(
                                         CourseState.total_reviews,
                                         size="6",
@@ -406,7 +403,6 @@ def course_detail_page() -> rx.Component:
                                             rx.text(
                                                 lesson["content"],
                                                 size="2",
-                                                color="gray",
                                                 no_of_lines=2,
                                                 margin_top="2",
                                             ),
@@ -438,16 +434,15 @@ def course_detail_page() -> rx.Component:
                                                 rx.text(review["student"], weight="bold", size="3"),
                                                 rx.spacer(),
                                                 rx.hstack(
-                                                    rx.text("Rating:", size="2", color="gray"),
+                                                    rx.text("Rating:", size="2"),
                                                     rx.text(review["rating"], size="2", weight="bold"),
-                                                    rx.text("/5", size="2", color="gray"),
+                                                    rx.text("/5", size="2"),
                                                     spacing="1",
                                                 ),
                                             ),
                                             rx.text(
                                                 review["comment"],
                                                 size="2",
-                                                color="gray",
                                                 margin_top="2",
                                             ),
                                             padding="3",

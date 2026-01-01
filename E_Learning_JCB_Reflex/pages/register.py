@@ -44,24 +44,39 @@ def register_page() -> rx.Component:
         - Muestra callouts de éxito/error basados en AuthState.success y AuthState.error
         - El formulario está limitado a un max_width de 550px para mejor legibilidad
     """
-    return rx.vstack(
-        navbar(),
-        rx.container(
-            rx.vstack(
-                # Header
-                rx.heading(
-                    "Crear Cuenta",
-                    size="9",
-                    margin_bottom="2",
-                    text_align="center",
-                ),
-                rx.text(
-                    "Únete a E-Learning JCB y comienza a aprender",
-                    size="5",
-                    color=rx.color("gray", 11),
-                    margin_bottom="8",
-                    text_align="center",
-                ),
+    return rx.box(
+        # Background image
+        rx.box(
+            position="fixed",
+            top="0",
+            left="0",
+            width="100%",
+            height="100%",
+            background_image="url(/images/bg/background_register.webp)",
+            background_size="cover",
+            background_position="center",
+            background_repeat="no-repeat",
+            opacity="0.3",
+            z_index="-1",
+        ),
+        rx.vstack(
+            navbar(),
+            rx.container(
+                rx.vstack(
+                    # Header
+                    rx.heading(
+                        "Crear Cuenta",
+                        size="9",
+                        margin_bottom="2",
+                        text_align="center",
+                    ),
+                    rx.text(
+                        "Únete a E-Learning JCB y comienza a aprender",
+                        size="5",
+                        color=rx.color("gray", 12),
+                        margin_bottom="8",
+                        text_align="center",
+                    ),
                 # Mensaje de éxito
                 rx.cond(
                     AuthState.success != "",
@@ -194,17 +209,17 @@ def register_page() -> rx.Component:
                             rx.text(
                                 "• Student: Para aprender cursos",
                                 size="2",
-                                color=rx.color("gray", 10),
+                                color=rx.color("gray", 12),
                             ),
                             rx.text(
                                 "• Instructor: Para crear y enseñar cursos",
                                 size="2",
-                                color=rx.color("gray", 10),
+                                color=rx.color("gray", 12),
                             ),
                             rx.text(
                                 "• Admin: Gestión completa de la plataforma",
                                 size="2",
-                                color=rx.color("gray", 10),
+                                color=rx.color("gray", 12),
                             ),
                             width="100%",
                             spacing="2",
@@ -261,4 +276,7 @@ def register_page() -> rx.Component:
         ),
         width="100%",
         spacing="0",
+        ),
+        width="100%",
+        position="relative",
     )

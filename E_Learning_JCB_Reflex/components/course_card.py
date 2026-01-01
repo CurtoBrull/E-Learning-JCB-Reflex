@@ -86,7 +86,7 @@ def course_card(course: dict) -> rx.Component:
                 ),
                 rx.text(
                     course.get("description", "No description"),
-                    color="gray",
+                    color=rx.color("gray", 12),
                     size="2",
                     no_of_lines=3,
                     padding_x="4px",
@@ -109,7 +109,7 @@ def course_card(course: dict) -> rx.Component:
                 ),
                 rx.text(
                     f"Instructor: {course.get('instructor_name', 'Unknown')}",
-                    color="gray",
+                    color=rx.color("gray", 12),
                     size="1",
                     padding="4px",
                 ),

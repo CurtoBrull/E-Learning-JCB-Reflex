@@ -71,34 +71,51 @@ def instructor_card(instructor: dict) -> rx.Component:
                     padding_top="4",
                     padding_bottom="4",
                 ),
-                # Nombre del instructor
-                rx.heading(
-                    instructor.get("name", "Instructor"),
-                    size="6",
-                    padding_x="4px",
-                    text_align="center",
-                    width="100%",
-                ),
-                # Expertise
-                rx.cond(
-                    instructor.get("expertise", "") != "",
-                    rx.badge(
-                        instructor.get("expertise", ""),
-                        color_scheme="purple",
-                        size="2",
+                # Nombre del instructor con altura fija
+                rx.box(
+                    rx.heading(
+                        instructor.get("name", "Instructor"),
+                        size="6",
+                        text_align="center",
+                        no_of_lines=2,
                     ),
-                ),
-                # Bio
-                rx.text(
-                    instructor.get("bio", "Sin biografía disponible"),
-                    color="gray",
-                    size="2",
-                    no_of_lines=3,
+                    min_height="3.5rem",
+                    width="100%",
+                    display="flex",
+                    align_items="center",
+                    justify_content="center",
                     padding_x="4px",
+                ),
+                # Expertise con altura fija
+                rx.box(
+                    rx.cond(
+                        instructor.get("expertise", "") != "",
+                        rx.badge(
+                            instructor.get("expertise", ""),
+                            color_scheme="purple",
+                            size="2",
+                        ),
+                    ),
+                    min_height="1.5rem",
+                    display="flex",
+                    align_items="center",
+                    justify_content="center",
+                ),
+                # Bio con altura fija
+                rx.box(
+                    rx.text(
+                        instructor.get("bio", "Sin biografía disponible"),
+                        color=rx.color("gray", 12),
+                        size="2",
+                        no_of_lines=3,
+                        text_align="center",
+                    ),
                     min_height="4.5rem",
                     width="100%",
-                    text_align="center",
+                    padding_x="4px",
                 ),
+                # Espaciador para empujar estadísticas hacia abajo
+                rx.spacer(),
                 # Estadísticas
                 rx.hstack(
                     rx.vstack(
@@ -110,7 +127,7 @@ def instructor_card(instructor: dict) -> rx.Component:
                         rx.text(
                             "Cursos",
                             size="1",
-                            color="gray",
+                            color=rx.color("gray", 12)
                         ),
                         spacing="0",
                         align_items="center",
@@ -122,6 +139,7 @@ def instructor_card(instructor: dict) -> rx.Component:
                 spacing="3",
                 align_items="center",
                 width="100%",
+                height="100%",
             ),
             border_radius="5px",
             box_shadow="5px 5px 15px rgba(0, 0, 0, 0.5)",
@@ -135,6 +153,9 @@ def instructor_card(instructor: dict) -> rx.Component:
                 "cursor": "pointer",
             },
             padding="4",
+            height="420px",
+            display="flex",
+            flex_direction="column",
         ),
         href=f"/instructors/{instructor.get('id', '')}",
         text_decoration="none",

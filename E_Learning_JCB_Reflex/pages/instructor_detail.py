@@ -92,6 +92,7 @@ def instructor_detail_page() -> rx.Component:
                                     rx.heading(
                                         InstructorState.instructor_name,
                                         size="9",
+                                        color=rx.color("gray", 12),
                                     ),
                                     rx.cond(
                                         InstructorState.instructor_expertise != "",
@@ -104,7 +105,7 @@ def instructor_detail_page() -> rx.Component:
                                     rx.text(
                                         InstructorState.instructor_email,
                                         size="3",
-                                        color="gray",
+                                        color=rx.color("gray", 12),
                                     ),
                                     rx.cond(
                                         InstructorState.instructor_bio != "",
@@ -112,6 +113,7 @@ def instructor_detail_page() -> rx.Component:
                                             InstructorState.instructor_bio,
                                             size="4",
                                             margin_top="4",
+                                            color=rx.color("gray", 12),
                                         ),
                                     ),
                                     align_items="start",
@@ -125,12 +127,11 @@ def instructor_detail_page() -> rx.Component:
                             width="100%",
                             padding="6",
                             border_radius="5px",
-                            bg="white",
                         ),
                         # SECCIÓN 2: ESTADÍSTICAS
                         rx.hstack(
                             rx.box(
-                                rx.text("Cursos", size="2", color="gray"),
+                                rx.text("Cursos", size="2"),
                                 rx.text(
                                     InstructorState.total_courses,
                                     size="6",
@@ -141,7 +142,7 @@ def instructor_detail_page() -> rx.Component:
                                 flex="1",
                             ),
                             rx.box(
-                                rx.text("Estudiantes", size="2", color="gray"),
+                                rx.text("Estudiantes", size="2"),
                                 rx.text(
                                     InstructorState.total_students,
                                     size="6",
@@ -181,7 +182,6 @@ def instructor_detail_page() -> rx.Component:
                                                         rx.text(
                                                             course["description"],
                                                             size="2",
-                                                            color="gray",
                                                             no_of_lines=2,
                                                         ),
                                                         rx.hstack(
@@ -201,7 +201,6 @@ def instructor_detail_page() -> rx.Component:
                                                             rx.text(
                                                                 f"{course['students_count']} estudiantes",
                                                                 size="1",
-                                                                color="gray",
                                                             ),
                                                             rx.text(
                                                                 f"★ {course['average_rating']}/5",
@@ -219,7 +218,7 @@ def instructor_detail_page() -> rx.Component:
                                                     width="100%",
                                                 ),
                                                 border_radius="5px",
-                                                box_shadow="3px 3px 10px rgba(0, 0, 0, 0.3)",
+                                                box_shadow="5px 5px 10px 5px rgba(0, 0, 0, 0.3)",
                                                 overflow="hidden",
                                                 _hover={
                                                     "box_shadow": "5px 5px 15px rgba(0, 0, 0, 0.5)",

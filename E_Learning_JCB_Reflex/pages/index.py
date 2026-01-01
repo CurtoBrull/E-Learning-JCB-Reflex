@@ -77,33 +77,48 @@ def index() -> rx.Component:
     Eventos:
         - on_mount: Carga cursos populares al cargar la página
     """
-    return rx.vstack(
-        navbar(),
-        logout_success_dialog(),
-        rx.container(
-            rx.vstack(
-                # Header
-                rx.heading(
-                    "¡Bienvenido a E-Learning JCB!",
-                    size="9",
-                    margin_bottom="2",
-                    text_align="center",
-                    max_width="100%",
-                ),
-                rx.text(
-                    "¡Aprende y Crece con nosotros!",
-                    size="8",
-                    color=rx.color("gray", 11),
-                    margin_bottom="8",
-                    text_align="center",
-                ),
-                rx.text(
-                    "Descubre nuestros cursos online impartidos por expertos en programación, administración de sistemas y más. Aprende a tu ritmo, mejora tus habilidades y obtén certificaciones reconocidas en el sector IT.",
-                    size="6",
-                    color=rx.color("gray", 11),
-                    margin_bottom="8",
-                    text_align="center",
-                ),
+    return rx.box(
+        # Background image
+        rx.box(
+            position="fixed",
+            top="0",
+            left="0",
+            width="100%",
+            height="100%",
+            background_image="url(/images/bg/background_login.webp)",
+            background_size="cover",
+            background_position="center",
+            background_repeat="no-repeat",
+            opacity="0.15",
+            z_index="-1",
+        ),
+        rx.vstack(
+            navbar(),
+            logout_success_dialog(),
+            rx.container(
+                rx.vstack(
+                    # Header
+                    rx.heading(
+                        "¡Bienvenido a E-Learning JCB!",
+                        size="9",
+                        margin_bottom="2",
+                        text_align="center",
+                        max_width="100%",
+                    ),
+                    rx.text(
+                        "¡Aprende y Crece con nosotros!",
+                        size="8",
+                        color=rx.color("gray", 12),
+                        margin_bottom="8",
+                        text_align="center",
+                    ),
+                    rx.text(
+                        "Descubre nuestros cursos online impartidos por expertos en programación, administración de sistemas y más. Aprende a tu ritmo, mejora tus habilidades y obtén certificaciones reconocidas en el sector IT.",
+                        size="6",
+                        color=rx.color("gray", 12),
+                        margin_bottom="8",
+                        text_align="center",
+                    ),
                 # Mensaje de error
                 rx.cond(
                     CourseState.error != "",
@@ -159,4 +174,7 @@ def index() -> rx.Component:
         ),
         width="100%",
         spacing="0",
+        ),
+        width="100%",
+        position="relative",
     )

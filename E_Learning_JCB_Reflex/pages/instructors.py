@@ -41,16 +41,31 @@ def instructors_page() -> rx.Component:
         - Muestra callout de error si InstructorState.error no está vacío
         - La cuadrícula solo se muestra si hay instructores disponibles
     """
-    return rx.vstack(
-        navbar(),
-        rx.container(
-            rx.vstack(
-                rx.heading(
-                    "Nuestros Instructores",
-                    size="8",
-                    margin_bottom="4",
-                    text_align="center",
-                ),
+    return rx.box(
+        # Background image
+        rx.box(
+            position="fixed",
+            top="0",
+            left="0",
+            width="100%",
+            height="100%",
+            background_image="url(/images/bg/background_login.webp)",
+            background_size="cover",
+            background_position="center",
+            background_repeat="no-repeat",
+            opacity="0.15",
+            z_index="-1",
+        ),
+        rx.vstack(
+            navbar(),
+            rx.container(
+                rx.vstack(
+                    rx.heading(
+                        "Nuestros Instructores",
+                        size="8",
+                        margin_bottom="4",
+                        text_align="center",
+                    ),
                 # Mensaje de error
                 rx.cond(
                     InstructorState.error != "",
@@ -90,4 +105,7 @@ def instructors_page() -> rx.Component:
         ),
         width="100%",
         spacing="0",
+        ),
+        width="100%",
+        position="relative",
     )

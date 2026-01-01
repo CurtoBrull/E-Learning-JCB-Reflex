@@ -34,21 +34,36 @@ def login_page() -> rx.Component:
     Eventos:
         - on_submit: AuthState.handle_login
     """
-    return rx.vstack(
-        navbar(),
-        rx.container(
-            rx.vstack(
-                # Header
-                rx.heading(
-                    "Iniciar Sesión",
-                    size="9",
-                    margin_bottom="2",
-                    text_align="center",
-                ),
+    return rx.box(
+        # Background image
+        rx.box(
+            position="fixed",
+            top="0",
+            left="0",
+            width="100%",
+            height="100%",
+            background_image="url(/images/bg/background_register.webp)",
+            background_size="cover",
+            background_position="center",
+            background_repeat="no-repeat",
+            opacity="0.3",
+            z_index="-1",
+        ),
+        rx.vstack(
+            navbar(),
+            rx.container(
+                rx.vstack(
+                    # Header
+                    rx.heading(
+                        "Iniciar Sesión",
+                        size="9",
+                        margin_bottom="2",
+                        text_align="center",
+                    ),
                 rx.text(
                     "Accede a tu cuenta de E-Learning JCB",
                     size="5",
-                    color=rx.color("gray", 11),
+                    color=rx.color("gray", 12),
                     margin_bottom="8",
                     text_align="center",
                 ),
@@ -163,7 +178,7 @@ def login_page() -> rx.Component:
                         rx.text(
                             "Contacta con soporte en contacto@elearningjcb.com",
                             size="3",
-                            color=rx.color("gray", 11),
+                            color=rx.color("gray", 12),
                         ),
                         spacing="2",
                         padding="6",
@@ -184,4 +199,7 @@ def login_page() -> rx.Component:
         ),
         width="100%",
         spacing="0",
+        ),
+        width="100%",
+        position="relative",
     )
