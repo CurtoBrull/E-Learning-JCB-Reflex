@@ -141,7 +141,7 @@ E-Learning-JCB-Reflex/
 
    **En Windows:**
    ```bash
-   python -m venv reflex-env
+   py -m venv reflex-env
    reflex-env\Scripts\activate
    ```
 
