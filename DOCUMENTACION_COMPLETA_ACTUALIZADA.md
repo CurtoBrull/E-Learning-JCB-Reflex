@@ -16,6 +16,9 @@ Esta documentación está dividida en múltiples archivos para facilitar la nave
 8. **[docs/07_SCRIPTS_Y_UTILIDADES.md](./docs/07_SCRIPTS_Y_UTILIDADES.md)** - Scripts de mantenimiento y utilidades
 9. **[docs/08_FLUJOS_Y_TESTING.md](./docs/08_FLUJOS_Y_TESTING.md)** - Flujos de usuario y estrategias de testing
 10. **[docs/09_METRICAS_Y_CONCLUSIONES.md](./docs/09_METRICAS_Y_CONCLUSIONES.md)** - Métricas del proyecto y conclusiones
+11. **[docs/10_ESQUEMA_BASE_DATOS_REAL.md](./docs/10_ESQUEMA_BASE_DATOS_REAL.md)** - Esquema real de MongoDB Atlas con ejemplos
+12. **[docs/11_DESPLIEGUE_REFLEX_CLOUD.md](./docs/11_DESPLIEGUE_REFLEX_CLOUD.md)** - Guía completa de despliegue en Reflex Cloud
+13. **[docs/12_USUARIOS_EJEMPLO.md](./docs/12_USUARIOS_EJEMPLO.md)** - Credenciales de usuarios de prueba
 
 ---
 
