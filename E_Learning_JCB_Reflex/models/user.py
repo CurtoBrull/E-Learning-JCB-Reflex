@@ -87,6 +87,10 @@ class User:
             >>> user_doc = {"_id": ObjectId(...), "firstName": "Juan", "email": "juan@email.com"}
             >>> user = User.from_dict(user_doc)
         """
+        # Convertir coursesCreated de ObjectId a string para compatibilidad
+        courses_created_raw = data.get("coursesCreated", [])
+        courses_created = [str(course_id) for course_id in courses_created_raw] if courses_created_raw else []
+
         return cls(
             _id=data.get("_id"),
             first_name=data.get("firstName", ""),
@@ -96,7 +100,7 @@ class User:
             password=data.get("password"),
             instructor_profile=data.get("instructorProfile"),
             enrollments=data.get("enrollments", []),
-            courses_created=data.get("coursesCreated", []),
+            courses_created=courses_created,
             created_at=data.get("createdAt"),
         )
 

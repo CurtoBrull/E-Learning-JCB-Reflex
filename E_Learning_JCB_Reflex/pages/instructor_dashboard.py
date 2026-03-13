@@ -27,6 +27,7 @@ import reflex as rx
 from E_Learning_JCB_Reflex.components.navbar import navbar
 from E_Learning_JCB_Reflex.components.protected import instructor_only
 from E_Learning_JCB_Reflex.states.auth_state import AuthState
+from E_Learning_JCB_Reflex.states.instructor_dashboard_state import InstructorDashboardState
 
 
 def instructor_dashboard_content() -> rx.Component:
@@ -83,7 +84,11 @@ def instructor_dashboard_content() -> rx.Component:
                             rx.hstack(
                                 rx.icon("graduation-cap", size=24, color=rx.color("purple", 9)),
                                 rx.spacer(),
-                                rx.badge("0", size="2", color_scheme="gray"),
+                                rx.badge(
+                                    InstructorDashboardState.total_courses,
+                                    size="2",
+                                    color_scheme="purple",
+                                ),
                             ),
                             rx.text("Cursos Creados", size="3", weight="bold"),
                             rx.text(
@@ -100,7 +105,11 @@ def instructor_dashboard_content() -> rx.Component:
                             rx.hstack(
                                 rx.icon("users", size=24, color=rx.color("blue", 9)),
                                 rx.spacer(),
-                                rx.badge("0", size="2", color_scheme="gray"),
+                                rx.badge(
+                                    InstructorDashboardState.total_students,
+                                    size="2",
+                                    color_scheme="blue",
+                                ),
                             ),
                             rx.text("Estudiantes", size="3", weight="bold"),
                             rx.text(
@@ -117,7 +126,11 @@ def instructor_dashboard_content() -> rx.Component:
                             rx.hstack(
                                 rx.icon("star", size=24, color=rx.color("yellow", 9)),
                                 rx.spacer(),
-                                rx.badge("0.0", size="2", color_scheme="gray"),
+                                rx.badge(
+                                    InstructorDashboardState.average_rating,
+                                    size="2",
+                                    color_scheme="yellow",
+                                ),
                             ),
                             rx.text("Valoración Media", size="3", weight="bold"),
                             rx.text(
@@ -134,7 +147,11 @@ def instructor_dashboard_content() -> rx.Component:
                             rx.hstack(
                                 rx.icon("dollar-sign", size=24, color=rx.color("green", 9)),
                                 rx.spacer(),
-                                rx.badge("$0", size="2", color_scheme="gray"),
+                                rx.badge(
+                                    f"€{InstructorDashboardState.total_revenue}",
+                                    size="2",
+                                    color_scheme="green",
+                                ),
                             ),
                             rx.text("Ingresos", size="3", weight="bold"),
                             rx.text(
@@ -171,34 +188,88 @@ def instructor_dashboard_content() -> rx.Component:
                             width="100%",
                         ),
                         rx.divider(),
-                        rx.center(
-                            rx.vstack(
-                                rx.icon("graduation-cap", size=40, color=rx.color("gray", 8)),
-                                rx.text(
-                                    "No has creado cursos todavía",
-                                    size="4",
-                                    color=rx.color("gray", 10),
-                                ),
-                                rx.text(
-                                    "Comienza a compartir tu conocimiento creando tu primer curso",
-                                    size="3",
-                                    color=rx.color("gray", 9),
-                                ),
-                                rx.link(
-                                    rx.button(
-                                        rx.hstack(
-                                            rx.icon("plus", size=18),
-                                            rx.text("Crear Mi Primer Curso"),
-                                            spacing="2",
+                        rx.cond(
+                            InstructorDashboardState.total_courses > 0,
+                            # Mostrar cursos si existen
+                            rx.grid(
+                                rx.foreach(
+                                    InstructorDashboardState.courses,
+                                    lambda course: rx.card(
+                                        rx.vstack(
+                                            rx.image(
+                                                src=course["thumbnail"],
+                                                width="100%",
+                                                height="150px",
+                                                object_fit="cover",
+                                                border_radius="8px 8px 0 0",
+                                            ),
+                                            rx.vstack(
+                                                rx.heading(course["title"], size="4"),
+                                                rx.text(
+                                                    course["description"],
+                                                    size="2",
+                                                    color=rx.color("gray", 10),
+                                                    no_of_lines=2,
+                                                ),
+                                                rx.hstack(
+                                                    rx.badge(f"€{course['price']}", color_scheme="green"),
+                                                    rx.badge(f"{course['students_count']} estudiantes", color_scheme="blue"),
+                                                    rx.badge(f"⭐ {course['average_rating']}", color_scheme="yellow"),
+                                                    spacing="2",
+                                                ),
+                                                rx.link(
+                                                    rx.button(
+                                                        "Ver Detalles",
+                                                        size="2",
+                                                        variant="soft",
+                                                        width="100%",
+                                                    ),
+                                                    href=f"/courses/{course['id']}",
+                                                    width="100%",
+                                                ),
+                                                spacing="3",
+                                                align_items="start",
+                                                padding="1em",
+                                            ),
+                                            spacing="0",
+                                            align_items="start",
                                         ),
-                                        size="3",
-                                        color_scheme="purple",
                                     ),
-                                    href="/instructor/courses/new",
                                 ),
-                                spacing="3",
-                                align_items="center",
-                                padding="4em",
+                                columns="3",
+                                spacing="4",
+                                width="100%",
+                            ),
+                            # Mostrar mensaje si no hay cursos
+                            rx.center(
+                                rx.vstack(
+                                    rx.icon("graduation-cap", size=40, color=rx.color("gray", 8)),
+                                    rx.text(
+                                        "No has creado cursos todavía",
+                                        size="4",
+                                        color=rx.color("gray", 10),
+                                    ),
+                                    rx.text(
+                                        "Comienza a compartir tu conocimiento creando tu primer curso",
+                                        size="3",
+                                        color=rx.color("gray", 9),
+                                    ),
+                                    rx.link(
+                                        rx.button(
+                                            rx.hstack(
+                                                rx.icon("plus", size=18),
+                                                rx.text("Crear Mi Primer Curso"),
+                                                spacing="2",
+                                            ),
+                                            size="3",
+                                            color_scheme="purple",
+                                        ),
+                                        href="/instructor/courses/new",
+                                    ),
+                                    spacing="3",
+                                    align_items="center",
+                                    padding="4em",
+                                ),
                             ),
                         ),
                         spacing="4",
@@ -302,4 +373,10 @@ def instructor_dashboard_page() -> rx.Component:
         - Si el usuario no es instructor, redirige o muestra acceso denegado
         - Esta es la función principal exportada para el routing
     """
-    return instructor_only(instructor_dashboard_content())
+    return instructor_only(
+        rx.box(
+            instructor_dashboard_content(),
+            on_mount=InstructorDashboardState.load_dashboard_data,
+            width="100%",
+        )
+    )
