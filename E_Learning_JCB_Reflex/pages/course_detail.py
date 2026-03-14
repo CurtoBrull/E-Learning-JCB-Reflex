@@ -26,6 +26,7 @@ from E_Learning_JCB_Reflex.states.course_state import CourseState
 from E_Learning_JCB_Reflex.states.enrollment_state import EnrollmentState
 from E_Learning_JCB_Reflex.states.auth_state import AuthState
 from E_Learning_JCB_Reflex.components.navbar import navbar
+from E_Learning_JCB_Reflex.components.footer import footer
 from E_Learning_JCB_Reflex.utils.route_helpers import get_dynamic_id
 
 
@@ -535,6 +536,7 @@ def course_detail_page() -> rx.Component:
             padding_x="2rem",
             margin_x="auto",
         ),
+        footer(),
         width="100%",
         spacing="0",
         align_items="center",

@@ -18,6 +18,7 @@ Estado: AuthState para manejar autenticación
 import reflex as rx
 from E_Learning_JCB_Reflex.states.auth_state import AuthState
 from E_Learning_JCB_Reflex.components.navbar import navbar
+from E_Learning_JCB_Reflex.components.footer import footer
 
 
 def login_page() -> rx.Component:
@@ -197,6 +198,7 @@ def login_page() -> rx.Component:
             max_width="100%",
             padding_x="2rem",
         ),
+        footer(),
         width="100%",
         spacing="0",
         ),

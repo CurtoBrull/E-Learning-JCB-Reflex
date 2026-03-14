@@ -25,6 +25,7 @@ Notas:
 
 import reflex as rx
 from E_Learning_JCB_Reflex.components.navbar import navbar
+from E_Learning_JCB_Reflex.components.footer import footer
 from E_Learning_JCB_Reflex.components.protected import instructor_only
 from E_Learning_JCB_Reflex.states.auth_state import AuthState
 from E_Learning_JCB_Reflex.states.instructor_dashboard_state import InstructorDashboardState
@@ -353,6 +354,7 @@ def instructor_dashboard_content() -> rx.Component:
             ),
             max_width="1400px",
         ),
+        footer(),
         width="100%",
         spacing="0",
     )
