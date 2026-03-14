@@ -29,6 +29,7 @@ from E_Learning_JCB_Reflex.components.footer import footer
 from E_Learning_JCB_Reflex.components.protected import instructor_only
 from E_Learning_JCB_Reflex.states.auth_state import AuthState
 from E_Learning_JCB_Reflex.states.instructor_dashboard_state import InstructorDashboardState
+from E_Learning_JCB_Reflex.states.instructor_course_state import InstructorCourseState
 
 
 def instructor_dashboard_content() -> rx.Component:
@@ -174,17 +175,15 @@ def instructor_dashboard_content() -> rx.Component:
                         rx.hstack(
                             rx.heading("Mis Cursos", size="6"),
                             rx.spacer(),
-                            rx.link(
-                                rx.button(
-                                    rx.hstack(
-                                        rx.icon("plus", size=18),
-                                        rx.text("Crear Curso"),
-                                        spacing="2",
-                                    ),
-                                    size="2",
-                                    color_scheme="purple",
+                            rx.button(
+                                rx.hstack(
+                                    rx.icon("plus", size=18),
+                                    rx.text("Crear Curso"),
+                                    spacing="2",
                                 ),
-                                href="/instructor/courses/new",
+                                size="2",
+                                color_scheme="purple",
+                                on_click=InstructorCourseState.go_to_create,
                             ),
                             width="100%",
                         ),
@@ -255,17 +254,15 @@ def instructor_dashboard_content() -> rx.Component:
                                         size="3",
                                         color=rx.color("gray", 9),
                                     ),
-                                    rx.link(
-                                        rx.button(
-                                            rx.hstack(
-                                                rx.icon("plus", size=18),
-                                                rx.text("Crear Mi Primer Curso"),
-                                                spacing="2",
-                                            ),
-                                            size="3",
-                                            color_scheme="purple",
+                                    rx.button(
+                                        rx.hstack(
+                                            rx.icon("plus", size=18),
+                                            rx.text("Crear Mi Primer Curso"),
+                                            spacing="2",
                                         ),
-                                        href="/instructor/courses/new",
+                                        size="3",
+                                        color_scheme="purple",
+                                        on_click=InstructorCourseState.go_to_create,
                                     ),
                                     spacing="3",
                                     align_items="center",
@@ -283,20 +280,17 @@ def instructor_dashboard_content() -> rx.Component:
                         rx.heading("Acciones Rápidas", size="6"),
                         rx.divider(),
                         rx.grid(
-                            rx.link(
-                                rx.button(
-                                    rx.hstack(
-                                        rx.icon("plus", size=20),
-                                        rx.text("Crear Curso"),
-                                        spacing="2",
-                                    ),
-                                    variant="soft",
-                                    size="3",
-                                    width="100%",
-                                    color_scheme="purple",
+                            rx.button(
+                                rx.hstack(
+                                    rx.icon("plus", size=20),
+                                    rx.text("Crear Curso"),
+                                    spacing="2",
                                 ),
-                                href="/instructor/courses/new",
+                                variant="soft",
+                                size="3",
                                 width="100%",
+                                color_scheme="purple",
+                                on_click=InstructorCourseState.go_to_create,
                             ),
                             rx.link(
                                 rx.button(
