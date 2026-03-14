@@ -56,6 +56,8 @@ from E_Learning_JCB_Reflex.pages.docs import docs_page
 from E_Learning_JCB_Reflex.pages.privacy import privacy_page
 from E_Learning_JCB_Reflex.pages.terms import terms_page
 from E_Learning_JCB_Reflex.pages.cookies import cookies_page
+from E_Learning_JCB_Reflex.pages.blog import blog_page
+from E_Learning_JCB_Reflex.pages.blog_post import blog_post_page
 from E_Learning_JCB_Reflex.pages.login import login_page
 from E_Learning_JCB_Reflex.pages.register import register_page
 from E_Learning_JCB_Reflex.pages.student_dashboard import student_dashboard_page
@@ -93,6 +95,8 @@ app.add_page(docs_page, route="/docs")  # Documentación
 app.add_page(privacy_page, route="/privacy")  # Política de privacidad
 app.add_page(terms_page, route="/terms")  # Términos y condiciones
 app.add_page(cookies_page, route="/cookies")  # Política de cookies
+app.add_page(blog_page, route="/blog")  # Blog
+app.add_page(blog_post_page, route="/blog/[post_id]")  # Detalle de artículo
 app.add_page(login_page, route="/login")  # Inicio de sesión
 app.add_page(register_page, route="/register")  # Registro de nuevos usuarios
 
