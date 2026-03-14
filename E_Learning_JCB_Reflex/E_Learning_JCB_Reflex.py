@@ -54,6 +54,7 @@ from E_Learning_JCB_Reflex.pages.login import login_page
 from E_Learning_JCB_Reflex.pages.register import register_page
 from E_Learning_JCB_Reflex.pages.student_dashboard import student_dashboard_page
 from E_Learning_JCB_Reflex.pages.instructor_dashboard import instructor_dashboard_page
+from E_Learning_JCB_Reflex.pages.instructor_courses import instructor_courses_page
 from E_Learning_JCB_Reflex.pages.admin_dashboard import admin_dashboard_page
 from E_Learning_JCB_Reflex.pages.profile import profile_page
 from E_Learning_JCB_Reflex.pages.user_management import user_management_page
@@ -90,6 +91,7 @@ app.add_page(register_page, route="/register")  # Registro de nuevos usuarios
 
 app.add_page(student_dashboard_page, route="/student/dashboard")  # Dashboard de estudiante
 app.add_page(instructor_dashboard_page, route="/instructor/dashboard")  # Dashboard de instructor
+app.add_page(instructor_courses_page, route="/instructor/courses")  # Gestión de cursos del instructor
 app.add_page(admin_dashboard_page, route="/admin/dashboard")  # Dashboard de administrador
 
 
