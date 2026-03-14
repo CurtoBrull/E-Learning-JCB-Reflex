@@ -21,6 +21,7 @@ import reflex as rx
 from E_Learning_JCB_Reflex.states.course_state import CourseState
 from E_Learning_JCB_Reflex.states.enrollment_state import EnrollmentState
 from E_Learning_JCB_Reflex.components.navbar import navbar
+from E_Learning_JCB_Reflex.components.footer import footer
 from E_Learning_JCB_Reflex.components.course_card import course_card
 
 
@@ -104,6 +105,7 @@ def courses_page() -> rx.Component:
             max_width="100%",
             padding_x="2rem",
         ),
+        footer(),
         width="100%",
         spacing="0",
         ),

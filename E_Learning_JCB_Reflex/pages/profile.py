@@ -20,6 +20,7 @@ Estado: ProfileState para gestionar información del perfil
 
 import reflex as rx
 from E_Learning_JCB_Reflex.components.navbar import navbar
+from E_Learning_JCB_Reflex.components.footer import footer
 from E_Learning_JCB_Reflex.states.profile_state import ProfileState
 
 
@@ -380,6 +381,7 @@ def profile_page_content() -> rx.Component:
             padding_x=["4", "6", "8"],
             margin_x="auto",
         ),
+        footer(),
         width="100%",
         spacing="0",
     )

@@ -23,6 +23,7 @@ Protección: student_only HOC
 
 import reflex as rx
 from E_Learning_JCB_Reflex.components.navbar import navbar
+from E_Learning_JCB_Reflex.components.footer import footer
 from E_Learning_JCB_Reflex.components.protected import student_only
 from E_Learning_JCB_Reflex.components.course_card import course_card
 from E_Learning_JCB_Reflex.states.auth_state import AuthState
@@ -453,6 +454,7 @@ def student_dashboard_content() -> rx.Component:
             padding_x=["4", "6", "8"],
             margin_x="auto",
         ),
+        footer(),
         width="100%",
         spacing="0",
     )
