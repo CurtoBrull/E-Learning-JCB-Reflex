@@ -140,7 +140,6 @@ def footer() -> rx.Component:
                 rx.vstack(
                     footer_section_title("Recursos"),
                     footer_link("Documentación", "/docs"),
-                    footer_link("Ayuda", "/help"),
                     footer_link("Preguntas Frecuentes", "/faq"),
                     footer_link("Blog", "/blog"),
                     align_items="start",
