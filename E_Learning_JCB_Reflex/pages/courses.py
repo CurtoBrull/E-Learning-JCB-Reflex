@@ -68,6 +68,33 @@ def courses_page() -> rx.Component:
                         margin_bottom="4",
                         text_align="center",
                     ),
+                    # Buscador
+                    rx.box(
+                        rx.input(
+                            rx.input.slot(
+                                rx.icon("search", size=18, color=rx.color("gray", 10)),
+                            ),
+                            placeholder="Buscar por título, instructor, nivel...",
+                            value=CourseState.search_query,
+                            on_change=CourseState.set_search_query,
+                            size="3",
+                            width="100%",
+                        ),
+                        width="100%",
+                        max_width="600px",
+                        margin_bottom="4",
+                    ),
+                    # Contador de resultados
+                    rx.cond(
+                        CourseState.search_query != "",
+                        rx.text(
+                            f"{CourseState.filtered_courses.length()} resultado(s) para: ",
+                            rx.text.strong(CourseState.search_query),
+                            size="2",
+                            color=rx.color("gray", 10),
+                            margin_bottom="2",
+                        ),
+                    ),
                 # Mensaje de error
                 rx.cond(
                     CourseState.error != "",
@@ -85,14 +112,36 @@ def courses_page() -> rx.Component:
                 ),
                 # Cuadrícula de cursos usando course_card
                 rx.cond(
-                    CourseState.courses.length() > 0,
+                    CourseState.filtered_courses.length() > 0,
                     rx.grid(
                         rx.foreach(
-                            CourseState.courses,
+                            CourseState.filtered_courses,
                             lambda course: course_card(course)
                         ),
                         columns="3",
                         spacing="6",
+                    ),
+                    rx.cond(
+                        CourseState.search_query != "",
+                        rx.center(
+                            rx.vstack(
+                                rx.icon("search-x", size=40, color=rx.color("gray", 8)),
+                                rx.text(
+                                    "No se encontraron cursos con ese criterio",
+                                    size="4",
+                                    color=rx.color("gray", 10),
+                                ),
+                                rx.button(
+                                    "Limpiar búsqueda",
+                                    on_click=CourseState.set_search_query(""),
+                                    variant="soft",
+                                    size="2",
+                                ),
+                                spacing="3",
+                                align_items="center",
+                                padding="4em",
+                            ),
+                        ),
                     ),
                 ),
                 spacing="4",
