@@ -50,6 +50,7 @@ from E_Learning_JCB_Reflex.pages.course_viewer import course_viewer_page
 from E_Learning_JCB_Reflex.pages.instructors import instructors_page
 from E_Learning_JCB_Reflex.pages.instructor_detail import instructor_detail_page
 from E_Learning_JCB_Reflex.pages.contact import contact_page
+from E_Learning_JCB_Reflex.pages.about import about_page
 from E_Learning_JCB_Reflex.pages.login import login_page
 from E_Learning_JCB_Reflex.pages.register import register_page
 from E_Learning_JCB_Reflex.pages.student_dashboard import student_dashboard_page
@@ -81,6 +82,7 @@ app.add_page(course_viewer_page, route="/courses/[course_id]/view")  # Visor de 
 app.add_page(instructors_page, route="/instructors")  # Listado de instructores
 app.add_page(instructor_detail_page, route="/instructors/[instructor_id]")  # Detalle del instructor
 app.add_page(contact_page, route="/contact")  # Formulario de contacto
+app.add_page(about_page, route="/about")  # Sobre nosotros
 app.add_page(login_page, route="/login")  # Inicio de sesión
 app.add_page(register_page, route="/register")  # Registro de nuevos usuarios
 
