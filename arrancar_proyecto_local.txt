@@ -1,0 +1,1 @@
+source reflex-env/bin/activate && reflex run

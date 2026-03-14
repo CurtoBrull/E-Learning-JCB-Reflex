@@ -62,8 +62,27 @@ class CourseState(rx.State):
     """
 
     courses: list[dict] = []
+    search_query: str = ""
     loading: bool = False
     error: str = ""
+
+    @rx.var
+    def filtered_courses(self) -> list[dict]:
+        """Cursos filtrados según el texto de búsqueda."""
+        if not self.search_query:
+            return self.courses
+        query = self.search_query.lower()
+        return [
+            c for c in self.courses
+            if query in c.get("title", "").lower()
+            or query in c.get("description", "").lower()
+            or query in c.get("instructor_name", "").lower()
+            or query in c.get("level", "").lower()
+        ]
+
+    def set_search_query(self, value: str):
+        """Actualizar el texto de búsqueda."""
+        self.search_query = value
 
     # Información básica del curso seleccionado
     current_course_id: str = ""
