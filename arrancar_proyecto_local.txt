@@ -1,1 +1,15 @@
+Iniciar venv linux y arrancar en local:
+
 source reflex-env/bin/activate && reflex run
+
+Student:
+maria.garcia@elearningjcb.com
+student123
+
+Instructor: 
+carlos.rodriguez@elearningjcb.com
+instructor123
+
+Admin:
+ana.martinez@elearningjcb.com
+admin123

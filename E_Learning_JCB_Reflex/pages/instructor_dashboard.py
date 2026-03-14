@@ -353,6 +353,8 @@ def instructor_dashboard_content() -> rx.Component:
                 padding_y="4",
             ),
             max_width="1400px",
+            padding_x=["4", "6", "8"],
+            margin_x="auto",
         ),
         footer(),
         width="100%",
