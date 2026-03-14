@@ -420,54 +420,58 @@ ALL_POSTS = {
 # ---------------------------------------------------------------------------
 
 class BlogPostState(rx.State):
-
-    @rx.var
-    def post_id(self) -> str:
-        return self.router.page.params.get("post_id", "")
+    # post_id es inyectada automáticamente por Reflex desde la ruta dinámica /blog/[post_id]
 
     @rx.var
     def found(self) -> bool:
-        return self.post_id in ALL_POSTS
+        return self.post_id in ALL_POSTS  # type: ignore[attr-defined]
 
     @rx.var
     def post(self) -> dict:
-        return ALL_POSTS.get(self.post_id, {})
+        return ALL_POSTS.get(self.post_id, {})  # type: ignore[attr-defined]
 
     @rx.var
     def title(self) -> str:
-        return ALL_POSTS.get(self.post_id, {}).get("title", "")
+        return ALL_POSTS.get(self.post_id, {}).get("title", "")  # type: ignore[attr-defined]
 
     @rx.var
     def category(self) -> str:
-        return ALL_POSTS.get(self.post_id, {}).get("category", "")
+        return ALL_POSTS.get(self.post_id, {}).get("category", "")  # type: ignore[attr-defined]
 
     @rx.var
     def category_color(self) -> str:
-        return ALL_POSTS.get(self.post_id, {}).get("category_color", "gray")
+        return ALL_POSTS.get(self.post_id, {}).get("category_color", "gray")  # type: ignore[attr-defined]
 
     @rx.var
     def author(self) -> str:
-        return ALL_POSTS.get(self.post_id, {}).get("author", "")
+        return ALL_POSTS.get(self.post_id, {}).get("author", "")  # type: ignore[attr-defined]
 
     @rx.var
     def author_role(self) -> str:
-        return ALL_POSTS.get(self.post_id, {}).get("author_role", "")
+        return ALL_POSTS.get(self.post_id, {}).get("author_role", "")  # type: ignore[attr-defined]
 
     @rx.var
     def date(self) -> str:
-        return ALL_POSTS.get(self.post_id, {}).get("date", "")
+        return ALL_POSTS.get(self.post_id, {}).get("date", "")  # type: ignore[attr-defined]
 
     @rx.var
     def read_time(self) -> str:
-        return ALL_POSTS.get(self.post_id, {}).get("read_time", "")
+        return ALL_POSTS.get(self.post_id, {}).get("read_time", "")  # type: ignore[attr-defined]
 
     @rx.var
-    def sections(self) -> list[dict]:
-        return ALL_POSTS.get(self.post_id, {}).get("sections", [])
+    def body_blocks(self) -> list[dict]:
+        """Aplana las secciones en bloques {type, text} para rx.foreach sin anidado."""
+        post = ALL_POSTS.get(self.post_id, {})  # type: ignore[attr-defined]
+        blocks: list[dict] = []
+        for section in post.get("sections", []):
+            blocks.append({"type": "heading", "text": section["heading"]})
+            for p in section["paragraphs"]:
+                blocks.append({"type": "paragraph", "text": p})
+        return blocks
 
     @rx.var
     def tags(self) -> list[str]:
-        return ALL_POSTS.get(self.post_id, {}).get("tags", [])
+        return ALL_POSTS.get(self.post_id, {}).get("tags", [])  # type: ignore[attr-defined]
 
 
 # ---------------------------------------------------------------------------
@@ -478,16 +482,11 @@ def tag_badge(tag: str) -> rx.Component:
     return rx.badge(tag, color_scheme="purple", variant="soft", size="1")
 
 
-def post_section(section: dict) -> rx.Component:
-    return rx.vstack(
-        rx.heading(section["heading"], size="5", margin_top="0.5em"),
-        *[
-            rx.text(p, size="3", color=rx.color("gray", 11), line_height="1.9")
-            for p in section["paragraphs"]
-        ],
-        spacing="3",
-        align_items="start",
-        width="100%",
+def render_block(block: rx.Var) -> rx.Component:
+    return rx.cond(
+        block["type"] == "heading",
+        rx.heading(block["text"], size="5", margin_top="1em"),
+        rx.text(block["text"], size="3", color=rx.color("gray", 11), line_height="1.9"),
     )
 
 
@@ -570,8 +569,8 @@ def blog_post_page() -> rx.Component:
                     # Cuerpo del artículo
                     rx.vstack(
                         rx.foreach(
-                            BlogPostState.sections,
-                            post_section,
+                            BlogPostState.body_blocks,
+                            render_block,
                         ),
                         spacing="4",
                         align_items="start",
