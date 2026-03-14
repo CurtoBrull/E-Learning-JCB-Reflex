@@ -53,6 +53,9 @@ from E_Learning_JCB_Reflex.pages.contact import contact_page
 from E_Learning_JCB_Reflex.pages.about import about_page
 from E_Learning_JCB_Reflex.pages.faq import faq_page
 from E_Learning_JCB_Reflex.pages.docs import docs_page
+from E_Learning_JCB_Reflex.pages.privacy import privacy_page
+from E_Learning_JCB_Reflex.pages.terms import terms_page
+from E_Learning_JCB_Reflex.pages.cookies import cookies_page
 from E_Learning_JCB_Reflex.pages.login import login_page
 from E_Learning_JCB_Reflex.pages.register import register_page
 from E_Learning_JCB_Reflex.pages.student_dashboard import student_dashboard_page
@@ -87,6 +90,9 @@ app.add_page(contact_page, route="/contact")  # Formulario de contacto
 app.add_page(about_page, route="/about")  # Sobre nosotros
 app.add_page(faq_page, route="/faq")  # Preguntas frecuentes
 app.add_page(docs_page, route="/docs")  # Documentación
+app.add_page(privacy_page, route="/privacy")  # Política de privacidad
+app.add_page(terms_page, route="/terms")  # Términos y condiciones
+app.add_page(cookies_page, route="/cookies")  # Política de cookies
 app.add_page(login_page, route="/login")  # Inicio de sesión
 app.add_page(register_page, route="/register")  # Registro de nuevos usuarios
 
