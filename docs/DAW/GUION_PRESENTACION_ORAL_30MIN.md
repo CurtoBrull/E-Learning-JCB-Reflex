@@ -1,81 +1,175 @@
 # E-Learning JCB — Guion de Presentación Oral (30 minutos)
 > Texto completo para leer/adaptar · ~130 palabras/minuto · ~3.900 palabras totales
+> Incluye módulos FOL (Formación y Orientación Laboral) y EMPRESA e Iniciativa Emprendedora
 
 ---
 
 ## ESTRUCTURA RÁPIDA
 
-| Bloque | Tema | Tiempo |
-|--------|------|--------|
-| 1 | Introducción y contexto | 3 min |
-| 2 | Arquitectura general del sistema | 4 min |
-| 3 | La base de datos: MongoDB y modelos | 4 min |
-| 4 | Autenticación y sistema de roles | 5 min |
-| 5 | Los estados de Reflex: el backend | 5 min |
-| 6 | Páginas y componentes: el frontend | 4 min |
-| 7 | Demo de funcionalidades destacadas | 3 min |
-| 8 | Conclusiones y próximos pasos | 2 min |
+| Bloque | Tema | Módulo | Tiempo |
+|--------|------|--------|--------|
+| 1 | Introducción y contexto del proyecto | DAW | 2 min |
+| 2 | Mercado, oportunidad y modelo de negocio | EMPRESA | 4 min |
+| 3 | Viabilidad: técnica, económica y legal | FOL + EMPRESA | 4 min |
+| 4 | Arquitectura general del sistema | DAW | 3 min |
+| 5 | La base de datos: MongoDB y modelos | DAW | 3 min |
+| 6 | Autenticación y sistema de roles | DAW | 4 min |
+| 7 | Los estados de Reflex: el backend | DAW | 4 min |
+| 8 | Páginas, componentes y funcionalidades | DAW | 4 min |
+| 9 | Conclusiones, ayudas y próximos pasos | FOL + DAW | 2 min |
 
 ---
 
 ---
 
 # BLOQUE 1 — INTRODUCCIÓN Y CONTEXTO
-**⏱ 3 minutos · ~390 palabras**
+**⏱ 2 minutos · ~260 palabras**
 
 ---
 
 Buenos días a todos.
 
-Voy a presentaros **E-Learning JCB**, una plataforma de formación online que he desarrollado íntegramente en Python. Y cuando digo íntegramente en Python, lo digo en serio: no hay ni una sola línea de JavaScript escrita manualmente en este proyecto. Todo el código, tanto el servidor como la interfaz de usuario, está en Python.
+Voy a presentaros **E-Learning JCB**, una plataforma de formación online construida íntegramente en Python. Y cuando digo íntegramente en Python, lo digo en serio: no hay ni una sola línea de JavaScript escrita manualmente. Todo el código —servidor e interfaz de usuario— está escrito en un único lenguaje.
 
-Sé que eso suena extraño. Normalmente cuando construimos una aplicación web, el frontend es JavaScript o TypeScript —React, Vue, Angular— y el backend es Python, Java, Node... Son dos mundos separados, con dos lenguajes, dos entornos de desarrollo, dos formas de pensar.
+Esto es posible gracias a **Reflex**, un framework open-source que compila código Python en una aplicación React + FastAPI automáticamente. Escribes Python puro; Reflex genera el frontend y el backend por debajo.
 
-**E-Learning JCB rompe esa dicotomía.** Y lo hace gracias a **Reflex**, un framework open-source que compila código Python en una aplicación React + FastAPI de forma automática. Tú escribes Python puro, Reflex genera el frontend en React y el backend en FastAPI por debajo. Tú no ves ese código generado: solo ves Python.
+El proyecto cubre el stack completo de una plataforma real: autenticación con roles, operaciones CRUD, búsqueda en tiempo real y dashboards diferenciados para estudiantes, instructores y administradores.
 
-¿Por qué este proyecto? Tres razones principales.
+Para tener la escala en mente:
 
-La primera: quería demostrar que Python es suficiente para construir una aplicación web profesional y completa. No un prototipo, no un tutorial de diez páginas: una plataforma real con autenticación, múltiples roles de usuario, operaciones CRUD, búsqueda en tiempo real y dashboards diferenciados.
+- **39 archivos Python**, **0 líneas de JavaScript manual**
+- **30 páginas web**, **33 rutas registradas**
+- **10 clases de estado** gestionando toda la lógica
+- **~18.000 líneas de código**
 
-La segunda: quería trabajar con MongoDB en un contexto real. No con datos de ejemplo, sino con una base de datos de producción en MongoDB Atlas, con documentos complejos y relaciones reales entre colecciones.
-
-La tercera: el resultado final tiene que ser algo útil. Una plataforma de e-learning, similar en concepto a Udemy o Platzi, donde estudiantes se inscriben en cursos, instructores crean y gestionan contenido, y administradores controlan todo el sistema.
-
-Antes de entrar en detalle, os dejo algunas cifras para tener la escala del proyecto en mente:
-
-- **39 archivos Python** en total
-- **30 páginas web** accesibles desde el navegador
-- **33 rutas registradas** en la aplicación
-- **10 clases de estado** que gestionan toda la lógica
-- **4 servicios** que se comunican con la base de datos
-- **~18.000 líneas de código** Python
-
-Empecemos por cómo está organizado todo esto.
+Pero antes de entrar en el código, necesito explicar **por qué** existe este proyecto y si tiene sentido económico y legal construirlo. Eso es lo que veremos en los próximos bloques.
 
 ---
 
 ---
 
-# BLOQUE 2 — ARQUITECTURA GENERAL DEL SISTEMA
-**⏱ 4 minutos · ~520 palabras**
+# BLOQUE 2 — MERCADO, OPORTUNIDAD Y MODELO DE NEGOCIO
+**⏱ 4 minutos · ~520 palabras · Módulo: EMPRESA**
 
 ---
 
-Cuando diseñé la arquitectura de E-Learning JCB, seguí un patrón en capas inspirado en MVC —Modelo, Vista, Controlador—, pero adaptado al paradigma reactivo de Reflex.
+## El contexto del mercado
 
-Hay **cinco capas bien diferenciadas**, y cada una tiene una responsabilidad clara.
+El e-learning no es una moda pasajera. Es uno de los sectores con mayor crecimiento sostenido de la última década.
 
-La capa más alta es el **navegador**. El usuario abre Chrome, Safari, lo que sea. Lo que ve es React —pero ese React lo ha generado Reflex automáticamente a partir de mi código Python. No lo he escrito yo.
+Según el informe *Global E-Learning Market 2025* de Research and Markets:
 
-La segunda capa son las **páginas y componentes**: treinta archivos Python en la carpeta `/pages/` que definen qué ve el usuario en cada URL. Y cinco componentes reutilizables en `/components/` —la barra de navegación, el footer, las tarjetas de cursos— que se usan en varias páginas.
+- El mercado global facturó **$315 mil millones** en 2023.
+- La proyección para 2026 es de **$457 mil millones**.
+- La tasa de crecimiento anual compuesta es del **13,7%**, muy por encima del PIB medio global.
 
-La tercera capa son los **estados**. Esta es la capa clave en Reflex. Los estados son clases Python que almacenan los datos y definen las acciones del usuario. Hay diez estados en el proyecto. Cuando el usuario hace clic en un botón, se ejecuta un método del estado. Cuando el estado cambia, la UI se actualiza automáticamente. Todo via WebSocket.
+En España, el mercado factura **€2.1 mil millones** anuales y crece a ritmo similar. El 76% de las empresas españolas ya ha adoptado formación online, y el 89% de los estudiantes universitarios usa plataformas de e-learning de forma complementaria.
 
-La cuarta capa son los **servicios**. Cuatro módulos Python que encapsulan todas las operaciones con MongoDB. Los estados llaman a los servicios; los servicios hablan con la base de datos. Los servicios no saben nada de la UI. Eso permite testear la lógica sin necesitar el frontend.
+## Las oportunidades identificadas
 
-Y la quinta capa es **MongoDB Atlas**: la base de datos en la nube con cuatro colecciones —usuarios, cursos, contactos y categorías.
+He identificado tres segmentos de mercado con potencial real para este proyecto.
 
-El **archivo de entrada** del proyecto es `E_Learning_JCB_Reflex.py`. Su función es muy simple: registrar todas las rutas de la aplicación.
+**El primero es el mercado de formación técnica.** En España hay 120.000 profesionales IT, y el 68% busca formación online por flexibilidad. El ticket medio por curso es de 49€ a 199€, con una frecuencia de 3 a 4 cursos por año. Proyección conservadora para el primer año: **13.860€** con 100 estudiantes activos.
+
+**El segundo es el mercado corporativo B2B.** Hay 2,9 millones de PYMEs en España, y el 23% busca plataformas de e-learning propias. El presupuesto medio anual por empresa es de 2.000€ a 5.000€. Con solo 5 empresas cliente, el primer año genera **12.000€**.
+
+**El tercero es el marketplace de instructores.** Con 20 instructores activos y 50 ventas mensuales a una comisión del 25%, el primer año produce **14.850€**.
+
+## El análisis de competencia
+
+Los principales competidores directos son Udemy, Coursera, Domestika y Platzi.
+
+Udemy domina con un 35% de cuota de mercado, pero su principal debilidad es la saturación de contenido y la baja calidad de algunos cursos. Coursera apunta al mercado académico premium, dejando desatendido el segmento de formación técnica accesible. Domestika tiene muy buena UX pero un catálogo limitado a creativos. Platzi tiene comunidad sólida pero orientada a Latinoamérica.
+
+La oportunidad está en el nicho de **formación técnica de calidad**, con contenido verificado, UX optimizada y precios accesibles para el mercado español.
+
+## El modelo de negocio
+
+El modelo está estructurado en tres fuentes de ingresos:
+
+1. **Modelo Freemium**: cursos básicos gratuitos para atraer usuarios, cursos premium de 49€ a 99€.
+2. **Comisiones por ventas**: la plataforma retiene un 25-30% de cada venta de instructor.
+3. **Suscripciones corporativas**: acceso ilimitado para empresas a partir de 200€/mes.
+
+El **punto de equilibrio** es de solo **24 ventas al año** —2 cursos vendidos al mes—, un umbral muy accesible en cualquiera de los tres segmentos.
+
+---
+
+---
+
+# BLOQUE 3 — VIABILIDAD: TÉCNICA, ECONÓMICA Y LEGAL
+**⏱ 4 minutos · ~520 palabras · Módulo: FOL + EMPRESA**
+
+---
+
+## La forma jurídica: autónomo
+
+Para el lanzamiento del proyecto se ha optado por la figura del **trabajador autónomo** —persona física empresario individual—. Las razones son claras:
+
+- **Coste de constitución cero**: el alta es gratuita, no hay capital mínimo.
+- **Gestión simplificada**: contabilidad más sencilla, sin Registro Mercantil.
+- **Flexibilidad total**: se puede cesar la actividad en cualquier momento.
+- **Tarifa plana de Seguridad Social**: los primeros doce meses, la cuota es de solo **80€/mes** en lugar de los ~303€ habituales. Eso supone un ahorro de **2.676€ el primer año**.
+
+La única desventaja relevante es la responsabilidad ilimitada —el patrimonio personal responde de las deudas—, pero en un negocio digital con costes bajos, ese riesgo es mínimo.
+
+Si el negocio supera los **40.000€ de beneficios anuales**, está previsto el cambio a Sociedad Limitada, que es fiscalmente más eficiente a partir de ese umbral.
+
+## Obligaciones fiscales
+
+Como autónomo que presta servicios digitales en España, las obligaciones fiscales son tres.
+
+**IVA al 21%**: declaración trimestral mediante el Modelo 303, más el resumen anual (Modelo 390). En servicios digitales a consumidores finales españoles, se aplica siempre el 21%.
+
+**IRPF**: declaración trimestral (Modelo 130) bajo el régimen de estimación directa simplificada. El tipo progresivo va del 15% al 47% sobre el beneficio neto. Para un beneficio neto de 11.400€ en el primer año, el IRPF es de aproximadamente **720€**.
+
+**Cuota de Seguridad Social (RETA)**: 80€/mes el primer año por tarifa plana. A partir del segundo año, la cuota se calcula por rendimientos netos, con un mínimo de ~230€/mes.
+
+## Marco legal del proyecto
+
+El proyecto cumple con tres normativas clave.
+
+**RGPD** —Reglamento General de Protección de Datos—: los datos de usuarios se almacenan en MongoDB Atlas con cifrado AES-256 en reposo y TLS en tránsito. Existe política de privacidad accesible, formulario de contacto con consentimiento explícito, y cookies con gestión de preferencias. La plataforma incluye páginas de política de privacidad, términos y condiciones, y política de cookies.
+
+**LSSI** —Ley de Servicios de la Sociedad de la Información—: el servicio está identificado legalmente, los precios son visibles antes de la compra, y existe proceso de contratación electrónica documentado.
+
+**Propiedad intelectual**: el código fuente se publica bajo **licencia MIT**, compatible con uso comercial. Los contenidos de los cursos son propiedad de los instructores que los crean. Las dependencias del proyecto usan licencias Apache 2.0, MIT y PSF, todas compatibles con el uso comercial.
+
+## Viabilidad económica resumida
+
+| Concepto | Valor |
+|----------|-------|
+| Coste de desarrollo (Año 1) | 13.190€ |
+| Coste operativo anual | 4.376€ |
+| Punto de equilibrio | 24 ventas/año |
+| Ingresos Año 1 (realista) | 13.761€ |
+| ROI Año 1 sin coste desarrollo | +18% a +506% |
+| **Viabilidad global** | **89% — PROYECTO VIABLE** |
+
+---
+
+---
+
+# BLOQUE 4 — ARQUITECTURA GENERAL DEL SISTEMA
+**⏱ 3 minutos · ~390 palabras · Módulo: DAW**
+
+---
+
+La arquitectura de E-Learning JCB sigue un patrón en capas inspirado en MVC, adaptado al paradigma reactivo de Reflex.
+
+Hay **cinco capas diferenciadas**:
+
+El **navegador** ejecuta React —generado por Reflex desde Python. El usuario ve HTML, CSS y JavaScript estándar, pero yo nunca los escribí.
+
+Las **páginas y componentes** son treinta archivos Python que definen qué ve el usuario en cada URL, más cinco componentes reutilizables —navbar, footer, tarjetas de cursos—.
+
+Los **estados** son la capa central de Reflex. Diez clases Python que almacenan datos y definen las acciones del usuario. Cuando el estado cambia, la UI se actualiza sola vía WebSocket.
+
+Los **servicios** son cuatro módulos Python que encapsulan todas las operaciones con MongoDB. Los estados llaman a los servicios; los servicios no saben nada de la UI.
+
+Y **MongoDB Atlas** en la nube, con cuatro colecciones: usuarios, cursos, contactos y categorías.
+
+El archivo de entrada registra las 33 rutas:
 
 ```python
 app = rx.App()
@@ -83,89 +177,69 @@ app.add_page(index_page, route="/")
 app.add_page(courses_page, route="/courses")
 app.add_page(course_detail_page, route="/courses/[course_id]")
 app.add_page(admin_dashboard_page, route="/admin/dashboard")
-# ... 33 rutas en total
 ```
 
-Hay dos tipos de rutas. Las **rutas públicas** son accesibles sin autenticación: la portada, el catálogo de cursos, el blog, los instructores. Las **rutas protegidas** requieren login y, además, verifican el rol del usuario: el panel de administrador solo es accesible para admins, el dashboard de instructor solo para instructores.
+Las rutas con corchetes como `[course_id]` son **rutas dinámicas**: Reflex extrae el parámetro de la URL e inyecta su valor en el estado automáticamente.
 
-Un detalle técnico interesante: las rutas con corchetes como `/courses/[course_id]` son **rutas dinámicas**. Reflex extrae automáticamente el parámetro de la URL y lo inyecta en el estado. Cuando visito `/courses/abc123`, Reflex pone `course_id = "abc123"` en el estado y la página carga el curso correcto de MongoDB.
-
-En cuanto al stack tecnológico:
-- **Python 3.14** como único lenguaje
-- **Reflex 0.8.24** como framework full-stack
-- **MongoDB Atlas** como base de datos en la nube
-- **Motor 3.7** como driver asíncrono para MongoDB —las operaciones no bloquean el servidor
-- **bcrypt** para el hash seguro de contraseñas
-- **Granian** como servidor HTTP asíncrono, más rápido que uvicorn
-- **Redis** para sincronizar el estado entre sesiones y pestañas
+El stack completo: **Python 3.14 + Reflex 0.8.24 + MongoDB Atlas + Motor async + bcrypt + Granian + Redis**.
 
 ---
 
 ---
 
-# BLOQUE 3 — LA BASE DE DATOS: MONGODB Y LOS MODELOS
-**⏱ 4 minutos · ~520 palabras**
+# BLOQUE 5 — LA BASE DE DATOS: MONGODB Y LOS MODELOS
+**⏱ 3 minutos · ~390 palabras · Módulo: DAW**
 
 ---
 
-¿Por qué MongoDB y no una base de datos relacional como PostgreSQL?
+¿Por qué MongoDB? Porque los cursos tienen estructura variable: algunos tienen vídeos, otros textos, otros evaluaciones. Con SQL necesitaría nuevas tablas y JOINs costosos para cada variación. Con MongoDB, un curso es un **documento JSON flexible** con exactamente los campos que necesita.
 
-La respuesta está en la naturaleza del contenido. Un curso de programación tiene lecciones con código. Un curso de diseño tiene lecciones con imágenes. Un curso de música tiene lecciones con audio. Con SQL, cada variación requeriría nuevas tablas y JOINs costosos. Con MongoDB, un curso es simplemente un **documento JSON flexible**: tiene exactamente los campos que necesita, nada más.
+El proyecto usa **cuatro colecciones**: `users`, `courses`, `contacts` y `categories`.
 
-El proyecto usa **cuatro colecciones**.
+La colección `courses` aplica el patrón de diseño más importante: **embedding vs referencing**.
 
-La colección `users` almacena estudiantes, instructores y administradores en una misma colección. El campo `role` distingue entre ellos. Los instructores tienen además un subdocumento `instructorProfile` con su bio y especialidad.
+Las **lecciones y reseñas** están embebidas dentro del curso porque siempre se leen juntas con él. Las **referencias a estudiantes e instructores** son solo ObjectIDs porque esos datos se consultan también de forma independiente.
 
-La colección `courses` es la más compleja. Cada curso lleva embebidos sus propias lecciones y reseñas, porque siempre se consultan junto al curso. Pero las referencias a estudiantes e instructores son solo ObjectIDs, porque esos datos se consultan también de forma independiente.
-
-Este es el **patrón de diseño más importante** de la base de datos: **embedding vs referencing**. Si los datos siempre se leen juntos, los embedo dentro del documento. Si los datos se leen también por separado, guardo solo el ID y hago una consulta adicional cuando los necesito.
-
-La colección `contacts` almacena los mensajes del formulario de contacto. Y `categories` almacena las categorías de cursos que el administrador puede gestionar.
-
-Los **modelos Python** en la carpeta `/models/` son clases que mapean esos documentos a objetos Python. El más relevante es el método `from_dict()`, que convierte un documento de MongoDB en un objeto Python:
+Los modelos Python convierten documentos MongoDB en objetos Python con el método `from_dict()`:
 
 ```python
 @classmethod
 def from_dict(cls, data: dict) -> "Course":
     course = cls()
     course.id = str(data.get("_id", ""))
-    course.title = data.get("title", "")
     course.students = [str(s) for s in data.get("students", [])]
     return course
 ```
 
-¿Por qué ese `str()` en todos los IDs? MongoDB almacena los identificadores como tipo `ObjectId`, no como string. Si no los convierto, cuando comparo en Python `"abc123" == ObjectId("abc123")` el resultado es `False`. Ese es el tipo de bug difícil de detectar que aparece en producción un viernes por la tarde. El `from_dict()` convierte todo a string al cargar los datos, eliminando el problema de raíz.
+El `str()` es crítico: MongoDB almacena IDs como tipo `ObjectId`, no como string. Sin esa conversión, `"abc123" == ObjectId("abc123")` devuelve `False` —un bug silencioso que aparece en producción.
 
-Los **servicios** en `/services/` encapsulan todas las operaciones con la base de datos. Son funciones `async` que el estado llama cuando necesita datos:
+Los servicios son funciones `async` que encapsulan las operaciones:
 
 ```python
 async def get_popular_courses(limit: int = 6) -> list[Course]:
     db = MongoDB.get_db()
     cursor = db["courses"].find({}).sort("studentsEnrolled", -1).limit(limit)
-    docs = await cursor.to_list(length=limit)
-    return [Course.from_dict(doc) for doc in docs]
+    return [Course.from_dict(doc) for doc in await cursor.to_list(length=limit)]
 ```
 
-La palabra clave `async` y el `await` son esenciales aquí. Motor —el driver de MongoDB— es completamente asíncrono. Esto significa que mientras esperamos que MongoDB responda, el servidor puede atender otras peticiones. No hay bloqueos.
+`async`/`await` con Motor garantiza que mientras MongoDB responde, el servidor atiende otras peticiones. Sin bloqueos.
 
 ---
 
 ---
 
-# BLOQUE 4 — AUTENTICACIÓN Y SISTEMA DE ROLES
-**⏱ 5 minutos · ~650 palabras**
+# BLOQUE 6 — AUTENTICACIÓN Y SISTEMA DE ROLES
+**⏱ 4 minutos · ~520 palabras · Módulo: DAW**
 
 ---
 
-La autenticación es uno de los sistemas más críticos de cualquier plataforma. Si falla, cualquiera puede acceder a cualquier cosa. En E-Learning JCB hay tres tipos de usuario con capacidades muy distintas.
+La autenticación es el sistema más crítico. En E-Learning JCB hay tres roles con capacidades muy distintas.
 
-El **estudiante** puede ver el catálogo, inscribirse en cursos, acceder al contenido de los cursos en los que está inscrito y dejar valoraciones.
+El **estudiante** se inscribe en cursos, accede al contenido y deja valoraciones.
+El **instructor** crea y gestiona sus cursos, ve estadísticas de rendimiento.
+El **administrador** tiene control total: usuarios, cursos, categorías, configuración.
 
-El **instructor** puede crear y editar sus propios cursos, ver cuántos alumnos tiene inscritos en cada uno, y acceder a sus estadísticas de rendimiento.
-
-El **administrador** tiene acceso total: gestión de todos los usuarios, todos los cursos, todas las categorías, y la configuración del sistema.
-
-El corazón de todo esto es `AuthState`, el estado base del que heredan todos los demás estados de la aplicación:
+El corazón es `AuthState`:
 
 ```python
 class AuthState(rx.State):
@@ -181,83 +255,59 @@ class AuthState(rx.State):
         return self.user_role == "admin"
 ```
 
-El `@rx.var` es un decorador especial de Reflex. Marca una propiedad como **computada**: se recalcula automáticamente cada vez que `current_user` cambia. No hay que llamarla manualmente. El frontend siempre tiene el valor correcto.
+El `@rx.var` marca una propiedad como **computada**: se recalcula automáticamente cuando `current_user` cambia. El frontend siempre tiene el valor correcto sin código de sincronización.
 
-El **flujo de login** tiene cinco pasos bien definidos.
+El **flujo de login** tiene cinco pasos:
 
-Primero, se busca el usuario en MongoDB por email. Si no existe, error de credenciales —sin especificar cuál es incorrecto, por seguridad.
+1. Buscar usuario en MongoDB por email. Si no existe: error genérico —sin especificar cuál campo es incorrecto, por seguridad.
+2. Verificar contraseña con bcrypt.
+3. Guardar usuario en estado: `self.current_user = {...}`, `self.is_authenticated = True`.
+4. Redirigir según rol: `/admin/dashboard`, `/instructor/dashboard` o `/student/dashboard`.
+5. El cambio de estado se propaga a toda la app: navbar, menús, rutas protegidas.
 
-Segundo, se verifica la contraseña usando bcrypt. Más sobre esto en un momento.
-
-Tercero, si todo es correcto, se guarda el usuario en el estado: `self.current_user = {...}`, `self.is_authenticated = True`.
-
-Cuarto, se redirige al usuario a su dashboard correspondiente según su rol.
-
-```python
-if user.role == "admin":
-    return rx.redirect("/admin/dashboard")
-elif user.role == "instructor":
-    return rx.redirect("/instructor/dashboard")
-else:
-    return rx.redirect("/student/dashboard")
-```
-
-Quinto, el estado `is_authenticated = True` ya está visible en toda la aplicación porque AuthState es el estado base. La navbar cambia, el menú cambia, las rutas protegidas se desbloquean.
-
-Hablemos de **bcrypt**. Las contraseñas nunca se guardan en texto plano en la base de datos. Eso sería un desastre de seguridad: si alguien obtiene acceso a la base de datos, obtiene todas las contraseñas de todos los usuarios.
-
-bcrypt aplica un algoritmo de hash que es prácticamente imposible de revertir. Además, añade un "salt" —un valor aleatorio— antes de hashear, por lo que dos usuarios con la misma contraseña tienen hashes completamente diferentes. Esto bloquea los ataques de "rainbow table", que son listas precomputadas de hashes comunes.
+**bcrypt**: las contraseñas nunca se guardan en texto plano. bcrypt aplica un hash irreversible con salt aleatorio integrado:
 
 ```python
 def hash_password(password: str) -> str:
     salt = bcrypt.gensalt()
     return bcrypt.hashpw(password.encode(), salt).decode()
-    # 'micontraseña123' → '$2b$12$KNk/wJ9JRlmqYhxVu97hg...'
+    # 'micontraseña' → '$2b$12$KNk/wJ9JRlmq...'
 
 def verify_password(plain: str, hashed: str) -> bool:
     return bcrypt.checkpw(plain.encode(), hashed.encode())
 ```
 
-La verificación no necesita conocer el salt porque bcrypt lo embebe dentro del propio hash.
+Esto bloquea los ataques de rainbow table: aunque la base de datos sea comprometida, los hashes no son revertibles.
 
-Para la **protección de rutas**, uso Higher Order Components en `/components/protected.py`:
+La **protección de rutas** usa Higher Order Components:
 
 ```python
 def admin_only(component: rx.Component) -> rx.Component:
     return rx.cond(
         AuthState.is_user_admin,
-        component,           # Admin: ve el contenido
-        access_denied_view() # Otros: pantalla de acceso denegado
+        component,            # Admin: ve el contenido
+        access_denied_view()  # Otros: pantalla de error
     )
-```
 
-Y en cada página protegida:
-
-```python
+# En la página:
 def admin_dashboard_page():
-    return admin_only(
-        rx.box(navbar(), admin_dashboard_content(), footer())
-    )
+    return admin_only(rx.box(navbar(), admin_content(), footer()))
 ```
 
-`rx.cond()` funciona en el **frontend**. El navegador recibe ambos componentes y muestra el correcto según el estado actual. La protección real del backend está en los servicios: si el estado no lo permite, las operaciones de MongoDB nunca se ejecutan.
+`rx.cond()` funciona en el frontend. La protección real del backend está en los servicios: si el estado no lo permite, las operaciones de MongoDB no se ejecutan.
 
 ---
 
 ---
 
-# BLOQUE 5 — LOS ESTADOS DE REFLEX: EL CORAZÓN DEL BACKEND
-**⏱ 5 minutos · ~650 palabras**
+# BLOQUE 7 — LOS ESTADOS DE REFLEX: EL BACKEND
+**⏱ 4 minutos · ~520 palabras · Módulo: DAW**
 
 ---
 
-Si hay un concepto central en Reflex que hay que entender, es el **State**.
+El **State** es el concepto central de Reflex. Una clase Python que almacena datos, define acciones y se sincroniza con el frontend vía WebSocket automáticamente.
 
-Un State en Reflex es una clase Python que hace tres cosas: almacena los datos que la UI necesita mostrar, define las acciones que el usuario puede ejecutar, y se sincroniza automáticamente con el frontend vía WebSocket.
-
-Cuando un atributo del estado cambia, todos los componentes UI que lo usan se actualizan solos. No hay que escribir código de sincronización. No hay fetch, no hay callbacks, no hay useState de React. Solo Python.
-
-Los diez estados del proyecto forman una **jerarquía de herencia** que tiene `AuthState` en la cima:
+Los diez estados forman una jerarquía de herencia con `AuthState` en la cima:
 
 ```
 rx.State
@@ -270,9 +320,9 @@ rx.State
             └── UserManagementState
 ```
 
-Al heredar de `AuthState`, cualquier estado hijo tiene acceso directo a `self.current_user`, `self.is_authenticated` y los vars computados de rol. No hay que pasarlos como parámetros ni duplicar código.
+Los estados hijos heredan acceso directo a `self.current_user` y `self.is_authenticated` sin duplicar código.
 
-Veamos `CourseState`, que gestiona la búsqueda en tiempo real de cursos:
+**CourseState** gestiona la búsqueda en tiempo real:
 
 ```python
 class CourseState(rx.State):
@@ -284,31 +334,17 @@ class CourseState(rx.State):
         if not self.search_query:
             return self.courses
         query = self.search_query.lower()
-        return [
-            c for c in self.courses
-            if query in c.get("title", "").lower()
-            or query in c.get("description", "").lower()
-        ]
+        return [c for c in self.courses
+                if query in c.get("title", "").lower()
+                or query in c.get("description", "").lower()]
 
     def set_search_query(self, value: str):
         self.search_query = value
 ```
 
-El `@rx.var` `filtered_courses` se recalcula automáticamente cada vez que `search_query` cambia. En la UI solo hay que conectar el input al handler:
+El usuario escribe → `set_search_query` se ejecuta → `filtered_courses` se recalcula → la lista se actualiza. Sin llamadas al servidor. Sin recargar la página.
 
-```python
-rx.input(
-    on_change=CourseState.set_search_query,
-),
-rx.foreach(
-    CourseState.filtered_courses,
-    course_card
-)
-```
-
-El usuario escribe una letra, `set_search_query` se ejecuta, `filtered_courses` se recalcula, la lista de cursos se actualiza. Sin recargar la página. Sin llamadas adicionales al servidor.
-
-Ahora `InstructorCourseState`, que gestiona el CRUD de cursos:
+**InstructorCourseState** gestiona el CRUD de cursos:
 
 ```python
 async def save_course(self):
@@ -316,78 +352,39 @@ async def save_course(self):
         await update_course(self.editing_course_id, data)
     else:
         course_id = await create_course(data)
-        await self._add_course_to_instructor(course_id)
-
-async def _add_course_to_instructor(self, course_id: str):
-    db = MongoDB.get_db()
-    await db["users"].update_one(
-        {"_id": ObjectId(user_id)},
-        {"$addToSet": {"coursesCreated": ObjectId(course_id)}}
-    )
+        await db["users"].update_one(
+            {"_id": ObjectId(user_id)},
+            {"$addToSet": {"coursesCreated": ObjectId(course_id)}}
+        )
 ```
 
-El operador `$addToSet` de MongoDB es interesante: añade el elemento al array solo si no existe ya. Evita duplicados de forma atómica, sin necesitar una consulta previa para verificar.
+`$addToSet` de MongoDB añade al array solo si el elemento no existe, evitando duplicados de forma atómica.
 
-Un problema técnico real que encontré y resolví: **el doble `on_mount`**. En modo desarrollo, Reflex llama a `on_mount` dos veces por el StrictMode de React. Eso causaba que el formulario de crear curso se abriera y se volviera a cerrar inmediatamente.
-
-La solución fue usar un flag `auto_open_form` y comprobar también el estado actual de `show_form`:
+Un bug real que resolví: **el doble `on_mount`**. En desarrollo, Reflex llama a `on_mount` dos veces por el StrictMode de React. El formulario se abría y se cerraba inmediatamente. La solución fue idempotencia con un flag:
 
 ```python
 async def load_my_courses(self):
     if self.auto_open_form and not self.show_form:
-        self.open_create_form()     # Primera llamada: abrir
+        self.open_create_form()      # Primera llamada: abrir
         self.auto_open_form = False
     elif self.auto_open_form and self.show_form:
         self.auto_open_form = False  # Segunda llamada: ignorar
 ```
 
-Este tipo de bugs —donde el mismo código correcto se ejecuta dos veces— son los más difíciles de diagnosticar porque el código parece correcto. La clave fue entender el comportamiento de React StrictMode e implementar idempotencia en el handler.
-
-`EnrollmentState` gestiona las inscripciones con dos operaciones atómicas en MongoDB: añade el curso al array `enrolledCourses` del usuario, y añade el usuario al array `students` del curso. Ambas con `$addToSet` para garantizar consistencia.
+Este tipo de bug —código correcto ejecutado dos veces— es el más difícil de diagnosticar. La clave fue entender el ciclo de vida de React StrictMode.
 
 ---
 
 ---
 
-# BLOQUE 6 — PÁGINAS Y COMPONENTES: EL FRONTEND
-**⏱ 4 minutos · ~520 palabras**
+# BLOQUE 8 — PÁGINAS, COMPONENTES Y FUNCIONALIDADES
+**⏱ 4 minutos · ~520 palabras · Módulo: DAW**
 
 ---
 
-En Reflex, una página es simplemente una función Python que retorna componentes UI. Esos componentes se compilan a JSX/React automáticamente. El resultado es HTML, CSS y JavaScript estándar en el navegador, pero nosotros nunca vemos ese código.
+En Reflex, una página es una función Python que retorna componentes UI compilados automáticamente a JSX/React.
 
-Los **cinco componentes reutilizables** del proyecto son la navbar, el footer, las tarjetas de cursos, el formulario de contacto y los componentes de protección de rutas.
-
-La **tarjeta de curso** es un buen ejemplo de cómo funciona la UI en Reflex:
-
-```python
-def course_card(course: dict) -> rx.Component:
-    return rx.card(
-        rx.vstack(
-            rx.image(src=course["thumbnail"], height="200px"),
-            rx.heading(course["title"], size="4"),
-            rx.text(course["description"], no_of_lines=3),
-            rx.hstack(
-                rx.badge(
-                    course["level"],
-                    color_scheme=rx.match(
-                        course["level"],
-                        ("beginner", "green"),
-                        ("intermediate", "blue"),
-                        ("advanced", "purple"),
-                        "gray"
-                    )
-                ),
-                rx.text(f"€{course['price']}", color="green"),
-            )
-        ),
-        href=f"/courses/{course['id']}",
-    )
-```
-
-`rx.match()` es el equivalente del `switch/case` en la UI. No podemos usar `if/else` de Python normal con valores del estado, porque esos valores solo se conocen en el navegador en tiempo de ejecución, no en Python en tiempo de compilación. `rx.match()` genera la lógica condicional en el frontend.
-
-La **navbar** es el componente más complejo porque muestra cosas diferentes según si el usuario está autenticado y cuál es su rol:
+La **navbar** muestra opciones distintas según el estado del usuario:
 
 ```python
 def user_menu() -> rx.Component:
@@ -396,10 +393,9 @@ def user_menu() -> rx.Component:
         rx.menu.root(
             rx.menu.trigger(rx.text(AuthState.user_name)),
             rx.menu.content(
-                rx.cond(
-                    AuthState.is_user_admin,
+                rx.cond(AuthState.is_user_admin,
                     rx.menu.item("Panel Admin", on_click=rx.redirect("/admin/dashboard")),
-                    rx.fragment()  # Nada si no es admin
+                    rx.fragment()
                 ),
                 rx.menu.item("Mi Perfil", on_click=rx.redirect("/profile")),
                 rx.menu.item("Cerrar Sesión", on_click=AuthState.logout, color="red"),
@@ -412,93 +408,75 @@ def user_menu() -> rx.Component:
     )
 ```
 
-`rx.cond()` con dos variantes: si está autenticado, menú con opciones de usuario; si no, botones de login y registro. Y dentro del menú, otro `rx.cond()` que muestra el enlace al panel de admin solo si el usuario es admin.
-
-El **diseño responsive** se implementa con `rx.breakpoints()`:
+El **diseño responsive** usa `rx.breakpoints()`:
 
 ```python
 rx.grid(
     columns=rx.breakpoints(
-        initial="1",   # Móvil: 1 columna
-        sm="2",        # Tablet: 2 columnas
-        md="3",        # Escritorio: 3 columnas
-        lg="4",        # Pantalla grande: 4 columnas
+        initial="1",  # Móvil: 1 columna
+        sm="2",       # Tablet: 2 columnas
+        md="3",       # Escritorio: 3 columnas
+        lg="4",       # Pantalla grande: 4 columnas
     ),
     gap="4",
 )
 ```
 
-Una sola línea de Python, y el grid se adapta a cualquier tamaño de pantalla. Reflex genera los media queries de CSS correspondientes automáticamente.
+Una sola línea genera los media queries de CSS automáticamente.
 
-La plataforma tiene **páginas de contenido** —blog, FAQ, documentación, términos, cookies, política de privacidad— y **páginas funcionales** con lógica real: dashboards, gestión de usuarios, gestión de cursos, visor de lecciones. En total, treinta páginas accesibles desde el navegador.
+Quiero destacar **cinco funcionalidades** que demuestran la amplitud del proyecto.
 
----
+**El visor de cursos** funciona como Udemy: sidebar con índice de lecciones, panel central con el contenido, progreso guardado por lección en MongoDB.
 
----
+**Los dashboards diferenciados**: el de administrador muestra estadísticas globales y acceso a gestión de usuarios, cursos y categorías. El de instructor muestra sus cursos y KPIs. El de estudiante muestra los cursos inscritos y el progreso individual.
 
-# BLOQUE 7 — FUNCIONALIDADES DESTACADAS
-**⏱ 3 minutos · ~390 palabras**
+**La búsqueda en tiempo real**: el usuario escribe, los resultados se filtran al instante mediante la var computada `filtered_courses`. Cero llamadas al servidor.
 
----
+**El CRUD de cursos para instructores**: crear, editar, eliminar con confirmación mediante dialog de alerta, y ver alumnos inscritos. El mismo formulario maneja creación y edición distinguiéndolos por el flag `is_editing`.
 
-Quiero destacar cinco funcionalidades que demuestran la amplitud del proyecto.
-
-**Primera: el visor de cursos**. La página `/courses/[course_id]/view` funciona como un reproductor de cursos tipo Udemy. Tiene un sidebar izquierdo con el índice de lecciones, un panel central con el contenido de la lección actual, y el progreso se guarda en MongoDB por lección. El estudiante puede navegar entre lecciones y retomar donde lo dejó.
-
-**Segunda: los dashboards diferenciados**. Cada rol tiene su propio dashboard.
-
-El dashboard de **administrador** muestra estadísticas globales: total de usuarios, cursos, inscripciones, ingresos. Tiene acceso directo a la gestión de usuarios, cursos y categorías. Los cambios que hace el admin se reflejan inmediatamente en la base de datos.
-
-El dashboard de **instructor** muestra sus cursos activos, cuántos estudiantes tiene cada uno, y métricas de rendimiento. Desde ahí puede crear un nuevo curso con un clic.
-
-El dashboard de **estudiante** muestra los cursos en los que está inscrito, el progreso en cada uno, y recomendaciones de nuevos cursos.
-
-**Tercera: la búsqueda en tiempo real**. Ya la hemos visto en el código, pero en la práctica es: el usuario empieza a escribir en el buscador, y los resultados se filtran instantáneamente. Sin botón de buscar, sin llamada al servidor, sin recarga de página. La var computada `filtered_courses` hace todo el trabajo.
-
-**Cuarta: el CRUD completo de cursos para instructores**. Desde la página `/instructor/courses`, el instructor puede crear cursos nuevos, editar los existentes, eliminarlos con confirmación mediante un dialog de alerta, y ver cuántos alumnos tiene cada curso. El formulario maneja tanto la creación como la edición con el mismo código, distinguiéndolos por el flag `is_editing`.
-
-**Quinta: estadísticas reales desde MongoDB**. La página `/about` no usa datos hardcodeados. Consulta MongoDB en tiempo de carga:
-
-```python
-self.total_courses = len(courses)
-self.total_lessons = sum(len(c.get("lessons", [])) for c in courses)
-self.total_enrollments = sum(len(c.get("students", [])) for c in courses)
-self.total_instructors = len([u for u in users if u["role"] == "instructor"])
-```
-
-Los números que ve el usuario en "Sobre Nosotros" son los números reales de la base de datos en ese momento.
+**Las estadísticas reales**: la página `/about` consulta MongoDB en tiempo de carga para mostrar datos reales —total de cursos, lecciones, inscripciones, instructores activos—. No hay datos hardcodeados.
 
 ---
 
 ---
 
-# BLOQUE 8 — CONCLUSIONES Y PRÓXIMOS PASOS
-**⏱ 2 minutos · ~260 palabras**
+# BLOQUE 9 — CONCLUSIONES, AYUDAS Y PRÓXIMOS PASOS
+**⏱ 2 minutos · ~260 palabras · Módulo: FOL + DAW**
 
 ---
 
-Repasemos lo que hemos visto hoy.
+## Ayudas para el lanzamiento
 
-Hemos construido una plataforma de e-learning completa usando exclusivamente Python. Sin JavaScript manual. Sin frameworks frontend separados. Un solo lenguaje para todo el stack.
+El proyecto tiene acceso a ayudas reales que reducen el riesgo financiero del primer año:
 
-La combinación de **Reflex + MongoDB + bcrypt** ha demostrado ser eficaz para este tipo de proyecto:
+- **Tarifa plana de autónomos**: 80€/mes los primeros 12 meses. Ahorro de **2.676€**.
+- **Kit Digital** (Red.es): hasta **1.500€** para digitalización de autónomos.
+- **Almería Emprende** (Junta de Andalucía): hasta **3.000€** para proyectos innovadores.
+- **ENISA** (si se constituye SL): préstamo participativo de hasta **25.000€**.
 
-- **Velocidad de desarrollo**: un solo lenguaje para todo elimina el cambio de contexto constante entre frontend y backend.
-- **Coherencia del código**: toda la lógica, tanto de UI como de negocio, sigue los mismos patrones Python.
-- **Seguridad**: autenticación con bcrypt, roles bien definidos, rutas protegidas, contraseñas nunca en texto plano.
-- **Escalabilidad**: MongoDB crece horizontalmente; Reflex compila a React optimizado para producción.
+Total de ayudas accesibles en el escenario conservador: **7.176€**, lo que cubre prácticamente todos los costes operativos del primer año.
 
-Los **patrones de diseño** aplicados son: Repository Pattern en los servicios, State Pattern en los estados, Component Pattern en la UI, y Higher Order Components para la protección de rutas.
+## Síntesis final
 
-En cuanto a **próximos pasos**:
-- Integración con Stripe para pagos online
-- Sistema de notificaciones en tiempo real
-- Exámenes y certificados automáticos
-- Analítica avanzada con gráficos de progreso
-- Recomendaciones personalizadas con IA
-- Deploy a producción en Reflex Cloud o con Docker
+| Dimensión | Resultado |
+|-----------|-----------|
+| Técnica | Python full-stack, sin JavaScript manual, MVC adaptado a Reflex |
+| Datos | MongoDB NoSQL, embedding + referencing, 4 colecciones |
+| Seguridad | bcrypt, RBAC por roles, RGPD cumplido, LSSI cumplido |
+| Negocio | Punto equilibrio: 24 ventas/año, ROI +18% a +506% en Año 1 |
+| Legal | Autónomo, IVA 21%, IRPF progresivo, MIT license |
+| Viabilidad global | **89% — PROYECTO ALTAMENTE VIABLE** |
 
-La reflexión final es esta: **Python es suficiente**. Suficiente para construir una aplicación web profesional, escalable y segura. No necesitamos dos lenguajes, dos equipos, dos formas de pensar. Reflex demuestra que el ecosistema Python puede cubrir el stack completo de una aplicación moderna.
+## Próximos pasos del proyecto
+
+- Integración con **Stripe** para pagos online
+- Sistema de **notificaciones** en tiempo real
+- **Exámenes y certificados** automáticos
+- **Analítica avanzada** con gráficos de progreso
+- Recomendaciones personalizadas con **IA**
+- **Deploy a producción**: Reflex Cloud o Docker + VPS
+
+La reflexión final es esta: **Python es suficiente** para construir una aplicación web profesional, segura y económicamente viable. Un solo lenguaje, un solo stack, un proyecto real.
 
 Muchas gracias. Quedo abierto a preguntas.
 
@@ -508,6 +486,12 @@ Muchas gracias. Quedo abierto a preguntas.
 
 # APÉNDICE — RESPUESTAS A PREGUNTAS FRECUENTES
 
+**¿Por qué autónomo y no Sociedad Limitada?**
+Para el primer año, el autónomo es más ágil y barato. La tarifa plana reduce la SS a 80€/mes. Si los beneficios superan 40.000€, el cambio a SL es más eficiente fiscalmente.
+
+**¿Qué pasa con el RGPD y los datos de los estudiantes?**
+Los datos se almacenan en MongoDB Atlas con cifrado AES-256 en reposo y TLS en tránsito. La plataforma incluye política de privacidad, gestión de cookies y formularios con consentimiento explícito.
+
 **¿No es más lento que usar React directamente?**
 En producción, Reflex compila a React optimizado. La diferencia de rendimiento es mínima para este tipo de aplicación. La ganancia en velocidad de desarrollo es enorme.
 
@@ -515,15 +499,13 @@ En producción, Reflex compila a React optimizado. La diferencia de rendimiento 
 Sí. Reflex funciona con cualquier base de datos. MongoDB se eligió por la flexibilidad de esquema para cursos con estructura variable.
 
 **¿Cómo se hace el deploy?**
-Reflex tiene su propio servicio en la nube, Reflex Cloud, o se puede dockerizar para desplegar en cualquier VPS.
-
-**¿Es seguro para producción?**
-La autenticación y el hash de contraseñas son sólidos. Para producción habría que añadir HTTPS, rate limiting y validación de entrada más estricta.
+Reflex Cloud o Docker + VPS. Coste estimado: 0-20€/mes en Reflex Cloud, 360€/año en VPS propio.
 
 **¿Qué fue lo más difícil de desarrollar?**
-El sistema de estados con herencia y el bug del doble `on_mount` en Reflex. Entender cómo el estado reactivo se sincroniza con el frontend requiere cambiar la forma de pensar respecto al desarrollo web tradicional.
+El sistema de estados con herencia y el bug del doble `on_mount`. Entender cómo el estado reactivo se sincroniza con el frontend requiere cambiar la forma de pensar respecto al desarrollo web tradicional.
 
 ---
 
 *Guion oral para presentación de 30 minutos — E-Learning JCB*
 *~3.900 palabras · ~130 palabras/minuto · 30 minutos*
+*Módulos: DAW · FOL · EMPRESA e Iniciativa Emprendedora*
