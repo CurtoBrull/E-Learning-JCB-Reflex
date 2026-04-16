@@ -22,20 +22,20 @@
 
 ---
 
-# BLOQUE 1 — INTRODUCCIÓN Y CONTEXTO
+# BLOQUE 1 — INTRODUCCIÓN Y CONTEXTO (pagina 1 del PDF)
 **⏱ 2 minutos · ~260 palabras**
 
 ---
 
 Buenos días a todos.
 
-Voy a presentaros **E-Learning JCB**, una plataforma de formación online construida íntegramente en Python. Y cuando digo íntegramente en Python, lo digo en serio: no hay ni una sola línea de JavaScript escrita manualmente. Todo el código —servidor e interfaz de usuario— está escrito en un único lenguaje.
+Voy a presentaros **E-Learning JCB**, una plataforma de formación online construida íntegramente en Python. No hay ni una sola línea de JavaScript escrita manualmente. Todo el código —servidor e interfaz de usuario— está escrito en un único lenguaje.
 
 Esto es posible gracias a **Reflex**, un framework open-source que compila código Python en una aplicación React + FastAPI automáticamente. Escribes Python puro; Reflex genera el frontend y el backend por debajo.
 
 El proyecto cubre el stack completo de una plataforma real: autenticación con roles, operaciones CRUD, búsqueda en tiempo real y dashboards diferenciados para estudiantes, instructores y administradores.
 
-Para tener la escala en mente:
+Para tener la escala en mente: (pag 2 del PDF)
 
 - **39 archivos Python**, **0 líneas de JavaScript manual**
 - **30 páginas web**, **33 rutas registradas**
@@ -48,12 +48,12 @@ Pero antes de entrar en el código, necesito explicar **por qué** existe este p
 
 ---
 
-# BLOQUE 2 — MERCADO, OPORTUNIDAD Y MODELO DE NEGOCIO
+# BLOQUE 2 — MERCADO, OPORTUNIDAD Y MODELO DE NEGOCIO (pagina 3 del PDF)
 **⏱ 4 minutos · ~520 palabras · Módulo: EMPRESA**
 
 ---
 
-## El contexto del mercado
+## El contexto del mercado 
 
 El e-learning no es una moda pasajera. Es uno de los sectores con mayor crecimiento sostenido de la última década.
 
@@ -71,7 +71,7 @@ He identificado tres segmentos de mercado con potencial real para este proyecto.
 
 **El primero es el mercado de formación técnica.** En España hay 120.000 profesionales IT, y el 68% busca formación online por flexibilidad. El ticket medio por curso es de 49€ a 199€, con una frecuencia de 3 a 4 cursos por año. Proyección conservadora para el primer año: **13.860€** con 100 estudiantes activos.
 
-**El segundo es el mercado corporativo B2B.** Hay 2,9 millones de PYMEs en España, y el 23% busca plataformas de e-learning propias. El presupuesto medio anual por empresa es de 2.000€ a 5.000€. Con solo 5 empresas cliente, el primer año genera **12.000€**.
+**El segundo es el mercado corporativo B2B (Business-to-Business (Negocio a Negocio)).** Hay 2,9 millones de PYMEs en España, y el 23% busca plataformas de e-learning propias. El presupuesto medio anual por empresa es de 2.000€ a 5.000€. Con solo 5 empresas cliente, el primer año genera **12.000€**.
 
 **El tercero es el marketplace de instructores.** Con 20 instructores activos y 50 ventas mensuales a una comisión del 25%, el primer año produce **14.850€**.
 
@@ -79,11 +79,11 @@ He identificado tres segmentos de mercado con potencial real para este proyecto.
 
 Los principales competidores directos son Udemy, Coursera, Domestika y Platzi.
 
-Udemy domina con un 35% de cuota de mercado, pero su principal debilidad es la saturación de contenido y la baja calidad de algunos cursos. Coursera apunta al mercado académico premium, dejando desatendido el segmento de formación técnica accesible. Domestika tiene muy buena UX pero un catálogo limitado a creativos. Platzi tiene comunidad sólida pero orientada a Latinoamérica.
+Udemy domina con un 35% de cuota de mercado, pero su principal debilidad es la saturación de contenido y la baja calidad de algunos cursos, aunque proximamente parece que será adquirida por Coursera. Ésta última apunta al mercado académico premium, dejando desatendido el segmento de formación técnica accesible. Domestika tiene muy buena UX (User Xperience) pero un catálogo limitado a creativos. Platzi tiene comunidad sólida pero orientada a Latinoamérica.
 
 La oportunidad está en el nicho de **formación técnica de calidad**, con contenido verificado, UX optimizada y precios accesibles para el mercado español.
 
-## El modelo de negocio
+## El modelo de negocio (pagina 4 del PDF)
 
 El modelo está estructurado en tres fuentes de ingresos:
 
@@ -97,7 +97,7 @@ El **punto de equilibrio** es de solo **24 ventas al año** —2 cursos vendidos
 
 ---
 
-# BLOQUE 3 — VIABILIDAD: TÉCNICA, ECONÓMICA Y LEGAL
+# BLOQUE 3 — VIABILIDAD: TÉCNICA, ECONÓMICA Y LEGAL (pagina 5 del PDF)
 **⏱ 4 minutos · ~520 palabras · Módulo: FOL + EMPRESA**
 
 ---
@@ -150,7 +150,7 @@ El proyecto cumple con tres normativas clave.
 
 ---
 
-# BLOQUE 4 — ARQUITECTURA GENERAL DEL SISTEMA
+# BLOQUE 4 — ARQUITECTURA GENERAL DEL SISTEMA (pagina 6 del PDF)
 **⏱ 3 minutos · ~390 palabras · Módulo: DAW**
 
 ---
@@ -163,13 +163,13 @@ El **navegador** ejecuta React —generado por Reflex desde Python. El usuario v
 
 Las **páginas y componentes** son treinta archivos Python que definen qué ve el usuario en cada URL, más cinco componentes reutilizables —navbar, footer, tarjetas de cursos—.
 
-Los **estados** son la capa central de Reflex. Diez clases Python que almacenan datos y definen las acciones del usuario. Cuando el estado cambia, la UI se actualiza sola vía WebSocket.
+Los **estados** son la capa central de Reflex. Diez clases Python que almacenan datos y definen las acciones del usuario. Cuando el estado cambia, la UI se actualiza sola vía WebSocket (un WebSocket es el "túnel" de comunicación que permite que la información viaje de forma instantánea entre el servidor y el navegador.).
 
 Los **servicios** son cuatro módulos Python que encapsulan todas las operaciones con MongoDB. Los estados llaman a los servicios; los servicios no saben nada de la UI.
 
 Y **MongoDB Atlas** en la nube, con cuatro colecciones: usuarios, cursos, contactos y categorías.
 
-El archivo de entrada registra las 33 rutas:
+El archivo de entrada (E_Learning_JCB_Reflex/E_Learning_JCB_Reflex.py) registra las 33 rutas:
 
 ```python
 app = rx.App()
@@ -183,11 +183,25 @@ Las rutas con corchetes como `[course_id]` son **rutas dinámicas**: Reflex extr
 
 El stack completo: **Python 3.14 + Reflex 0.8.24 + MongoDB Atlas + Motor async + bcrypt + Granian + Redis**.
 
----
+- Python 3.14: El lenguaje de programación base y el cerebro que ejecuta toda la lógica de tu servidor.
+
+- Reflex 0.8.24: El framework que te permite crear tanto el frontend (web) como el backend usando solo Python.
+
+- MongoDB Atlas: Base de datos NoSQL en la nube donde guardas la información en documentos flexibles tipo JSON.
+
+- Motor async: La librería técnica que permite a Python hablar con MongoDB de forma rápida y sin bloquear otros procesos.
+
+- bcrypt: Herramienta de seguridad para encriptar contraseñas de forma segura antes de guardarlas en la base de datos.
+
+- Granian: El servidor web de alto rendimiento (escrito en Rust) que "levanta" y sirve tu aplicación Python al mundo.
+
+- Redis: Base de datos ultrarrápida en memoria usada para guardar sesiones de usuario o datos temporales (caché).
 
 ---
 
-# BLOQUE 5 — LA BASE DE DATOS: MONGODB Y LOS MODELOS
+---
+
+# BLOQUE 5 — LA BASE DE DATOS: MONGODB Y LOS MODELOS (pagina 7 del PDF)
 **⏱ 3 minutos · ~390 palabras · Módulo: DAW**
 
 ---
@@ -228,7 +242,7 @@ async def get_popular_courses(limit: int = 6) -> list[Course]:
 
 ---
 
-# BLOQUE 6 — AUTENTICACIÓN Y SISTEMA DE ROLES
+# BLOQUE 6 — AUTENTICACIÓN Y SISTEMA DE ROLES ( pagina 8 del PDF)
 **⏱ 4 minutos · ~520 palabras · Módulo: DAW**
 
 ---
@@ -300,7 +314,7 @@ def admin_dashboard_page():
 
 ---
 
-# BLOQUE 7 — LOS ESTADOS DE REFLEX: EL BACKEND
+# BLOQUE 7 — LOS ESTADOS DE REFLEX: EL BACKEND ( pagina 9 del PDF)
 **⏱ 4 minutos · ~520 palabras · Módulo: DAW**
 
 ---
@@ -377,7 +391,7 @@ Este tipo de bug —código correcto ejecutado dos veces— es el más difícil 
 
 ---
 
-# BLOQUE 8 — PÁGINAS, COMPONENTES Y FUNCIONALIDADES
+# BLOQUE 8 — PÁGINAS, COMPONENTES Y FUNCIONALIDADES ( pagina 10 del PDF)
 **⏱ 4 minutos · ~520 palabras · Módulo: DAW**
 
 ---
@@ -440,7 +454,7 @@ Quiero destacar **cinco funcionalidades** que demuestran la amplitud del proyect
 
 ---
 
-# BLOQUE 9 — CONCLUSIONES, AYUDAS Y PRÓXIMOS PASOS
+# BLOQUE 9 — CONCLUSIONES, AYUDAS Y PRÓXIMOS PASOS ( pagina 11 del PDF)
 **⏱ 2 minutos · ~260 palabras · Módulo: FOL + DAW**
 
 ---
@@ -456,7 +470,7 @@ El proyecto tiene acceso a ayudas reales que reducen el riesgo financiero del pr
 
 Total de ayudas accesibles en el escenario conservador: **7.176€**, lo que cubre prácticamente todos los costes operativos del primer año.
 
-## Síntesis final
+## Síntesis final (pagina 12 del PDF)
 
 | Dimensión | Resultado |
 |-----------|-----------|
