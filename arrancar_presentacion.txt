@@ -1,0 +1,22 @@
+== ACCESO CLOUD (PRODUCCIÓN) ==
+
+App desplegada: https://e-learning-jcb-reflex-gray-orca.reflex.run/
+Dashboard Reflex Cloud: https://build.reflex.dev/project/80b9f062-22e7-44e5-ab3c-4a5485a994bb/app/f9eed997-3221-43d0-977c-639a65e634b0/
+
+== ARRANCAR EN LOCAL ==
+
+source reflex-env/bin/activate && reflex run
+
+== CREDENCIALES DE PRUEBA ==
+
+Student:
+maria.garcia@elearningjcb.com
+student123
+
+Instructor:
+carlos.rodriguez@elearningjcb.com
+instructor123
+
+Admin:
+ana.martinez@elearningjcb.com
+admin123
