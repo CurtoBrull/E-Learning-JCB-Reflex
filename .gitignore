@@ -12,3 +12,5 @@ env/
 .vscode/
 .claude/
 .env.production
+.agents/
+skills-lock.json

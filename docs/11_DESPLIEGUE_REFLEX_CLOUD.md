@@ -112,6 +112,11 @@ Una vez completado el despliegue, Reflex te mostrará:
 📊 Dashboard: https://cloud.reflex.dev/projects/your-project-id
 ```
 
+## URLs del Proyecto Desplegado
+
+- **App (producción)**: https://e-learning-jcb-reflex-gray-orca.reflex.run/
+- **Dashboard Reflex Cloud**: https://build.reflex.dev/project/80b9f062-22e7-44e5-ab3c-4a5485a994bb/app/f9eed997-3221-43d0-977c-639a65e634b0/
+
 Abre la URL del frontend en tu navegador y verifica que:
 
 1. La aplicación carga correctamente
