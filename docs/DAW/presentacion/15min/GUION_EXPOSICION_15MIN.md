@@ -18,9 +18,7 @@
 | 8 | Páginas, componentes y funcionalidades | Pág. 10 | 1 min |
 | 9 | Conclusiones, ayudas y próximos pasos | Pág. 11–12 | 1 min |
 
----
-
----
+<div style="page-break-after: always;"></div>
 
 # BLOQUE 1 — INTRODUCCIÓN Y CONTEXTO
 **⏱ 1 minuto · ~130 palabras · Pág. 1 del PDF**
@@ -44,9 +42,7 @@ Para tener la escala en mente:
 - **10 clases de estado** gestionando toda la lógica
 - **~18.000 líneas de código**
 
----
-
----
+<div style="page-break-after: always;"></div>
 
 # BLOQUE 2 — MERCADO, OPORTUNIDAD Y MODELO DE NEGOCIO
 **⏱ 2 minutos · ~260 palabras · Pág. 3–4 del PDF · Módulo: EMPRESA**
@@ -77,9 +73,7 @@ El modelo de negocio tiene tres patas:
 
 El **punto de equilibrio son solo 24 ventas al año** —2 cursos al mes—, un umbral altamente accesible.
 
----
-
----
+<div style="page-break-after: always;"></div>
 
 # BLOQUE 3 — VIABILIDAD: TÉCNICA, ECONÓMICA Y LEGAL
 **⏱ 2 minutos · ~260 palabras · Pág. 5 del PDF · Módulo: FOL + EMPRESA**
@@ -114,9 +108,7 @@ Se ha optado por **trabajador autónomo** por tres razones: coste de constituci�
 | ROI Año 1 (sin coste desarrollo) | +18% a +506% |
 | **Viabilidad global** | **89% — PROYECTO VIABLE** |
 
----
-
----
+<div style="page-break-after: always;"></div>
 
 # BLOQUE 4 — ARQUITECTURA GENERAL DEL SISTEMA
 **⏱ 1.5 minutos · ~195 palabras · Pág. 6 del PDF · Módulo: DAW**
@@ -137,9 +129,7 @@ Las rutas dinámicas como `/courses/[course_id]` extraen el parámetro de la URL
 
 Stack completo: **Python 3.14 + Reflex + MongoDB Atlas + Motor async + bcrypt + Granian + Redis**.
 
----
-
----
+<div style="page-break-after: always;"></div>
 
 # BLOQUE 5 — LA BASE DE DATOS: MONGODB Y LOS MODELOS
 **⏱ 1.5 minutos · ~195 palabras · Pág. 7 del PDF · Módulo: DAW**
@@ -160,9 +150,7 @@ Un detalle crítico: MongoDB almacena IDs como tipo `ObjectId`, no como string. 
 
 Los servicios usan `async`/`await` con Motor: mientras MongoDB responde, el servidor atiende otras peticiones sin bloqueos.
 
----
-
----
+<div style="page-break-after: always;"></div>
 
 # BLOQUE 6 — AUTENTICACIÓN Y SISTEMA DE ROLES
 **⏱ 2 minutos · ~260 palabras · Pág. 8 del PDF · Módulo: DAW**
@@ -195,9 +183,7 @@ El **flujo de login** en cinco pasos:
 
 La **protección de rutas** usa Higher Order Components con `rx.cond()`. La protección real del backend está en los servicios: si el estado no lo permite, las operaciones de MongoDB no se ejecutan.
 
----
-
----
+<div style="page-break-after: always;"></div>
 
 # BLOQUE 7 — LOS ESTADOS DE REFLEX: EL BACKEND
 **⏱ 2 minutos · ~260 palabras · Pág. 9 del PDF · Módulo: DAW**
@@ -230,9 +216,7 @@ Lo más poderoso de Reflex es el **ciclo completo automatizado**: el desarrollad
 
 Sin fetch manual. Sin JSON. Sin Redux. Sin gestión de WebSocket. Todo ese código —que en un stack tradicional escribirías tú— lo genera y ejecuta Reflex por debajo.
 
----
-
----
+<div style="page-break-after: always;"></div>
 
 # BLOQUE 8 — PÁGINAS, COMPONENTES Y FUNCIONALIDADES
 **⏱ 1 minuto · ~130 palabras · Pág. 10 del PDF · Módulo: DAW**
@@ -249,9 +233,7 @@ Cinco funcionalidades clave que demuestran la amplitud del proyecto —y que ver
 4. **CRUD de cursos**: formulario unificado para crear y editar, con `$addToSet` para evitar duplicados atómicamente.
 5. **Diseño responsive**: `rx.breakpoints()` genera media queries en una sola línea de Python.
 
----
-
----
+<div style="page-break-after: always;"></div>
 
 # BLOQUE 9 — CONCLUSIONES, AYUDAS Y PRÓXIMOS PASOS
 **⏱ 1 minuto · ~130 palabras · Pág. 11–12 del PDF · Módulo: FOL + DAW**
@@ -282,9 +264,7 @@ Próximos pasos: Stripe, notificaciones WebSocket, exámenes/certificados, anal�
 
 A continuación, la demostración en vivo.
 
----
-
----
+<div style="page-break-after: always;"></div>
 
 # APÉNDICE — RESPUESTAS A PREGUNTAS FRECUENTES
 
